@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorldTradeStandard — Artificial Trading Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     LANDING PAGE
+═══════════════════════════════════════════ -->
+<div id="landing" class="landing-page">
+  <nav class="l-nav">
+    <div class="brand-logo">WORLDTRADESTANDARD</div>
+    <div class="l-nav-links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#" onclick="launchApp('free')">Sign In</a>
+    </div>
+    <button class="btn-gold" onclick="launchApp('free')">Start Free →</button>
+  </nav>
+
+  <section class="hero-section">
+    <div class="hero-left">
+      <div class="hero-badge"><span class="live-dot"></span>AI Engine Online · MQL5/MQL4</div>
+      <h1 class="hero-title">The <em>Artificial<br>Trading Assistant</em><br>for Serious Traders</h1>
+      <p class="hero-sub">Build MT4/MT5 robots, get daily chart markups in your style, journal every trade, and auto-debug your EA errors. WorldTradeStandard is the official standard for a high-level trader's workflow.</p>
+      <div class="hero-actions">
+        <button class="btn-gold btn-lg" onclick="launchApp('free')">Start Free — 3 Generations</button>
+        <button class="btn-ghost btn-lg" onclick="launchApp('exec')">View Executive Plan</button>
+      </div>
+      <div class="hero-proof">
+        <div class="proof-item"><span class="proof-num">4,800+</span><span class="proof-label">Robots Built</span></div>
+        <div class="proof-sep"></div>
+        <div class="proof-item"><span class="proof-num">MT4 & MT5</span><span class="proof-label">Native Code</span></div>
+        <div class="proof-sep"></div>
+        <div class="proof-item"><span class="proof-num">$0</span><span class="proof-label">To Start</span></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="terminal-card">
+        <div class="terminal-bar">
+          <div class="t-dots"><span class="td r"></span><span class="td y"></span><span class="td g"></span></div>
+          <span class="t-filename">WTS_XAUUSD_Breakout.mq5</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="tc-dim">// WorldTradeStandard.com · v1.0</span></div>
+          <div><span class="tc-dim">// XAUUSD Breakout EA · H1</span></div>
+          <br>
+          <div><span class="tc-kw">input</span> <span class="tc-fn">int</span> <span class="tc-str">lookback</span> = <span class="tc-num">20</span>;</div>
+          <div><span class="tc-kw">input</span> <span class="tc-fn">double</span> <span class="tc-str">lotSize</span> = <span class="tc-num">0.10</span>;</div>
+          <div><span class="tc-kw">input</span> <span class="tc-fn">int</span> <span class="tc-str">stopLoss</span> = <span class="tc-num">500</span>;</div>
+          <div><span class="tc-kw">input</span> <span class="tc-fn">int</span> <span class="tc-str">takeProfit</span> = <span class="tc-num">1000</span>;</div>
+          <br>
+          <div><span class="tc-fn">CTrade</span> trade;</div>
+          <div><span class="tc-fn">int</span> OnInit() {</div>
+          <div>&nbsp;&nbsp;<span class="tc-out">Print</span>(<span class="tc-str">"WTS EA Active"</span>);</div>
+          <div>&nbsp;&nbsp;<span class="tc-kw">return</span>(<span class="tc-num">INIT_SUCCEEDED</span>);</div>
+          <div>}</div>
+          <br>
+          <div class="tc-success">▸ 0 errors · 0 warnings · Ready<span class="cursor-blink"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="section-eyebrow">What's Inside</div>
+    <h2 class="section-title">Four tools. One standard.</h2>
+    <div class="features-grid">
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <h3>MQL Code Builder</h3>
+        <p>Describe your strategy in plain English. Get production-ready MT4/MT5 Expert Advisors, indicators, and scripts — fully compilable, no placeholders.</p>
+        <div class="feat-tags"><span>EA Generator</span><span>Indicator Builder</span><span>PineScript Translator</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h3>Chart Markup AI</h3>
+        <p>Train the AI once on your style. Every morning it opens your charts and marks up setups that match your personal edge — breakout, trend, or reversal.</p>
+        <div class="feat-tags"><span>Daily Mentor</span><span>Style Profile</span><span>Screenshot Analysis</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📓</div>
+        <h3>Trade Journal</h3>
+        <p>Log every trade with chart screenshots, emotional state, and pre/post notes. AI writes your post-trade analysis automatically and spots your patterns over time.</p>
+        <div class="feat-tags"><span>AI Analysis</span><span>Pattern Detection</span><span>PDF Export</span></div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔧</div>
+        <h3>Auto-Debugger</h3>
+        <p>Paste your MetaEditor error log. The AI reads every error, explains the cause, and delivers fixed code lines. Executive tier: errors detected and fixed automatically.</p>
+        <div class="feat-tags"><span>Error Analysis</span><span>Auto-Fix</span><span>Live Detection</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="section-eyebrow">Choose Your Standard</div>
+    <h2 class="section-title">From first robot to full execution.</h2>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-tier-label">Tier 1 · Free</div>
+        <div class="plan-name">Proof of Concept</div>
+        <div class="plan-price">$0<span>/mo</span></div>
+        <div class="plan-pitch">Experience the logic. Zero commitment.</div>
+        <ul class="plan-list">
+          <li class="yes">3 total generations</li>
+          <li class="yes">Standard indicators (RSI, MA, MACD)</li>
+          <li class="no">Source code — compiled .ex5 only</li>
+          <li class="no">Chart markup & journal</li>
+          <li class="no">Auto-debugger</li>
+        </ul>
+        <button class="plan-btn" onclick="launchApp('free')">Start Free</button>
+      </div>
+      <div class="plan-card plan-featured">
+        <div class="plan-badge-top">ACTIVE DEVELOPER</div>
+        <div class="plan-tier-label">Tier 2 · $19/mo</div>
+        <div class="plan-name" style="color:#378ADD">Active Developer</div>
+        <div class="plan-price" style="color:#378ADD">$19<span>/mo</span></div>
+        <div class="plan-pitch">Unlimited builds. Full source code. Learn the why.</div>
+        <ul class="plan-list">
+          <li class="yes">Unlimited EA/Indicator generations</li>
+          <li class="yes"><strong>Full source code access</strong></li>
+          <li class="yes">MT4 + MT5 output</li>
+          <li class="yes">YouTube → Robot converter</li>
+          <li class="yes">PineScript → MQL Translator</li>
+          <li class="yes">Chart Markup (manual upload)</li>
+          <li class="yes">Trade Journal + AI analysis</li>
+          <li class="yes">Auto-Debugger</li>
+        </ul>
+        <button class="plan-btn plan-btn-blue" onclick="launchApp('dev')">Start Developer Plan</button>
+      </div>
+      <div class="plan-card plan-exec">
+        <div class="plan-badge-top" style="background:var(--gold);color:#08090D">STANDARD EXECUTIVE</div>
+        <div class="plan-tier-label">Tier 3 · $79/mo</div>
+        <div class="plan-name" style="color:var(--gold)">Sovereign Executive</div>
+        <div class="plan-price" style="color:var(--gold)">$79<span>/mo</span></div>
+        <div class="plan-pitch">Zero friction. Your AI trades alongside you daily.</div>
+        <ul class="plan-list">
+          <li class="yes">Everything in Developer</li>
+          <li class="yes"><strong>Daily Mentor</strong> — morning chart markups</li>
+          <li class="yes"><strong>Auto-Debugger Live</strong> — detects & fixes automatically</li>
+          <li class="yes">Prop-Firm Stealth (SL/TP hidden)</li>
+          <li class="yes">News Shield (auto-pause on events)</li>
+          <li class="yes">Code Health Audit (unlimited)</li>
+          <li class="yes">Priority processing</li>
+          <li class="yes">Auto-injection to MetaTrader</li>
+        </ul>
+        <button class="plan-btn plan-btn-gold" onclick="launchApp('exec')">Become Standard Executive</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="l-footer">
+    <div class="footer-brand">WORLDTRADESTANDARD</div>
+    <div class="footer-links">
+      <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Docs</a><a href="#">Support</a>
+    </div>
+    <div class="footer-copy">© 2025 WorldTradeStandard. Built for traders who operate at the highest level.</div>
+    <div class="footer-cities">Lagos · Dubai · London · Singapore</div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     MAIN APP SHELL
+═══════════════════════════════════════════ -->
+<div id="appShell" class="app-shell hidden">
+
+  <!-- APP NAV -->
+  <nav class="app-nav">
+    <div class="brand-mark">
+      <span class="brand-wts">WTS</span>
+      <div class="brand-text">
+        <span class="brand-full">WORLDTRADESTANDARD</span>
+        <span class="brand-sub">Artificial Trading Assistant</span>
+      </div>
+    </div>
+    <div class="app-nav-tabs" id="appNavTabs">
+      <div class="antab active" data-view="builder" onclick="switchView('builder',this)">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Builder
+      </div>
+      <div class="antab" data-view="journal" onclick="switchView('journal',this)">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Journal
+      </div>
+      <div class="antab" data-view="markup" onclick="switchView('markup',this)">
+        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Chart Markup
+      </div>
+      <div class="antab" data-view="debugger" onclick="switchView('debugger',this)">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Debugger
+      </div>
+      <div class="antab" data-view="stats" onclick="switchView('stats',this)">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Performance
+      </div>
+      <div class="antab" data-view="pricing" onclick="switchView('pricing',this)">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Plans
+      </div>
+    </div>
+    <div class="app-nav-right">
+      <div class="tier-display" id="tierDisplay">
+        <span class="tier-dot free-dot"></span>
+        <span id="tierLabel">FREE TIER</span>
+      </div>
+      <div class="credits-chip" id="creditsChip">⚡ 3 left</div>
+      <button class="btn-gold btn-sm" onclick="switchView('pricing',document.querySelector('[data-view=pricing]'))">Upgrade</button>
+      <button class="btn-ghost btn-sm" onclick="exitApp()">← Exit</button>
+    </div>
+  </nav>
+
+  <!-- GUARD BANNER -->
+  <div class="guard-banner hidden" id="guardBanner">
+    <svg viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>WorldTradeStandard is a <strong>trading assistant only.</strong> This platform handles MQL coding, chart analysis, and trade journaling — nothing else.</span>
+    <span class="guard-close" onclick="document.getElementById('guardBanner').classList.add('hidden')">✕</span>
+  </div>
+
+  <!-- APP BODY -->
+  <div class="app-body">
+
+    <!-- SIDEBAR -->
+    <aside class="app-sidebar" id="appSidebar">
+      <!-- Builder sidebar -->
+      <div class="sb-section" id="sb-builder">
+        <div class="sb-lbl">Create</div>
+        <div class="sb-i active" onclick="setBuilderMode('ea',this)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>Expert Advisor
+        </div>
+        <div class="sb-i" onclick="setBuilderMode('indicator',this)">
+          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Custom Indicator
+        </div>
+        <div class="sb-i" onclick="setBuilderMode('script',this)">
+          <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Script / Utility
+        </div>
+        <div class="sb-lbl" style="margin-top:.75rem">Pro Tools</div>
+        <div class="sb-i" onclick="requireTier('dev','YouTube → Robot')">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>YouTube → Robot
+          <span class="sb-lock">PRO</span>
+        </div>
+        <div class="sb-i" onclick="requireTier('dev','PineScript Translator')">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>PineScript → MQL
+          <span class="sb-lock">PRO</span>
+        </div>
+        <div class="sb-lbl" style="margin-top:.75rem">Executive</div>
+        <div class="sb-i" onclick="requireTier('exec','Daily Mentor')">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Daily Mentor
+          <span class="sb-lock exec-lock">EXEC</span>
+        </div>
+        <div class="sb-i" onclick="requireTier('exec','Prop-Firm Stealth')">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Prop Stealth
+          <span class="sb-lock exec-lock">EXEC</span>
+        </div>
+      </div>
+
+      <!-- Journal sidebar -->
+      <div class="sb-section hidden" id="sb-journal">
+        <div class="sb-lbl">Filter</div>
+        <div class="sb-i active" onclick="filterTrades('all',this)">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>All Trades
+        </div>
+        <div class="sb-i" onclick="filterTrades('win',this)">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Winners
+        </div>
+        <div class="sb-i" onclick="filterTrades('loss',this)">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Losers
+        </div>
+        <div class="sb-i" onclick="filterTrades('open',this)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Open Trades
+        </div>
+        <div class="sb-lbl" style="margin-top:.75rem">By Pair</div>
+        <div class="sb-i" onclick="filterTrades('XAUUSD',this)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>XAUUSD
+        </div>
+        <div class="sb-i" onclick="filterTrades('EURUSD',this)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>EURUSD
+        </div>
+        <div class="sb-i" onclick="filterTrades('US30',this)">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>US30
+        </div>
+        <div class="sb-action-area">
+          <button class="sb-action-btn" onclick="openLogModal()">+ Log New Trade</button>
+        </div>
+      </div>
+
+      <!-- Markup sidebar -->
+      <div class="sb-section hidden" id="sb-markup">
+        <div class="sb-lbl">Style Profile</div>
+        <div class="style-tags" id="styleTags">
+          <div class="st-group">
+            <div class="st-label">Setup Style</div>
+            <span class="st active" onclick="this.classList.toggle('active')">Breakout</span>
+            <span class="st" onclick="this.classList.toggle('active')">Trend Follow</span>
+            <span class="st" onclick="this.classList.toggle('active')">Reversal</span>
+            <span class="st" onclick="this.classList.toggle('active')">Scalping</span>
+          </div>
+          <div class="st-group">
+            <div class="st-label">Pairs</div>
+            <span class="st active" onclick="this.classList.toggle('active')">XAUUSD</span>
+            <span class="st active" onclick="this.classList.toggle('active')">US30</span>
+            <span class="st" onclick="this.classList.toggle('active')">EURUSD</span>
+            <span class="st" onclick="this.classList.toggle('active')">NAS100</span>
+          </div>
+          <div class="st-group">
+            <div class="st-label">Risk Ratio</div>
+            <span class="st active" onclick="this.classList.toggle('active')">1.5 RR</span>
+            <span class="st" onclick="this.classList.toggle('active')">2.0 RR</span>
+            <span class="st" onclick="this.classList.toggle('active')">3.0 RR</span>
+          </div>
+        </div>
+        <div class="sb-lbl" style="margin-top:.75rem">Upload Chart</div>
+        <div class="sb-upload-zone" onclick="document.getElementById('markupFile').click()">
+          <svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Attach PNG/JPG chart</span>
+          <input type="file" id="markupFile" accept="image/*" style="display:none" onchange="handleChartUpload(this)">
+        </div>
+      </div>
+
+      <!-- Empty sidebars for other views -->
+      <div class="sb-section hidden" id="sb-debugger">
+        <div class="sb-lbl">How It Works</div>
+        <div class="debug-steps-info">
+          <div class="dsi"><span class="dsi-n">01</span><span>Paste MetaEditor error log</span></div>
+          <div class="dsi"><span class="dsi-n">02</span><span>AI reads each error line</span></div>
+          <div class="dsi"><span class="dsi-n">03</span><span>Explains root cause</span></div>
+          <div class="dsi"><span class="dsi-n">04</span><span>Returns fixed code</span></div>
+        </div>
+        <div class="sb-lbl" style="margin-top:1rem">Executive Tier</div>
+        <div style="font-size:.75rem;color:var(--muted);padding:.5rem;line-height:1.6">App detects compile errors automatically and fixes them without you pasting anything.</div>
+      </div>
+      <div class="sb-section hidden" id="sb-stats">
+        <div class="sb-lbl">Overview</div>
+        <div class="sb-stat-cards">
+          <div class="sb-stat"><div class="sb-stat-label">Win Rate</div><div class="sb-stat-val green" id="sb-wr">67%</div></div>
+          <div class="sb-stat"><div class="sb-stat-label">Net P&L</div><div class="sb-stat-val green" id="sb-pl">+$1,240</div></div>
+          <div class="sb-stat"><div class="sb-stat-label">Total Trades</div><div class="sb-stat-val" id="sb-tt">18</div></div>
+          <div class="sb-stat"><div class="sb-stat-label">Best Setup</div><div class="sb-stat-val gold">Breakout</div></div>
+        </div>
+      </div>
+      <div class="sb-section hidden" id="sb-pricing"></div>
+
+      <!-- Bottom always shown -->
+      <div class="sb-bottom">
+        <div class="sb-status"><div class="live-dot"></div>AI Engine Online</div>
+      </div>
+    </aside>
+
+    <!-- VIEWS -->
+    <div class="views-container">
+
+      <!-- ── BUILDER VIEW ── -->
+      <div class="view active" id="view-builder">
+        <div class="builder-layout">
+          <!-- Config -->
+          <div class="builder-config">
+            <div class="view-head">
+              <h2 id="builderModeTitle">EXPERT ADVISOR</h2>
+              <p id="builderModeDesc">Configure your strategy and generate production-ready MQL5/MQL4 code.</p>
+            </div>
+            <div class="view-body">
+              <div class="field-group">
+                <label class="field-label">Platform</label>
+                <select class="field-sel" id="b-platform">
+                  <option value="MT5">MetaTrader 5 (MQL5)</option>
+                  <option value="MT4">MetaTrader 4 (MQL4)</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label class="field-label">Strategy</label>
+                <select class="field-sel" id="b-strategy" onchange="updateBuilderParams()">
+                  <option>MA Crossover</option>
+                  <option>RSI Reversal</option>
+                  <option>Bollinger Bands Breakout</option>
+                  <option>MACD Signal Cross</option>
+                  <option>S&R Breakout</option>
+                  <option>Grid Trading</option>
+                  <option>Scalping EMA</option>
+                  <option>Stochastic Divergence</option>
+                  <option>ATR Trailing Stop EA</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label class="field-label">Symbol</label>
+                  <select class="field-sel" id="b-symbol">
+                    <option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option>
+                    <option>USDJPY</option><option>BTCUSD</option><option>US30</option>
+                    <option>NAS100</option><option>Any</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Timeframe</label>
+                  <select class="field-sel" id="b-tf">
+                    <option>M1</option><option>M5</option><option>M15</option>
+                    <option selected>H1</option><option>H4</option><option>D1</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-group">
+                <label class="field-label">Parameters</label>
+                <div class="param-table" id="builderParams"></div>
+              </div>
+              <div class="field-group">
+                <label class="field-label">Extra Requirements</label>
+                <textarea class="field-ta" id="b-extra" placeholder="e.g. Add trailing stop, Telegram alerts, avoid Fridays, add news filter..."></textarea>
+              </div>
+              <button class="btn-generate" id="genBtn" onclick="generateCode()">
+                <svg viewBox="0 0 24 24" width="15" height="15"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                GENERATE CODE
+              </button>
+            </div>
+          </div>
+          <!-- Output -->
+          <div class="builder-output" id="builderOutput">
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">
+                <svg viewBox="0 0 24 24" width="26" height="26"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </div>
+              <h3>MQL CODE ENGINE</h3>
+              <p>Configure your strategy on the left.<br>Your production-ready code appears here.</p>
+              <div class="quick-chips">
+                <div class="qchip" onclick="setQuick('Gold Scalper tight 30-pip SL XAUUSD M15')">Gold Scalper</div>
+                <div class="qchip" onclick="setQuick('RSI + MACD confluence EURUSD H1')">RSI+MACD EA</div>
+                <div class="qchip" onclick="setQuick('Custom RSI divergence indicator with arrow signals')">RSI Indicator</div>
+                <div class="qchip" onclick="setQuick('Grid EA US30 50-point spacing 8 max orders')">Grid EA</div>
+              </div>
+            </div>
+            <div class="load-state hidden" id="loadState">
+              <div class="spinner"></div>
+              <p class="load-text">Generating MQL code...</p>
+              <div class="load-steps">
+                <div class="ls" id="ls0">▸ Parsing strategy config</div>
+                <div class="ls" id="ls1">▸ Building signal logic</div>
+                <div class="ls" id="ls2">▸ Writing trade manager</div>
+                <div class="ls" id="ls3">▸ Applying risk controls</div>
+                <div class="ls" id="ls4">▸ Compiling MQL output</div>
+              </div>
+            </div>
+            <div class="code-panel hidden" id="codePanel">
+              <div class="code-panel-head">
+                <div class="cp-fname" id="cpFname">WTS_EA.mq5</div>
+                <div class="cp-actions">
+                  <button class="cp-btn" onclick="copyCode()">Copy</button>
+                  <button class="cp-btn" onclick="regenCode()">↺ Regen</button>
+                  <button class="cp-btn primary" onclick="downloadCode()">⬇ Download</button>
+                </div>
+              </div>
+              <div class="code-tabs">
+                <div class="ctab active" onclick="showMQL(this)">MQL Code</div>
+                <div class="ctab" onclick="showExplain(this)">Explanation</div>
+              </div>
+              <div class="code-display" id="codeDisplay"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── JOURNAL VIEW ── -->
+      <div class="view hidden" id="view-journal">
+        <div class="journal-layout">
+          <!-- Trade List -->
+          <div class="trade-list">
+            <div class="tl-head">
+              <h3>TRADE LOG</h3>
+              <button class="btn-gold btn-sm" onclick="openLogModal()">+ Log Trade</button>
+            </div>
+            <div class="tl-body" id="tradeList"></div>
+          </div>
+          <!-- Trade Detail -->
+          <div class="trade-detail" id="tradeDetail">
+            <div class="empty-state">
+              <div class="empty-icon"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <h3>SELECT A TRADE</h3>
+              <p>Click any trade on the left to view full details, chart markup, and AI post-trade analysis.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MARKUP VIEW ── -->
+      <div class="view hidden" id="view-markup">
+        <div class="markup-layout">
+          <div class="markup-chat-area">
+            <div class="chat-head">
+              <div>
+                <h2>CHART MARKUP AI</h2>
+                <p>Upload a screenshot or describe your chart — AI responds in your personal style only</p>
+              </div>
+              <div class="scope-pill">TRADING ANALYSIS ONLY</div>
+            </div>
+            <div class="chat-thread" id="markupThread">
+              <div class="chat-msg ai">
+                <div class="chat-avatar ai">WTS</div>
+                <div class="chat-bubble">Good morning. Style profile loaded: <strong style="color:var(--gold)">Breakout · XAUUSD/US30 · 1.5 RR</strong>.<br><br>Upload a chart screenshot or describe what you're seeing. I'll identify key levels, confirm if the setup fits your edge, and suggest entry/SL/TP.<br><br><em style="color:var(--muted);font-size:.75em">Note: I only discuss trading setups, MQL code, and market structure.</em></div>
+              </div>
+            </div>
+            <div class="chat-input-area">
+              <div class="chat-input-row">
+                <textarea class="chat-input" id="markupInput" placeholder="Describe your chart setup or ask about a level..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMarkup()}" rows="1"></textarea>
+                <button class="chat-send-btn" onclick="sendMarkup()">
+                  <svg viewBox="0 0 24 24" width="14" height="14"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </div>
+              <div class="chat-hint">Tier 2: Manual upload markup · Tier 3 Executive: AI marks up your charts every morning automatically</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DEBUGGER VIEW ── -->
+      <div class="view hidden" id="view-debugger">
+        <div class="debugger-layout" id="debuggerInner">
+          <div class="debug-col">
+            <div class="debug-col-head">
+              <span>MetaEditor Error Log</span>
+              <span style="color:var(--red);font-size:.65rem">PASTE FROM METAEDITOR</span>
+            </div>
+            <div class="debug-input-area">
+              <textarea class="debug-error-input" id="errorLog" placeholder="; Paste your MetaEditor error log here&#10;; Example:&#10;; EA_Strategy.mq5(47,15): error C0207: 'OrderSend' - wrong number of parameters&#10;; EA_Strategy.mq5(112,8): error C0301: undeclared identifier 'MagicNumber'&#10;; EA_Strategy.mq5(89,22): warning: possible loss of data"></textarea>
+            </div>
+            <div class="debug-action">
+              <button class="btn-generate" onclick="runDebugger()">ANALYSE & FIX ERRORS</button>
+            </div>
+          </div>
+          <div class="debug-col">
+            <div class="debug-col-head">
+              <span>AI Diagnosis</span>
+              <span class="debug-status" id="debugStatus">WAITING</span>
+            </div>
+            <div class="debug-output-area" id="debugOutput">
+              <div class="debug-placeholder">
+                <span class="tc-dim">// Paste your error log on the left</span><br>
+                <span class="tc-dim">// Click Analyse & Fix Errors</span><br>
+                <span class="tc-dim">// AI will explain each error and</span><br>
+                <span class="tc-dim">// return corrected code lines</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Lock for free tier -->
+        <div class="tier-lock" id="debugLock">
+          <div class="lock-body">
+            <div class="lock-icon">🔒</div>
+            <h3>DEVELOPER & EXECUTIVE ONLY</h3>
+            <p>The Auto-Debugger is available on the Active Developer ($19/mo) and Standard Executive ($79/mo) plans.</p>
+            <button class="btn-gold" onclick="switchView('pricing',document.querySelector('[data-view=pricing]'))">View Plans →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── STATS VIEW ── -->
+      <div class="view hidden" id="view-stats">
+        <div class="stats-layout">
+          <div class="stats-head">
+            <h2>PERFORMANCE OVERVIEW</h2>
+            <p>AI pattern recognition across your full trade history</p>
+          </div>
+          <div class="stats-kpis">
+            <div class="kpi-card"><div class="kpi-label">Win Rate</div><div class="kpi-val green">67%</div><div class="kpi-sub">12 of 18 trades</div></div>
+            <div class="kpi-card"><div class="kpi-label">Net P&L</div><div class="kpi-val green">+$1,240</div><div class="kpi-sub">This month</div></div>
+            <div class="kpi-card"><div class="kpi-label">Best Setup</div><div class="kpi-val gold">Breakout</div><div class="kpi-sub">83% win rate</div></div>
+            <div class="kpi-card"><div class="kpi-label">Avg R:R</div><div class="kpi-val gold">1.8</div><div class="kpi-sub">Target: 1.5 ✓</div></div>
+            <div class="kpi-card"><div class="kpi-label">Worst Day</div><div class="kpi-val red">Friday</div><div class="kpi-sub">6 of 7 losses</div></div>
+            <div class="kpi-card"><div class="kpi-label">Robots Active</div><div class="kpi-val">3</div><div class="kpi-sub">MT5 deployed</div></div>
+          </div>
+          <div class="stats-panels">
+            <div class="stats-panel">
+              <div class="sp-title">WIN RATE BY PAIR</div>
+              <div class="bar-row"><span class="bar-lbl">XAUUSD</span><div class="bar-track"><div class="bar-fill green" style="width:78%"></div></div><span class="bar-pct green">78%</span></div>
+              <div class="bar-row"><span class="bar-lbl">US30</span><div class="bar-track"><div class="bar-fill green" style="width:70%"></div></div><span class="bar-pct green">70%</span></div>
+              <div class="bar-row"><span class="bar-lbl">EURUSD</span><div class="bar-track"><div class="bar-fill red" style="width:42%"></div></div><span class="bar-pct red">42%</span></div>
+              <div class="bar-row"><span class="bar-lbl">GBPUSD</span><div class="bar-track"><div class="bar-fill red" style="width:35%"></div></div><span class="bar-pct red">35%</span></div>
+            </div>
+            <div class="stats-panel">
+              <div class="sp-title">WIN RATE BY SETUP</div>
+              <div class="bar-row"><span class="bar-lbl">Breakout</span><div class="bar-track"><div class="bar-fill green" style="width:83%"></div></div><span class="bar-pct green">83%</span></div>
+              <div class="bar-row"><span class="bar-lbl">Trend</span><div class="bar-track"><div class="bar-fill green" style="width:65%"></div></div><span class="bar-pct green">65%</span></div>
+              <div class="bar-row"><span class="bar-lbl">Reversal</span><div class="bar-track"><div class="bar-fill red" style="width:38%"></div></div><span class="bar-pct red">38%</span></div>
+              <div class="bar-row"><span class="bar-lbl">Scalp</span><div class="bar-track"><div class="bar-fill gold" style="width:55%"></div></div><span class="bar-pct gold">55%</span></div>
+            </div>
+            <div class="stats-panel ai-panel">
+              <div class="sp-title">AI PATTERN INSIGHTS</div>
+              <div class="insight"><div class="i-dot green"></div><div class="i-text"><strong>Your edge is XAUUSD breakouts on H1.</strong> 78% win rate over 9 trades. Daily Mentor will prioritise this setup.</div></div>
+              <div class="insight"><div class="i-dot red"></div><div class="i-text"><strong>Stop trading GBPUSD reversals.</strong> 3 trades, 0 winners, −$340. This setup has no edge in your system.</div></div>
+              <div class="insight"><div class="i-dot gold"></div><div class="i-text"><strong>You overtrade Fridays.</strong> 6 of your 7 losses were opened on Friday. Consider a Friday rule.</div></div>
+              <div class="insight"><div class="i-dot blue"></div><div class="i-text"><strong>Your RR is improving.</strong> First 9 trades: avg 1.3 RR. Last 9 trades: avg 2.1 RR. The discipline is building.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PRICING VIEW ── -->
+      <div class="view hidden" id="view-pricing">
+        <div class="pricing-layout">
+          <div class="pricing-head">
+            <h2>CHOOSE YOUR STANDARD</h2>
+            <p>Pick the plan that matches where you are as a trader.</p>
+          </div>
+          <div class="pricing-cards">
+            <div class="pc">
+              <div class="pc-tier">Free Tier</div>
+              <div class="pc-name">Proof of Concept</div>
+              <div class="pc-price">$0<span>/mo</span></div>
+              <div class="pc-pitch">Experience the logic. Zero commitment.</div>
+              <ul class="pc-list">
+                <li class="y">3 total code generations</li>
+                <li class="y">Standard indicators (RSI, MA, MACD)</li>
+                <li class="n">Source code — compiled only</li>
+                <li class="n">Chart markup & journal</li>
+                <li class="n">Auto-debugger</li>
+              </ul>
+              <button class="pc-btn" onclick="activateTier('free');switchView('builder',document.querySelector('[data-view=builder]'))">Current Plan</button>
+            </div>
+            <div class="pc pc-blue">
+              <div class="pc-badge" style="background:#378ADD">ACTIVE DEVELOPER</div>
+              <div class="pc-tier">$19/mo</div>
+              <div class="pc-name" style="color:#378ADD">Active Developer</div>
+              <div class="pc-price" style="color:#378ADD">$19<span>/mo</span></div>
+              <div class="pc-pitch">Unlimited builds. Full source code. Learn the why.</div>
+              <ul class="pc-list">
+                <li class="y">Unlimited EA/Indicator generations</li>
+                <li class="y"><strong>Full MQL source code</strong></li>
+                <li class="y">MT4 + MT5 output</li>
+                <li class="y">YouTube → Robot converter</li>
+                <li class="y">PineScript → MQL Translator</li>
+                <li class="y">Chart Markup (manual upload)</li>
+                <li class="y">Trade Journal + AI analysis</li>
+                <li class="y">Auto-Debugger</li>
+              </ul>
+              <button class="pc-btn pc-btn-blue" onclick="activateTier('dev');switchView('builder',document.querySelector('[data-view=builder]'))">Start Developer Plan</button>
+            </div>
+            <div class="pc pc-gold">
+              <div class="pc-badge" style="background:var(--gold);color:#08090D">STANDARD EXECUTIVE</div>
+              <div class="pc-tier">$79/mo</div>
+              <div class="pc-name" style="color:var(--gold)">Sovereign Executive</div>
+              <div class="pc-price" style="color:var(--gold)">$79<span>/mo</span></div>
+              <div class="pc-pitch">Zero friction. Your AI trades alongside you daily.</div>
+              <ul class="pc-list">
+                <li class="y">Everything in Developer</li>
+                <li class="y"><strong>Daily Mentor</strong> — morning markups in your style</li>
+                <li class="y"><strong>Auto-Debugger Live</strong> — auto-detect & fix</li>
+                <li class="y">Prop-Firm Stealth (SL/TP hidden)</li>
+                <li class="y">News Shield (auto-pause)</li>
+                <li class="y">Code Health Audit (unlimited)</li>
+                <li class="y">Priority processing</li>
+                <li class="y">Auto-injection to MetaTrader</li>
+              </ul>
+              <button class="pc-btn pc-btn-gold" onclick="activateTier('exec');switchView('builder',document.querySelector('[data-view=builder]'))">Become Standard Executive</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /views-container -->
+  </div><!-- /app-body -->
+
+</div><!-- /appShell -->
+
+<!-- LOG TRADE MODAL -->
+<div class="modal-overlay hidden" id="logModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>LOG NEW TRADE</h3>
+      <span class="modal-close" onclick="closeLogModal()">✕</span>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row">
+        <div><label class="modal-lbl">Pair</label><select class="modal-input" id="m-pair"><option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>US30</option><option>NAS100</option><option>BTCUSD</option></select></div>
+        <div><label class="modal-lbl">Direction</label><select class="modal-input" id="m-dir"><option>BUY</option><option>SELL</option></select></div>
+      </div>
+      <div class="modal-row">
+        <div><label class="modal-lbl">Entry Price</label><input class="modal-input" id="m-entry" placeholder="e.g. 2345.50"></div>
+        <div><label class="modal-lbl">Lot Size</label><input class="modal-input" id="m-lot" placeholder="e.g. 0.10"></div>
+      </div>
+      <div class="modal-row">
+        <div><label class="modal-lbl">Stop Loss</label><input class="modal-input" id="m-sl" placeholder="e.g. 2330.00"></div>
+        <div><label class="modal-lbl">Take Profit</label><input class="modal-input" id="m-tp" placeholder="e.g. 2375.00"></div>
+      </div>
+      <div class="modal-row">
+        <div><label class="modal-lbl">Setup Type</label><select class="modal-input" id="m-setup"><option>Breakout</option><option>Trend Follow</option><option>Reversal</option><option>Scalp</option><option>News Trade</option></select></div>
+        <div><label class="modal-lbl">Timeframe</label><select class="modal-input" id="m-tf"><option>M15</option><option>H1</option><option>H4</option><option>D1</option></select></div>
+      </div>
+      <div><label class="modal-lbl">Pre-Trade Notes</label><textarea class="modal-input" id="m-notes" style="min-height:65px;resize:vertical" placeholder="Why are you taking this trade? What's your thesis?"></textarea></div>
+      <div style="margin-top:.85rem"><label class="modal-lbl">Emotional State</label>
+        <div class="emo-tags" id="emoTags">
+          <span class="et" onclick="this.classList.toggle('active')">Confident</span>
+          <span class="et" onclick="this.classList.toggle('active')">Patient</span>
+          <span class="et" onclick="this.classList.toggle('active')">Anxious</span>
+          <span class="et" onclick="this.classList.toggle('active')">FOMO</span>
+          <span class="et" onclick="this.classList.toggle('active')">Revenge</span>
+          <span class="et" onclick="this.classList.toggle('active')">Disciplined</span>
+          <span class="et" onclick="this.classList.toggle('active')">Tired</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeLogModal()">Cancel</button>
+      <button class="btn-gold" onclick="saveTrade()">Save & AI Analyse</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toastEl"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
