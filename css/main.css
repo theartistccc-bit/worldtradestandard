@@ -240,6 +240,11 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 .field-ta { resize: vertical; min-height: 75px; line-height: 1.5; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
 .param-table { background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
+.param-row { display: flex; align-items: center; justify-content: space-between; padding: .45rem .75rem; border-bottom: 1px solid var(--border); gap: .75rem; }
+.param-row:last-child { border-bottom: none; }
+.param-key { font-size: .74rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.param-val { background: var(--bg4); border: 1px solid var(--border2); color: var(--text); border-radius: 4px; padding: .3rem .6rem; font-size: .8rem; font-family: "IBM Plex Mono", monospace; width: 110px; text-align: right; outline: none; transition: border-color .2s; }
+.param-val:focus { border-color: var(--gold); background: var(--bg3); }
 .pt-row { display: flex; align-items: center; justify-content: space-between; padding: .46rem .8rem; border-bottom: 1px solid var(--border); }
 .pt-row:last-child { border-bottom: none; }
 .pt-key { font-size: .77rem; color: var(--muted); }
