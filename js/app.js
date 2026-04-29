@@ -269,23 +269,105 @@ async function generateCode() {
   const paramStr = params.map(p => `${p.k}: ${p.v}`).join(', ');
   const typeLabel = mode === 'indicator' ? 'Custom Indicator' : mode === 'script' ? 'Script' : 'Expert Advisor';
 
-  const systemPrompt = `You are WorldTradeStandard's MQL code engine. Your only job is to generate complete, production-ready ${ext} code.
-Rules:
-- Return ONLY raw ${ext} code. No markdown, no backticks, no explanations before or after the code.
-- The code must compile without errors in MetaEditor.
-- Include all necessary #include statements for ${platform}.
-- Add a clear header comment block with strategy name, symbol, timeframe, and parameters.
-- All input parameters must be declared with the 'input' keyword.
-- Include OnInit(), OnDeinit(), and OnTick() functions.
-- Implement proper risk management with stop loss and take profit.
-- Add error checking on all trade operations.`;
+  const isMT5 = platform === 'MT5';
+  const systemPrompt = isMT5
+    ? `You are an expert MQL5 programmer. Generate complete, error-free MQL5 Expert Advisor code.
 
-  const userMessage = `Generate a complete ${platform} ${typeLabel} with the following specification:
+STRICT OUTPUT RULES:
+- Output ONLY raw MQL5 code. Zero markdown. Zero backticks. Zero prose before or after.
+- The code must compile in MetaEditor with 0 errors and 0 warnings.
+
+MANDATORY MQL5 STRUCTURE — follow this exactly:
+1. Properties block: #property copyright, #property version, #property strict
+2. Includes: #include <Trade\\Trade.mqh> for CTrade. Use #include <Indicators\\Trend.mqh> only if needed.
+3. Input parameters: use 'input' keyword, never 'extern'
+4. Global variables declared outside all functions
+5. CTrade trade; declared globally
+6. int OnInit() — return INIT_SUCCEEDED on success, INIT_FAILED on error
+7. void OnDeinit(const int reason)
+8. void OnTick() — use IsNewBar() pattern or time-based logic, NEVER fire on every tick without a bar check
+
+MQL5 RULES TO PREVENT COMPILE ERRORS:
+- iMA() signature: iMA(symbol, timeframe, period, shift, method, price) — 6 params, returns handle (int)
+- iRSI() signature: iRSI(symbol, timeframe, period, price) — 4 params, returns handle
+- iMACD() signature: iMACD(symbol, timeframe, fast, slow, signal, price) — 6 params, returns handle
+- iBands() signature: iBands(symbol, timeframe, period, shift, deviation, price) — 6 params, returns handle
+- ALL indicator handles must be created in OnInit() and stored as global int variables
+- To read indicator values use: CopyBuffer(handle, buffer_index, start_pos, count, array[])
+- ArraySetAsSeries(array, true) before CopyBuffer for newest-first indexing
+- For MA Crossover: create TWO handles (int handleFast, int handleSlow) in OnInit()
+- trade.Buy(lot, symbol, price, sl, tp, comment) — use NULL for symbol to use current
+- trade.Sell(lot, symbol, price, sl, tp, comment)
+- PositionSelect(_Symbol) returns bool — check before accessing position info
+- Use PositionsTotal() to count open positions
+- SL and TP must be in price, not points — calculate from Ask/Bid using point * multiplier
+- Always call ChartRefresh() is NOT needed — remove it
+- MqlTick lastTick; SymbolInfoTick(_Symbol, lastTick); for current price
+- Do NOT use OrderSend() directly — use CTrade methods only
+- Do NOT use RefreshRates() — deprecated in MQL5
+
+ISNEWBAR PATTERN (use this exactly):
+datetime lastBarTime = 0;
+bool IsNewBar() {
+   datetime currentBarTime = iTime(_Symbol, PERIOD_CURRENT, 0);
+   if(currentBarTime != lastBarTime) { lastBarTime = currentBarTime; return true; }
+   return false;
+}
+
+Generate clean, complete, compilable MQL5 code now.`
+
+    : `You are an expert MQL4 programmer. Generate complete, error-free MQL4 Expert Advisor code.
+
+STRICT OUTPUT RULES:
+- Output ONLY raw MQL4 code. Zero markdown. Zero backticks. Zero prose before or after.
+- The code must compile in MetaEditor with 0 errors and 0 warnings.
+
+MANDATORY MQL4 STRUCTURE:
+1. #property copyright, #property version, #property strict (ALWAYS include #property strict)
+2. extern or input parameters at the top
+3. Global variables
+4. int OnInit()
+5. void OnDeinit(const int reason)
+6. void OnTick()
+
+MQL4 RULES TO PREVENT COMPILE ERRORS:
+- iMA(symbol, timeframe, period, shift, method, price) — 6 params, returns double directly
+- iRSI(symbol, timeframe, period, price, shift) — 5 params, returns double
+- iMACD(symbol, timeframe, fast, slow, signal, price, mode, shift) — 8 params, returns double
+- iBands(symbol, timeframe, period, deviation, shift, price, mode, ishift) — 8 params
+- Use MODE_MAIN, MODE_SIGNAL for MACD; MODE_UPPER, MODE_LOWER for Bands
+- For MA Crossover: fastMA = iMA(NULL,0,FastPeriod,0,FastMethod,PRICE_CLOSE,0)
+- OrderSend(symbol, cmd, lots, price, slippage, sl, tp, comment, magic, expiry, arrow)
+- Use Ask for BUY entry price, Bid for SELL entry price
+- SL/TP in price not points
+- OrdersTotal() to count open orders
+- Use IsNewBar pattern to avoid firing every tick
+- #property strict catches type errors — always include it
+- Do NOT mix MQL5 syntax (CTrade, CopyBuffer) into MQL4 code
+
+Generate clean, complete, compilable MQL4 code now.`;
+
+  // Strategy-specific hints to prevent common compile errors
+  const strategyHints = {
+    "MA Crossover":             isMT5 ? "Create two iMA() handles in OnInit (handleFast, handleSlow). In OnTick use CopyBuffer into double arrays fastBuf[] and slowBuf[] with ArraySetAsSeries true. Crossover: fastBuf[1]<slowBuf[1] && fastBuf[0]>slowBuf[0] = buy signal." : "Use iMA(NULL,0,FastPeriod,0,FastMethod,PRICE_CLOSE,0) and iMA(NULL,0,SlowPeriod,0,SlowMethod,PRICE_CLOSE,0). Cross detection on bar 0 vs bar 1.",
+    "RSI Reversal":             isMT5 ? "One iRSI() handle in OnInit. CopyBuffer buffer 0 into rsiBuf[]. Buy when rsiBuf[1]<OversoldLevel && rsiBuf[0]>OversoldLevel." : "iRSI(NULL,0,RSIPeriod,PRICE_CLOSE,0). Cross above oversold = buy, cross below overbought = sell.",
+    "Bollinger Bands Breakout": isMT5 ? "iBands() handle. CopyBuffer: buffer 0=middle, 1=upper, 2=lower. Buy when close crosses above upper band." : "iBands with MODE_UPPER and MODE_LOWER. Breakout above upper = buy.",
+    "MACD Signal Cross":        isMT5 ? "iMACD() handle. Buffer 0=MACD line, 1=signal line. Cross: macdBuf[0]>sigBuf[0] && macdBuf[1]<sigBuf[1] = buy." : "iMACD MODE_MAIN and MODE_SIGNAL. Check cross current vs previous bar.",
+    "Scalping EMA":             isMT5 ? "Two iMA() EMA handles. Fast cross above slow = buy scalp. Tight SL." : "Two iMA() MODE_EMA calls.",
+    "Grid Trading":             isMT5 ? "No indicator handles needed. Track last order price, open new order every GridStep points away from price." : "Track last order price with OrdersTotal and order comments.",
+  };
+  const hint = strategyHints[strategy] || "";
+
+  const userMessage = `Generate a complete ${platform} ${typeLabel}.
+
 Strategy: ${strategy}
 Symbol: ${symbol}
 Timeframe: ${tf}
 Parameters: ${paramStr}
-${extra ? `Additional requirements: ${extra}` : ''}`;
+${extra ? "Additional requirements: " + extra : ""}
+${hint ? "Implementation note: " + hint : ""}
+
+Output ONLY the complete ${ext} code. No explanations. No markdown.`;
 
   // UI: show loading
   document.getElementById('emptyState')?.classList.add('hidden');
