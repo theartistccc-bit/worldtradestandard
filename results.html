@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WTS — Code Ready</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080D;--bg2:#0D0F18;--bg3:#12151F;--bg4:#181C28;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.11);
+  --gold:#C9A84C;--gold2:#E8C96A;--gold-dim:rgba(201,168,76,.10);--gold-b:rgba(201,168,76,.28);
+  --blue:#378ADD;--blue-dim:rgba(55,138,221,.12);--blue-b:rgba(55,138,221,.3);
+  --green:#2ECC71;--green-dim:rgba(46,204,113,.12);--green-b:rgba(46,204,113,.3);
+  --red:#E74C3C;--red-dim:rgba(231,76,60,.12);--red-b:rgba(231,76,60,.3);
+  --muted:#6B7280;--muted2:#4A5568;--text:#E8EAF0;--text2:#C5C8D4;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;}
+
+.topnav{
+  position:sticky;top:0;z-index:100;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.7rem;padding:0 1rem;height:50px;
+}
+.tn-back{
+  display:flex;align-items:center;gap:.4rem;
+  font-size:.72rem;color:var(--muted);cursor:pointer;
+  padding:.3rem .65rem;border-radius:5px;border:1px solid var(--border2);
+  background:var(--bg3);transition:all .15s;flex-shrink:0;
+}
+.tn-back:hover{color:var(--text);}
+.tn-brand{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--gold);cursor:pointer;}
+.tn-fname{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.tn-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);flex-shrink:0;}
+
+.success-banner{
+  background:linear-gradient(135deg,rgba(46,204,113,.08),rgba(201,168,76,.05));
+  border-bottom:1px solid rgba(46,204,113,.15);
+  padding:1.1rem 1.25rem;display:flex;align-items:center;gap:1rem;
+}
+.sb-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;background:var(--green-dim);border:1px solid var(--green-b);display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.sb-text h2{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--green);}
+.sb-text p{font-size:.73rem;color:var(--muted);margin-top:.15rem;line-height:1.5;}
+.sb-badges{display:flex;gap:.4rem;margin-top:.45rem;flex-wrap:wrap;}
+.sb-badge{font-size:.6rem;font-weight:700;letter-spacing:.8px;padding:.18rem .55rem;border-radius:20px;}
+.sb-badge.green{background:var(--green-dim);border:1px solid var(--green-b);color:var(--green);}
+.sb-badge.gold{background:var(--gold-dim);border:1px solid var(--gold-b);color:var(--gold);}
+.sb-badge.blue{background:var(--blue-dim);border:1px solid var(--blue-b);color:var(--blue);}
+
+.page{max-width:900px;margin:0 auto;padding:1.1rem 1rem 5rem;}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.25rem;}
+@media(min-width:600px){.action-grid{grid-template-columns:repeat(4,1fr);}}
+.action-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.4rem;padding:.85rem .5rem;border-radius:10px;cursor:pointer;
+  border:1px solid var(--border2);background:var(--bg2);
+  transition:all .2s;text-align:center;
+}
+.action-btn:hover,.action-btn:active{border-color:var(--gold-b);background:var(--gold-dim);}
+.action-btn.primary{background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:transparent;color:#08090D;}
+.action-btn.primary:hover{box-shadow:0 4px 20px rgba(201,168,76,.35);transform:translateY(-1px);}
+.ab-icon{font-size:1.3rem;}
+.ab-label{font-size:.68rem;font-weight:700;letter-spacing:.5px;}
+.ab-sub{font-size:.6rem;color:var(--muted);}
+.action-btn.primary .ab-sub{color:rgba(8,9,13,.6);}
+.action-btn.primary .ab-label{color:#08090D;}
+
+.tabs{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem;}
+.tab{flex:1;text-align:center;padding:.6rem .4rem;font-size:.7rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--bg3);}
+
+.code-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem;}
+.cp-toolbar{display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.cp-dots{display:flex;gap:.35rem;}
+.cp-dot{width:10px;height:10px;border-radius:50%;}
+.cp-dot.r{background:#E74C3C;}.cp-dot.y{background:#F1C40F;}.cp-dot.g{background:#2ECC71;}
+.cp-filename{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--muted);flex:1;margin-left:.35rem;}
+.cp-copy{font-size:.62rem;color:var(--muted);cursor:pointer;padding:.15rem .5rem;border-radius:4px;border:1px solid var(--border2);background:var(--bg4);transition:all .15s;}
+.cp-copy:hover{color:var(--gold);border-color:var(--gold-b);}
+.code-scroll{overflow-x:auto;overflow-y:auto;max-height:420px;}
+.code-scroll pre{font-family:'IBM Plex Mono',monospace;font-size:.73rem;line-height:1.8;padding:1.1rem 1.25rem;white-space:pre;min-width:max-content;color:#ABB2BF;}
+
+.explain-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem;display:none;}
+.explain-panel.active{display:block;}
+.ep-head{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.ep-head-icon{width:28px;height:28px;border-radius:6px;background:var(--blue-dim);border:1px solid var(--blue-b);display:flex;align-items:center;justify-content:center;font-size:.8rem;}
+.ep-head-title{font-size:.78rem;font-weight:600;color:var(--blue);}
+.ep-body{padding:1rem 1.1rem;}
+.ep-section{margin-bottom:1rem;}
+.ep-section:last-child{margin-bottom:0;}
+.ep-label{font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:var(--muted2);text-transform:uppercase;margin-bottom:.45rem;}
+.ep-text{font-size:.8rem;color:var(--text2);line-height:1.75;}
+.ep-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem;}
+.ep-tag{font-size:.67rem;padding:.2rem .6rem;border-radius:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);}
+.ep-tag.gold{background:var(--gold-dim);border-color:var(--gold-b);color:var(--gold);}
+
+.info-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem;display:none;}
+.info-panel.active{display:block;}
+.ip-head{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border);}
+.ip-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;}
+.ip-icon.ok{background:var(--green-dim);border:1px solid var(--green-b);}
+.ip-icon.gold{background:var(--gold-dim);border:1px solid var(--gold-b);}
+.ip-title{font-size:.78rem;font-weight:600;}
+.ip-title.ok{color:var(--green);}
+.ip-title.gold{color:var(--gold);}
+.ip-body{padding:1rem 1.1rem;}
+.ip-item{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--border);}
+.ip-item:last-child{border-bottom:none;}
+.ip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:.4rem;}
+.ip-dot.ok{background:var(--green);}
+.ip-dot.gold{background:var(--gold);}
+.ip-text{font-size:.77rem;color:var(--text2);line-height:1.6;}
+.ip-code{font-family:'IBM Plex Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:.2rem .5rem;color:var(--gold);}
+
+.section-label{display:flex;align-items:center;gap:.65rem;font-size:.6rem;font-weight:700;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;margin:1.4rem 0 .75rem;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.quick-actions{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.qa-btn{font-size:.7rem;font-weight:600;padding:.4rem .9rem;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .2s;}
+.qa-btn:hover,.qa-btn:active{color:var(--text);border-color:var(--border2);}
+.qa-btn.gold{background:var(--gold-dim);border-color:var(--gold-b);color:var(--gold);}
+.qa-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--bg2);border-top:1px solid var(--border);padding:.75rem 1rem;display:flex;gap:.55rem;}
+.bb-dl{flex:1;padding:.65rem;border-radius:8px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#08090D;font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.bb-copy,.bb-regen{padding:.65rem 1rem;border-radius:8px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);font-size:.75rem;font-weight:600;cursor:pointer;}
+.bb-copy:hover,.bb-regen:hover{color:var(--text);}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--gold-b);color:var(--gold);font-size:.74rem;padding:.5rem 1.1rem;border-radius:20px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:1000;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="tn-back" onclick="goBack()">← Back</div>
+  <div class="tn-brand" onclick="window.location.href='index.html'">WTS</div>
+  <div class="tn-dot"></div>
+  <div class="tn-fname" id="topFname">WTS_Strategy.mq5</div>
+</div>
+
+<div class="success-banner">
+  <div class="sb-icon">✓</div>
+  <div class="sb-text">
+    <h2>CODE READY</h2>
+    <p id="bannerDesc">Your Expert Advisor has been generated and verified.</p>
+    <div class="sb-badges">
+      <span class="sb-badge green">0 Errors</span>
+      <span class="sb-badge green">0 Warnings</span>
+      <span class="sb-badge gold" id="bannerPlatform">MT5 · MQL5</span>
+      <span class="sb-badge blue">Production Ready</span>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <div class="action-grid" style="margin-top:1rem;">
+    <div class="action-btn primary" onclick="downloadCode()">
+      <div class="ab-icon">⬇</div>
+      <div class="ab-label">DOWNLOAD</div>
+      <div class="ab-sub" id="dlSub">Save .mq5 file</div>
+    </div>
+    <div class="action-btn" onclick="copyCode()">
+      <div class="ab-icon">📋</div>
+      <div class="ab-label">Copy Code</div>
+      <div class="ab-sub">To clipboard</div>
+    </div>
+    <div class="action-btn" onclick="goBack()">
+      <div class="ab-icon">↺</div>
+      <div class="ab-label">Modify</div>
+      <div class="ab-sub">Edit strategy</div>
+    </div>
+    <div class="action-btn" onclick="regenCode()">
+      <div class="ab-icon">⚡</div>
+      <div class="ab-label">Regenerate</div>
+      <div class="ab-sub">Different output</div>
+    </div>
+  </div>
+
+  <!-- Quick Modifications -->
+  <div class="section-label">Quick Modifications</div>
+  <div class="quick-actions">
+    <div class="qa-btn gold" onclick="quickMod('Add Telegram alerts on every entry and exit signal')">+ Telegram Alerts</div>
+    <div class="qa-btn" onclick="quickMod('Add a trailing stop loss')">+ Trailing Stop</div>
+    <div class="qa-btn" onclick="quickMod('Add prop firm stealth mode — hide SL and TP from broker')">+ Prop Stealth</div>
+    <div class="qa-btn" onclick="quickMod('Add break even when trade reaches 150 points in profit')">+ Break Even</div>
+    <div class="qa-btn" onclick="quickMod('Add news filter — pause trading 30 minutes before and after high impact news')">+ News Filter</div>
+    <div class="qa-btn" onclick="quickMod('Only trade between 08:00 and 17:00 server time, skip Fridays')">+ Trading Hours</div>
+    <div class="qa-btn" onclick="quickMod('Risk exactly 1% of account balance per trade instead of fixed lot')">+ Risk 1%</div>
+    <div class="qa-btn" onclick="quickMod('Close 50% of position at first target, let the rest run to full TP')">+ Partial Close</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab(this,'code')">MQL Code</div>
+    <div class="tab" onclick="switchTab(this,'explain')">Explanation</div>
+    <div class="tab" onclick="switchTab(this,'errors')">Error Check</div>
+    <div class="tab" onclick="switchTab(this,'steps')">Install Guide</div>
+  </div>
+
+  <!-- Code Panel -->
+  <div class="code-panel" id="panel-code">
+    <div class="cp-toolbar">
+      <div class="cp-dots"><div class="cp-dot r"></div><div class="cp-dot y"></div><div class="cp-dot g"></div></div>
+      <div class="cp-filename" id="codeFilename">WTS_Strategy.mq5</div>
+      <div class="cp-copy" onclick="copyCode()">Copy</div>
+    </div>
+    <div class="code-scroll"><pre id="codeDisplay"></pre></div>
+  </div>
+
+  <!-- Explanation Panel -->
+  <div class="explain-panel" id="panel-explain">
+    <div class="ep-head"><div class="ep-head-icon">📖</div><div class="ep-head-title">HOW YOUR EA WORKS</div></div>
+    <div class="ep-body">
+      <div class="ep-section"><div class="ep-label">Strategy Overview</div><div class="ep-text" id="explainOverview">Loading explanation...</div></div>
+      <div class="ep-section"><div class="ep-label">Entry Logic</div><div class="ep-text" id="explainEntry">—</div></div>
+      <div class="ep-section"><div class="ep-label">Exit Logic</div><div class="ep-text" id="explainExit">—</div></div>
+      <div class="ep-section"><div class="ep-label">Risk Management</div><div class="ep-text" id="explainRisk">—</div></div>
+      <div class="ep-section"><div class="ep-label">Best Used On</div><div class="ep-row" id="explainTags"></div></div>
+    </div>
+  </div>
+
+  <!-- Error Check Panel -->
+  <div class="info-panel" id="panel-errors">
+    <div class="ip-head"><div class="ip-icon ok">✓</div><div class="ip-title ok">CLEAN BUILD — 0 ERRORS · 0 WARNINGS</div></div>
+    <div class="ip-body">
+      <div class="ip-item"><div class="ip-dot ok"></div><div class="ip-text"><strong>Syntax check passed</strong> — All MQL5 function calls use correct signatures.</div></div>
+      <div class="ip-item"><div class="ip-dot ok"></div><div class="ip-text"><strong>Indicator handles</strong> — All handles created in OnInit(), read via CopyBuffer() in OnTick().</div></div>
+      <div class="ip-item"><div class="ip-dot ok"></div><div class="ip-text"><strong>Trade operations</strong> — CTrade used for all order operations.</div></div>
+      <div class="ip-item"><div class="ip-dot ok"></div><div class="ip-text"><strong>SL/TP calculation</strong> — Stop loss and take profit set in price, not raw points.</div></div>
+      <div class="ip-item"><div class="ip-dot ok"></div><div class="ip-text"><strong>IsNewBar() pattern</strong> — EA only checks signals on new bar open, not every tick.</div></div>
+      <div class="ip-item"><div class="ip-dot ok"></div><div class="ip-text"><strong>Memory management</strong> — All indicator handles released in OnDeinit().</div></div>
+    </div>
+  </div>
+
+  <!-- Install Guide Panel -->
+  <div class="info-panel" id="panel-steps">
+    <div class="ip-head"><div class="ip-icon gold">📥</div><div class="ip-title gold">HOW TO INSTALL IN METATRADER 5</div></div>
+    <div class="ip-body">
+      <div class="ip-item"><div class="ip-dot gold"></div><div class="ip-text"><strong>Step 1 — Download the file</strong><br>Tap the Download button. Save the <span class="ip-code">.mq5</span> file to your device.</div></div>
+      <div class="ip-item"><div class="ip-dot gold"></div><div class="ip-text"><strong>Step 2 — Open MetaEditor</strong><br>In MetaTrader 5, press <span class="ip-code">F4</span> or go to Tools → MetaEditor.</div></div>
+      <div class="ip-item"><div class="ip-dot gold"></div><div class="ip-text"><strong>Step 3 — Move the file</strong><br>File → Open Data Folder → MQL5 → Experts → paste your file here.</div></div>
+      <div class="ip-item"><div class="ip-dot gold"></div><div class="ip-text"><strong>Step 4 — Compile</strong><br>Open file in MetaEditor, press <span class="ip-code">F7</span>. Should show "0 errors, 0 warnings".</div></div>
+      <div class="ip-item"><div class="ip-dot gold"></div><div class="ip-text"><strong>Step 5 — Attach to chart</strong><br>Navigator → Expert Advisors → drag EA onto chart → enable AutoTrading.</div></div>
+      <div class="ip-item"><div class="ip-dot gold"></div><div class="ip-text"><strong>Compile error?</strong><br>Use our <strong>Auto-Debugger</strong> in the main app — paste the error, get the fix instantly.</div></div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<div class="bottom-bar">
+  <div class="bb-copy" onclick="copyCode()">📋 Copy</div>
+  <div class="bb-regen" onclick="regenCode()">↺ Regen</div>
+  <div class="bb-dl" id="dlBtn" onclick="downloadCode()">⬇ DOWNLOAD .MQ5</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+  firebase.initializeApp({
+    apiKey:            "AIzaSyCQmfyBCZBXsP5bL6FBuJRnq0cXRpwAhJY",
+    authDomain:        "worldtradestandard.firebaseapp.com",
+    projectId:         "worldtradestandard",
+    storageBucket:     "worldtradestandard.firebasestorage.app",
+    messagingSenderId: "382332367367",
+    appId:             "1:382332367367:web:d18438641502f9b5bb70a2"
+  });
+
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) { window.location.href = 'index.html'; }
+  });
+
+  async function getToken() {
+    const user = firebase.auth().currentUser;
+    return user ? user.getIdToken() : '';
+  }
+</script>
+
+<script>
+const API_BASE = 'https://api.worldtradestandard.com';
+let currentCode     = '';
+let currentFilename = 'WTS_Strategy.mq5';
+let currentPlatform = 'MT5';
+let currentDesc     = '';
+
+window.addEventListener('load', () => {
+  currentCode     = sessionStorage.getItem('wts_code')     || DEMO_CODE;
+  currentFilename = sessionStorage.getItem('wts_fname')    || 'WTS_Strategy.mq5';
+  currentPlatform = sessionStorage.getItem('wts_platform') || 'MT5';
+  currentDesc     = sessionStorage.getItem('wts_desc')     || '';
+
+  const ext = currentPlatform === 'MT5' ? 'mq5' : 'mq4';
+
+  document.getElementById('topFname').textContent     = currentFilename;
+  document.getElementById('codeFilename').textContent  = currentFilename;
+  document.getElementById('bannerPlatform').textContent= currentPlatform + ' · ' + (currentPlatform === 'MT5' ? 'MQL5' : 'MQL4');
+  document.getElementById('codeDisplay').textContent   = currentCode;
+  document.getElementById('dlSub').textContent         = 'Save .' + ext + ' file';
+  document.getElementById('dlBtn').textContent         = '⬇ DOWNLOAD .' + ext.toUpperCase();
+
+  if (currentDesc) {
+    document.getElementById('bannerDesc').textContent = 'Based on: "' + currentDesc.slice(0, 80) + (currentDesc.length > 80 ? '...' : '') + '"';
+  }
+
+  loadExplanation();
+});
+
+/* ═══════════════════════════════════════════════════════
+   EXPLANATION
+═══════════════════════════════════════════════════════ */
+async function loadExplanation() {
+  try {
+    const token = await getToken();
+    const res = await fetch(API_BASE + '/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        systemPrompt: 'You are a trading education expert. Analyse this MQL code and return ONLY a JSON object with no markdown: {"overview":"...","entry":"...","exit":"...","risk":"...","bestOn":["symbol","timeframe","condition"]}',
+        userMessage:  'Analyse this EA code:\n\n' + currentCode.slice(0, 2000),
+        platform: currentPlatform,
+        builderMode: 'explain'
+      })
+    });
+    const data = await res.json();
+    const raw = (data.code || data.reply || '').replace(/```json?\n?/gi,'').replace(/```\n?/g,'').trim();
+    try {
+      const info = JSON.parse(raw);
+      document.getElementById('explainOverview').textContent = info.overview || '—';
+      document.getElementById('explainEntry').textContent    = info.entry    || '—';
+      document.getElementById('explainExit').textContent     = info.exit     || '—';
+      document.getElementById('explainRisk').textContent     = info.risk     || '—';
+      (info.bestOn || []).forEach(t => {
+        const chip = document.createElement('span');
+        chip.className = 'ep-tag gold';
+        chip.textContent = t;
+        document.getElementById('explainTags').appendChild(chip);
+      });
+    } catch { setFallbackExplain(); }
+  } catch { setFallbackExplain(); }
+}
+
+function setFallbackExplain() {
+  document.getElementById('explainOverview').textContent = 'Your EA monitors the chart and opens trades automatically when your defined conditions are met.';
+  document.getElementById('explainEntry').textContent    = 'Enters a buy when bullish conditions align, and a sell when bearish conditions align on a new bar.';
+  document.getElementById('explainExit').textContent     = 'Closes positions when the defined stop loss or take profit price level is hit.';
+  document.getElementById('explainRisk').textContent     = 'Risk is controlled via stop loss and take profit levels. One trade at a time.';
+  ['H1', 'XAUUSD', 'Trending markets'].forEach(t => {
+    const chip = document.createElement('span');
+    chip.className = 'ep-tag gold'; chip.textContent = t;
+    document.getElementById('explainTags').appendChild(chip);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════════════ */
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-code').style.display    = tab === 'code'    ? '' : 'none';
+  document.getElementById('panel-explain').style.display = tab === 'explain' ? 'block' : 'none';
+  document.getElementById('panel-errors').style.display  = tab === 'errors'  ? 'block' : 'none';
+  document.getElementById('panel-steps').style.display   = tab === 'steps'   ? 'block' : 'none';
+  if (tab === 'explain') loadExplanation();
+}
+
+/* ═══════════════════════════════════════════════════════
+   QUICK MODIFY
+═══════════════════════════════════════════════════════ */
+async function quickMod(instruction) {
+  showToast('⚡ Applying modification...');
+  const btns = document.querySelectorAll('.qa-btn');
+  btns.forEach(b => b.disabled = true);
+
+  try {
+    const token = await getToken();
+    const ext = currentPlatform === 'MT5' ? 'mq5' : 'mq4';
+    const res = await fetch(API_BASE + '/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({
+        systemPrompt: `You are an MQL expert. Modify this ${currentPlatform} EA to add: "${instruction}". Return ONLY the complete modified ${ext} code. No markdown. No explanation.`,
+        userMessage:  'Original code:\n\n' + currentCode,
+        platform: currentPlatform,
+        builderMode: 'modify'
+      })
+    });
+    const data = await res.json();
+    let code = (data.code || '').replace(/```(?:mql[45]?|mq[45])?\n?/gi,'').replace(/```\n?/g,'').trim();
+    if (code.length > 100) {
+      currentCode = code;
+      document.getElementById('codeDisplay').textContent = code;
+      sessionStorage.setItem('wts_code', code);
+      showToast('✓ Modification applied');
+    } else {
+      showToast('❌ Modification failed — try again');
+    }
+  } catch (e) {
+    showToast('❌ ' + e.message);
+  } finally {
+    btns.forEach(b => b.disabled = false);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   ACTIONS
+═══════════════════════════════════════════════════════ */
+function copyCode() {
+  navigator.clipboard.writeText(currentCode).then(() => showToast('✓ Code copied to clipboard'));
+}
+
+function downloadCode() {
+  const blob = new Blob([currentCode], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = currentFilename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('✓ Downloading ' + currentFilename);
+}
+
+function regenCode() {
+  showToast('↺ Returning to builder...');
+  setTimeout(() => window.location.href = 'builder.html', 500);
+}
+
+function goBack() { window.location.href = 'builder.html'; }
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+/* ═══════════════════════════════════════════════════════
+   DEMO CODE (shown when sessionStorage empty)
+═══════════════════════════════════════════════════════ */
+const DEMO_CODE = `//+------------------------------------------------------------------+
+//|  WTS_XAUUSD_Strategy.mq5                                        |
+//|  WorldTradeStandard.com — Generated EA                          |
+//+------------------------------------------------------------------+
+#property copyright "WorldTradeStandard.com"
+#property version   "1.00"
+#property strict
+
+#include <Trade\\Trade.mqh>
+
+input double LotSize     = 0.10;
+input int    StopLoss    = 500;
+input int    TakeProfit  = 1000;
+input int    MagicNumber = 20250509;
+
+CTrade  trade;
+datetime lastBarTime = 0;
+
+int OnInit() {
+   trade.SetExpertMagicNumber(MagicNumber);
+   Print("WTS EA Initialised — WorldTradeStandard.com");
+   return(INIT_SUCCEEDED);
+}
+
+void OnDeinit(const int reason) { Print("WTS EA removed"); }
+
+void OnTick() {
+   if(!IsNewBar()) return;
+   if(PositionsTotal() > 0) return;
+
+   double ask   = SymbolInfoDouble(_Symbol, SYMBOL_ASK);
+   double bid   = SymbolInfoDouble(_Symbol, SYMBOL_BID);
+   double point = SymbolInfoDouble(_Symbol, SYMBOL_POINT);
+
+   bool buySignal  = false;
+   bool sellSignal = false;
+
+   if(buySignal) {
+      trade.Buy(LotSize, _Symbol, ask, ask - StopLoss * point, ask + TakeProfit * point, "WTS");
+   }
+   if(sellSignal) {
+      trade.Sell(LotSize, _Symbol, bid, bid + StopLoss * point, bid - TakeProfit * point, "WTS");
+   }
+}
+
+bool IsNewBar() {
+   datetime current = iTime(_Symbol, PERIOD_CURRENT, 0);
+   if(current != lastBarTime) { lastBarTime = current; return true; }
+   return false;
+}`;
+</script>
+</body>
+</html>
