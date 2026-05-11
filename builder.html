@@ -280,9 +280,26 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* ══ AUTH GATE ══ */
+#authGate{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
+}
+.ag-brand{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:4px;color:var(--gold);}
+.ag-spinner{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--gold);animation:spin .8s linear infinite;}
+.ag-sub{font-size:.72rem;color:var(--muted);letter-spacing:1px;}
 </style>
 </head>
 <body>
+
+<!-- AUTH GATE — blocks all content until Firebase confirms session -->
+<div id="authGate">
+  <div class="ag-brand">WORLDTRADESTANDARD</div>
+  <div class="ag-spinner"></div>
+  <div class="ag-sub">Verifying session...</div>
+</div>
 
 <!-- TOP NAV -->
 <div class="topnav">
@@ -481,9 +498,9 @@ No coding knowledge needed. Just describe exactly what you want, and we build it
     appId:             "1:382332367367:web:d18438641502f9b5bb70a2"
   });
 
-  // Redirect to main if not signed in
   firebase.auth().onAuthStateChanged(user => {
     if (!user) { window.location.href = 'index.html'; return; }
+    document.getElementById('authGate').style.display = 'none';
     const tier = sessionStorage.getItem('wts_tier') || 'free';
     const credits = parseInt(sessionStorage.getItem('wts_credits') || '3');
     const tierBadge = document.getElementById('tierBadge');

@@ -133,9 +133,26 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 
 ::-webkit-scrollbar{width:3px;height:3px;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* ══ AUTH GATE ══ */
+#authGate{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
+}
+.ag-brand{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:4px;color:var(--gold);}
+.ag-spinner{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--gold);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ag-sub{font-size:.72rem;color:var(--muted);letter-spacing:1px;}
 </style>
 </head>
 <body>
+
+<div id="authGate">
+  <div class="ag-brand">WORLDTRADESTANDARD</div>
+  <div class="ag-spinner"></div>
+  <div class="ag-sub">Verifying session...</div>
+</div>
 
 <div class="topnav">
   <div class="tn-back" onclick="goBack()">← Back</div>
@@ -276,7 +293,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   });
 
   firebase.auth().onAuthStateChanged(user => {
-    if (!user) { window.location.href = 'index.html'; }
+    if (!user) { window.location.href = 'index.html'; return; }
+    document.getElementById('authGate').style.display = 'none';
   });
 
   async function getToken() {
