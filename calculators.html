@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>WTS — Risk Calculators</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.style.visibility='hidden';</script>
+<style>
+:root{
+  --bg:#07080D;--bg2:#0D0F18;--bg3:#12151F;--bg4:#181C28;
+  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.11);
+  --primary:#378ADD;--primary-dim:rgba(55,138,221,.10);--primary-b:rgba(55,138,221,.28);
+  --green:#1D9E75;--green2:#2ECC71;--green-dim:rgba(29,158,117,.12);--green-b:rgba(29,158,117,.28);
+  --red:#E74C3C;--red-dim:rgba(231,76,60,.12);--red-b:rgba(231,76,60,.3);
+  --orange:#E67E22;--orange-dim:rgba(230,126,34,.12);--orange-b:rgba(230,126,34,.3);
+  --muted:#6B7280;--muted2:#4A5568;--text:#E8EAF0;--text2:#C5C8D4;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ══ TOP NAV ══ */
+.topnav{position:sticky;top:0;z-index:200;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem;padding:0 1rem;height:50px;}
+.tn-brand{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--primary);cursor:pointer;flex-shrink:0;}
+.tn-div{width:1px;height:16px;background:var(--border2);flex-shrink:0;}
+.tn-nav{display:flex;flex:1;gap:.1rem;}
+.tn-navlink{display:flex;align-items:center;gap:.3rem;padding:.28rem .6rem;border-radius:5px;font-size:.72rem;color:var(--muted);text-decoration:none;transition:all .15s;white-space:nowrap;}
+.tn-navlink:hover{color:var(--text);background:rgba(255,255,255,.04);}
+.tn-navlink.active{color:var(--green2);background:var(--green-dim);}
+@media(max-width:640px){
+  .tn-nav{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .tn-nav::-webkit-scrollbar{display:none;}
+  .tn-navlink{flex-shrink:0;}
+}
+
+/* ══ AUTH GATE ══ */
+#authGate{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;}
+.ag-brand{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:4px;color:var(--primary);}
+.ag-spinner{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--primary);animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.ag-sub{font-size:.72rem;color:var(--muted);letter-spacing:1px;}
+
+/* ══ PAGE ══ */
+.page{max-width:900px;margin:0 auto;padding:1.25rem 1rem 4rem;}
+
+/* ══ PAGE HEADER ══ */
+.page-header{margin-bottom:1.5rem;}
+.page-header h1{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--text);margin-bottom:.25rem;}
+.page-header p{font-size:.78rem;color:var(--muted);line-height:1.6;}
+.free-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--green-dim);border:1px solid var(--green-b);color:var(--green);font-size:.62rem;font-weight:700;padding:.18rem .6rem;border-radius:20px;letter-spacing:.8px;font-family:'IBM Plex Mono',monospace;margin-left:.6rem;}
+
+/* ══ CALC TABS ══ */
+.calc-tabs{display:flex;background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.25rem;}
+.calc-tab{flex:1;text-align:center;padding:.65rem .4rem;font-size:.75rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;white-space:nowrap;}
+.calc-tab.active{color:var(--primary);border-bottom-color:var(--primary);background:var(--bg3);}
+@media(max-width:480px){.calc-tab{font-size:.65rem;padding:.55rem .25rem;}}
+
+/* ══ CALC PANELS ══ */
+.calc-panel{display:none;}
+.calc-panel.active{display:block;}
+
+/* ══ CALCULATOR CARD ══ */
+.calc-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem;}
+.calc-card-head{padding:.85rem 1.1rem;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;gap:.65rem;}
+.calc-card-icon{font-size:1.2rem;}
+.calc-card-title{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;}
+.calc-card-sub{font-size:.72rem;color:var(--muted);margin-left:auto;}
+.calc-card-body{padding:1.1rem;}
+
+/* ══ FORM GRID ══ */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+@media(max-width:600px){.calc-grid{grid-template-columns:1fr;}}
+.calc-inputs{}
+.calc-results{}
+
+/* ══ INPUT FIELDS ══ */
+.field{margin-bottom:.85rem;}
+.field-label{font-size:.62rem;font-weight:700;color:var(--muted2);letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:.35rem;font-family:'IBM Plex Mono',monospace;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+.calc-input,.calc-select{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  color:var(--text);padding:.55rem .8rem;border-radius:6px;
+  font-size:.85rem;font-family:'Outfit',sans-serif;outline:none;
+  appearance:none;transition:border-color .2s;
+}
+.calc-input:focus,.calc-select:focus{border-color:var(--primary);}
+.calc-input-note{font-size:.62rem;color:var(--muted2);margin-top:.25rem;}
+
+/* Range slider */
+.calc-slider{width:100%;accent-color:var(--primary);cursor:pointer;margin-top:.25rem;}
+.slider-labels{display:flex;justify-content:space-between;font-size:.62rem;color:var(--muted2);margin-top:.15rem;font-family:'IBM Plex Mono',monospace;}
+
+/* ══ CALCULATE BUTTON ══ */
+.calc-btn{
+  width:100%;padding:.7rem;border-radius:7px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--primary),var(--green2));
+  color:#08090D;font-family:'Bebas Neue',sans-serif;
+  font-size:.95rem;letter-spacing:2px;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  transition:all .2s;margin-top:.25rem;
+}
+.calc-btn:hover{box-shadow:0 4px 20px rgba(55,138,221,.3);}
+
+/* ══ RESULT BOX ══ */
+.result-box{
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:10px;padding:1rem;height:100%;
+  display:flex;flex-direction:column;gap:.75rem;min-height:200px;
+}
+.result-empty{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;gap:.5rem;text-align:center;
+}
+.result-empty-icon{font-size:1.75rem;opacity:.3;}
+.result-empty-text{font-size:.75rem;color:var(--muted2);}
+.result-main{
+  text-align:center;padding:1rem 0;
+  border-bottom:1px solid var(--border);
+}
+.result-main-val{
+  font-family:'IBM Plex Mono',monospace;font-size:2.2rem;font-weight:600;
+  color:var(--green2);letter-spacing:-1px;
+}
+.result-main-lbl{font-size:.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:.25rem;}
+.result-rows{display:flex;flex-direction:column;gap:.45rem;}
+.result-row{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;}
+.result-row-lbl{color:var(--muted);}
+.result-row-val{font-family:'IBM Plex Mono',monospace;font-weight:600;}
+.result-row-val.green{color:var(--green2);}
+.result-row-val.red{color:var(--red);}
+.result-row-val.orange{color:var(--orange);}
+.result-row-val.blue{color:var(--primary);}
+
+/* ══ ROR METERS ══ */
+.ror-meters{display:flex;flex-direction:column;gap:.65rem;}
+.ror-meter{}
+.ror-meter-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;font-size:.75rem;}
+.ror-meter-lbl{color:var(--muted);}
+.ror-meter-val{font-family:'IBM Plex Mono',monospace;font-weight:600;}
+.ror-bar-track{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;}
+.ror-bar-fill{height:100%;border-radius:4px;transition:width .6s ease;width:0;}
+
+/* ══ GROWTH TABLE ══ */
+.growth-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1rem;}
+.gs-card{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:.75rem;text-align:center;}
+.gs-val{font-family:'IBM Plex Mono',monospace;font-size:1.1rem;font-weight:600;margin-bottom:.2rem;}
+.gs-lbl{font-size:.62rem;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;}
+.growth-table{overflow-x:auto;}
+.gtable{width:100%;border-collapse:collapse;font-size:.75rem;}
+.gtable th{text-align:left;padding:.45rem .6rem;color:var(--muted2);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;}
+.gtable td{padding:.42rem .6rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle;}
+.gtable tr:last-child td{border-bottom:none;}
+.gtable td:not(:first-child){font-family:'IBM Plex Mono',monospace;}
+.growth-bar{height:6px;background:var(--primary-dim);border-radius:3px;overflow:hidden;min-width:60px;}
+.growth-bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--green2));border-radius:3px;transition:width .4s;}
+
+/* ══ INFO CHIPS ══ */
+.info-row{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.75rem;}
+.info-chip{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:.3rem .65rem;font-size:.68rem;color:var(--muted2);font-family:'IBM Plex Mono',monospace;}
+.info-chip strong{color:var(--muted);}
+
+/* ══ TOAST ══ */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--primary-b);color:var(--primary);font-size:.74rem;padding:.5rem 1.1rem;border-radius:20px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:1000;white-space:nowrap;max-width:90vw;}
+.toast.show{opacity:1;}
+
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div id="authGate">
+  <div class="ag-brand">WORLDTRADESTANDARD</div>
+  <div class="ag-spinner"></div>
+  <div class="ag-sub">Verifying session...</div>
+</div>
+
+<!-- TOP NAV -->
+<div class="topnav">
+  <div class="tn-brand" onclick="window.location.href='index.html'">WTS</div>
+  <div class="tn-div"></div>
+  <nav class="tn-nav">
+    <a class="tn-navlink" href="builder.html">⚡ Builder</a>
+    <a class="tn-navlink" href="index.html#journal">📓 Journal</a>
+    <a class="tn-navlink" href="index.html#markup">📊 Markup</a>
+    <a class="tn-navlink" href="index.html#debugger">🔧 Debugger</a>
+    <a class="tn-navlink" href="index.html#stats">📈 Performance</a>
+    <a class="tn-navlink active" href="calculators.html">🧮 Calculators</a>
+    <a class="tn-navlink" href="index.html#pricing">💳 Plans</a>
+  </nav>
+</div>
+
+<div class="page">
+
+  <div class="page-header">
+    <h1>Risk Calculators <span class="free-badge">FREE · ALL TIERS</span></h1>
+    <p>Professional trading math — position sizing, risk of ruin, and compound growth. No tokens used, no API calls. Pure calculation.</p>
+  </div>
+
+  <!-- Tab switcher -->
+  <div class="calc-tabs">
+    <div class="calc-tab active" onclick="switchCalc('position',this)">📐 Position Size</div>
+    <div class="calc-tab" onclick="switchCalc('ruin',this)">💀 Risk of Ruin</div>
+    <div class="calc-tab" onclick="switchCalc('growth',this)">📈 Compound Growth</div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CALCULATOR 1: POSITION SIZE
+  ══════════════════════════════════ -->
+  <div class="calc-panel active" id="panel-position">
+    <div class="calc-card">
+      <div class="calc-card-head">
+        <div class="calc-card-icon">📐</div>
+        <div>
+          <div class="calc-card-title">Position Size Calculator</div>
+        </div>
+        <div class="calc-card-sub">Find your exact lot size</div>
+      </div>
+      <div class="calc-card-body">
+        <div class="calc-grid">
+          <div class="calc-inputs">
+
+            <div class="field">
+              <label class="field-label">Account Balance ($)</label>
+              <input class="calc-input" id="ps-balance" type="number" value="10000" min="1" placeholder="10000">
+            </div>
+
+            <div class="field">
+              <label class="field-label">Risk per Trade (%)</label>
+              <input class="calc-input" id="ps-risk" type="number" value="1" min="0.1" max="100" step="0.1" placeholder="1">
+              <input class="calc-slider" id="ps-risk-slider" type="range" min="0.1" max="5" step="0.1" value="1"
+                oninput="document.getElementById('ps-risk').value=this.value;calcPosition()">
+              <div class="slider-labels"><span>0.1%</span><span>5%</span></div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Stop Loss (points)</label>
+              <input class="calc-input" id="ps-sl" type="number" value="500" min="1" placeholder="500">
+              <div class="calc-input-note">1 point = smallest price movement on your broker</div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Instrument</label>
+              <select class="calc-select" id="ps-symbol" onchange="setPipValue()">
+                <option value="1">XAUUSD — Gold ($1/point/lot)</option>
+                <option value="10">EURUSD / GBPUSD ($10/pip/lot)</option>
+                <option value="10">US30 — Dow Jones ($10/point/lot)</option>
+                <option value="20">NAS100 — Nasdaq ($20/point/lot)</option>
+                <option value="9">USDJPY (~$9/pip/lot)</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+
+            <div class="field" id="ps-custom-wrap" style="display:none">
+              <label class="field-label">Pip/Point Value ($ per 1.0 lot)</label>
+              <input class="calc-input" id="ps-pipval" type="number" value="10" min="0.01" step="0.01" placeholder="10">
+            </div>
+
+            <button class="calc-btn" onclick="calcPosition()">
+              <span>▸</span> CALCULATE LOT SIZE
+            </button>
+          </div>
+
+          <div class="calc-results">
+            <div class="result-box" id="ps-result">
+              <div class="result-empty">
+                <div class="result-empty-icon">📐</div>
+                <div class="result-empty-text">Enter your parameters<br>and click Calculate</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-chip"><strong>Formula:</strong> Lots = (Balance × Risk%) ÷ (SL × Pip Value)</div>
+          <div class="info-chip"><strong>Standard lot</strong> = 100,000 units</div>
+          <div class="info-chip"><strong>Mini lot</strong> = 10,000 units (0.10)</div>
+          <div class="info-chip"><strong>Micro lot</strong> = 1,000 units (0.01)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CALCULATOR 2: RISK OF RUIN
+  ══════════════════════════════════ -->
+  <div class="calc-panel" id="panel-ruin">
+    <div class="calc-card">
+      <div class="calc-card-head">
+        <div class="calc-card-icon">💀</div>
+        <div>
+          <div class="calc-card-title">Risk of Ruin Calculator</div>
+        </div>
+        <div class="calc-card-sub">Monte Carlo · 10,000 simulations</div>
+      </div>
+      <div class="calc-card-body">
+        <div class="calc-grid">
+          <div class="calc-inputs">
+
+            <div class="field">
+              <label class="field-label">Win Rate (%)</label>
+              <input class="calc-input" id="ror-wr" type="number" value="55" min="1" max="99" placeholder="55">
+              <input class="calc-slider" id="ror-wr-slider" type="range" min="10" max="90" step="1" value="55"
+                oninput="document.getElementById('ror-wr').value=this.value">
+              <div class="slider-labels"><span>10%</span><span>90%</span></div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Average Risk:Reward</label>
+              <select class="calc-select" id="ror-rr">
+                <option value="0.5">1 : 0.5</option>
+                <option value="1">1 : 1</option>
+                <option value="1.5" selected>1 : 1.5</option>
+                <option value="2">1 : 2</option>
+                <option value="2.5">1 : 2.5</option>
+                <option value="3">1 : 3</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Risk per Trade (%)</label>
+              <input class="calc-input" id="ror-risk" type="number" value="1" min="0.1" max="20" step="0.1" placeholder="1">
+              <input class="calc-slider" id="ror-risk-slider" type="range" min="0.5" max="10" step="0.5" value="1"
+                oninput="document.getElementById('ror-risk').value=this.value">
+              <div class="slider-labels"><span>0.5%</span><span>10%</span></div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Trades to Simulate</label>
+              <select class="calc-select" id="ror-trades">
+                <option value="100">100 trades</option>
+                <option value="200" selected>200 trades</option>
+                <option value="500">500 trades</option>
+                <option value="1000">1,000 trades</option>
+              </select>
+            </div>
+
+            <button class="calc-btn" onclick="calcRoR()">
+              <span>▸</span> RUN SIMULATION
+            </button>
+          </div>
+
+          <div class="calc-results">
+            <div class="result-box" id="ror-result">
+              <div class="result-empty">
+                <div class="result-empty-icon">💀</div>
+                <div class="result-empty-text">Set your parameters<br>and run the simulation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-chip"><strong>Ruin</strong> = account drawdown exceeds threshold</div>
+          <div class="info-chip"><strong>Edge</strong> = (WR × RR) − (1 − WR)</div>
+          <div class="info-chip"><strong>Kelly %</strong> = optimal risk per trade</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       CALCULATOR 3: COMPOUND GROWTH
+  ══════════════════════════════════ -->
+  <div class="calc-panel" id="panel-growth">
+    <div class="calc-card">
+      <div class="calc-card-head">
+        <div class="calc-card-icon">📈</div>
+        <div>
+          <div class="calc-card-title">Compound Growth Projector</div>
+        </div>
+        <div class="calc-card-sub">Month-by-month projection</div>
+      </div>
+      <div class="calc-card-body">
+
+        <div class="calc-grid" style="margin-bottom:1rem;">
+          <div class="calc-inputs">
+
+            <div class="field">
+              <label class="field-label">Starting Balance ($)</label>
+              <input class="calc-input" id="cg-balance" type="number" value="5000" min="1" placeholder="5000">
+            </div>
+
+            <div class="field">
+              <label class="field-label">Monthly Return Target (%)</label>
+              <input class="calc-input" id="cg-return" type="number" value="5" min="0.1" max="100" step="0.1" placeholder="5">
+              <input class="calc-slider" id="cg-return-slider" type="range" min="1" max="30" step="0.5" value="5"
+                oninput="document.getElementById('cg-return').value=this.value">
+              <div class="slider-labels"><span>1%</span><span>30%</span></div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Projection Period</label>
+              <select class="calc-select" id="cg-months">
+                <option value="6">6 months</option>
+                <option value="12" selected>12 months</option>
+                <option value="24">24 months</option>
+                <option value="36">36 months</option>
+                <option value="60">60 months (5 years)</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Monthly Withdrawal ($)</label>
+              <input class="calc-input" id="cg-withdrawal" type="number" value="0" min="0" placeholder="0">
+              <div class="calc-input-note">Leave 0 to compound everything</div>
+            </div>
+
+            <button class="calc-btn" onclick="calcGrowth()">
+              <span>▸</span> PROJECT GROWTH
+            </button>
+          </div>
+
+          <div class="calc-results">
+            <div class="result-box" id="cg-summary" style="min-height:auto;">
+              <div class="result-empty">
+                <div class="result-empty-icon">📈</div>
+                <div class="result-empty-text">Enter parameters<br>and project your growth</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Growth table (full width, shown after calculate) -->
+        <div id="cg-table-wrap" style="display:none;">
+          <div class="growth-table">
+            <table class="gtable">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Profit</th>
+                  <th>Withdrawal</th>
+                  <th>Balance</th>
+                  <th>Growth</th>
+                </tr>
+              </thead>
+              <tbody id="cg-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-chip"><strong>Compound:</strong> profits re-invested each month</div>
+          <div class="info-chip"><strong>Targets are not guaranteed</strong> — for planning only</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:            "AIzaSyCQmfyBCZBXsP5bL6FBuJRnq0cXRpwAhJY",
+  authDomain:        "worldtradestandard.firebaseapp.com",
+  projectId:         "worldtradestandard",
+  storageBucket:     "worldtradestandard.firebasestorage.app",
+  messagingSenderId: "382332367367",
+  appId:             "1:382332367367:web:d18438641502f9b5bb70a2"
+});
+
+firebase.auth().onAuthStateChanged(user => {
+  document.documentElement.style.visibility = 'visible';
+  if (!user) { window.location.href = 'index.html'; return; }
+  document.getElementById('authGate').style.display = 'none';
+});
+</script>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   TAB SWITCHER
+════════════════════════════════════════════════════════ */
+function switchCalc(name, el) {
+  document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+/* ════════════════════════════════════════════════════════
+   CALCULATOR 1 — POSITION SIZE
+════════════════════════════════════════════════════════ */
+function setPipValue() {
+  const sel = document.getElementById('ps-symbol');
+  const customWrap = document.getElementById('ps-custom-wrap');
+  const val = sel.value;
+  customWrap.style.display = val === 'custom' ? '' : 'none';
+  calcPosition();
+}
+
+function getPipValue() {
+  const sel = document.getElementById('ps-symbol');
+  if (sel.value === 'custom') {
+    return parseFloat(document.getElementById('ps-pipval').value) || 10;
+  }
+  return parseFloat(sel.value) || 10;
+}
+
+function calcPosition() {
+  const balance  = parseFloat(document.getElementById('ps-balance').value) || 0;
+  const riskPct  = parseFloat(document.getElementById('ps-risk').value)    || 0;
+  const sl       = parseFloat(document.getElementById('ps-sl').value)      || 0;
+  const pipVal   = getPipValue();
+
+  // Sync slider
+  const slider = document.getElementById('ps-risk-slider');
+  if (slider) slider.value = Math.min(riskPct, 5);
+
+  if (!balance || !riskPct || !sl || !pipVal) return;
+
+  const dollarRisk = balance * (riskPct / 100);
+  const lots       = dollarRisk / (sl * pipVal);
+  const miniLots   = lots * 10;
+  const microLots  = lots * 100;
+
+  const el = document.getElementById('ps-result');
+  el.innerHTML = `
+    <div class="result-main">
+      <div class="result-main-val">${lots.toFixed(2)}</div>
+      <div class="result-main-lbl">Lots (Standard)</div>
+    </div>
+    <div class="result-rows">
+      <div class="result-row">
+        <span class="result-row-lbl">Dollar Risk</span>
+        <span class="result-row-val green">$${dollarRisk.toFixed(2)}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-lbl">Standard Lots (1.0)</span>
+        <span class="result-row-val blue">${lots.toFixed(3)}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-lbl">Mini Lots (0.10)</span>
+        <span class="result-row-val">${miniLots.toFixed(2)}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-lbl">Micro Lots (0.01)</span>
+        <span class="result-row-val">${microLots.toFixed(1)}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-lbl">Max Risk per Account</span>
+        <span class="result-row-val ${riskPct > 2 ? 'red' : 'green'}">${riskPct}%</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-lbl">SL in $ (per lot)</span>
+        <span class="result-row-val">${(sl * pipVal).toFixed(2)}</span>
+      </div>
+    </div>
+  `;
+}
+
+// Live update on input change
+['ps-balance','ps-risk','ps-sl','ps-pipval'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener('input', calcPosition);
+});
+
+/* ════════════════════════════════════════════════════════
+   CALCULATOR 2 — RISK OF RUIN (Monte Carlo)
+════════════════════════════════════════════════════════ */
+function calcRoR() {
+  const winRate  = parseFloat(document.getElementById('ror-wr').value)   / 100;
+  const rr       = parseFloat(document.getElementById('ror-rr').value);
+  const riskPct  = parseFloat(document.getElementById('ror-risk').value) / 100;
+  const trades   = parseInt(document.getElementById('ror-trades').value);
+
+  if (!winRate || !rr || !riskPct) return;
+
+  const SIMS      = 10000;
+  const THRESHOLDS = [0.20, 0.30, 0.50]; // drawdown thresholds
+
+  const ruinCounts = [0, 0, 0];
+
+  for (let s = 0; s < SIMS; s++) {
+    let balance = 1.0;
+    let peak    = 1.0;
+    let ruinHit = [false, false, false];
+
+    for (let t = 0; t < trades; t++) {
+      if (Math.random() < winRate) {
+        balance *= (1 + riskPct * rr);
+      } else {
+        balance *= (1 - riskPct);
+      }
+      if (balance > peak) peak = balance;
+
+      const dd = (peak - balance) / peak;
+      THRESHOLDS.forEach((thresh, i) => {
+        if (!ruinHit[i] && dd >= thresh) { ruinCounts[i]++; ruinHit[i] = true; }
+      });
+
+      if (balance <= 0) break;
+    }
+  }
+
+  const rorPcts = ruinCounts.map(c => (c / SIMS) * 100);
+
+  // Edge & Kelly
+  const edge  = (winRate * rr) - (1 - winRate);
+  const kelly = edge > 0 ? (edge / rr) * 100 : 0;
+
+  const rorColors = ['green','orange','red'];
+  const rorLabels = ['20% Drawdown','30% Drawdown','50% Drawdown (Ruin)'];
+
+  const el = document.getElementById('ror-result');
+  el.innerHTML = `
+    <div class="result-rows" style="margin-bottom:.75rem;">
+      <div class="result-row">
+        <span class="result-row-lbl">Trading Edge</span>
+        <span class="result-row-val ${edge > 0 ? 'green' : 'red'}">${edge > 0 ? '+' : ''}${(edge * 100).toFixed(2)}%</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-lbl">Kelly % (optimal risk)</span>
+        <span class="result-row-val blue">${kelly.toFixed(2)}%</span>
+      </div>
+      <div class="result-row">
+        <span class="result-row-lbl">Breakeven Win Rate</span>
+        <span class="result-row-val">${(1 / (1 + rr) * 100).toFixed(1)}%</span>
+      </div>
+    </div>
+    <div class="ror-meters">
+      ${rorLabels.map((lbl, i) => `
+        <div class="ror-meter">
+          <div class="ror-meter-head">
+            <span class="ror-meter-lbl">${lbl}</span>
+            <span class="ror-meter-val" style="color:var(--${rorColors[i] === 'green' ? 'green2' : rorColors[i] === 'orange' ? 'orange' : 'red'})">${rorPcts[i].toFixed(1)}%</span>
+          </div>
+          <div class="ror-bar-track">
+            <div class="ror-bar-fill" style="width:${rorPcts[i]}%;background:var(--${rorColors[i] === 'green' ? 'green' : rorColors[i] === 'orange' ? 'orange' : 'red'})"></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="font-size:.67rem;color:var(--muted2);margin-top:.75rem;line-height:1.6;">
+      Based on ${SIMS.toLocaleString()} simulations × ${trades} trades each.<br>
+      ${riskPct * 100}% risk/trade · ${(winRate * 100).toFixed(0)}% win rate · ${rr}R reward.
+    </div>
+  `;
+}
+
+/* ════════════════════════════════════════════════════════
+   CALCULATOR 3 — COMPOUND GROWTH
+════════════════════════════════════════════════════════ */
+function calcGrowth() {
+  const startBalance = parseFloat(document.getElementById('cg-balance').value)    || 0;
+  const monthlyRet   = parseFloat(document.getElementById('cg-return').value)     || 0;
+  const months       = parseInt(document.getElementById('cg-months').value)       || 12;
+  const withdrawal   = parseFloat(document.getElementById('cg-withdrawal').value) || 0;
+
+  if (!startBalance || !monthlyRet) return;
+
+  const rows = [];
+  let balance = startBalance;
+  let totalProfit = 0;
+  let totalWithdrawn = 0;
+
+  for (let m = 1; m <= months; m++) {
+    const profit = balance * (monthlyRet / 100);
+    const w = Math.min(withdrawal, balance + profit);
+    balance = balance + profit - w;
+    totalProfit += profit;
+    totalWithdrawn += w;
+    rows.push({ month: m, profit, withdrawal: w, balance });
+  }
+
+  const totalGrowthPct = ((balance - startBalance) / startBalance) * 100;
+  const maxBalance = Math.max(...rows.map(r => r.balance));
+
+  // Summary cards
+  const summaryEl = document.getElementById('cg-summary');
+  summaryEl.innerHTML = `
+    <div class="growth-summary">
+      <div class="gs-card">
+        <div class="gs-val" style="color:var(--green2)">$${formatNum(balance)}</div>
+        <div class="gs-lbl">Final Balance</div>
+      </div>
+      <div class="gs-card">
+        <div class="gs-val" style="color:var(--primary)">$${formatNum(totalProfit)}</div>
+        <div class="gs-lbl">Total Profit</div>
+      </div>
+      <div class="gs-card">
+        <div class="gs-val" style="color:${totalGrowthPct > 0 ? 'var(--green2)' : 'var(--red)'}">
+          ${totalGrowthPct > 0 ? '+' : ''}${totalGrowthPct.toFixed(1)}%
+        </div>
+        <div class="gs-lbl">Total Growth</div>
+      </div>
+    </div>
+    ${totalWithdrawn > 0 ? `
+    <div class="result-row" style="font-size:.75rem;padding:.25rem 0;">
+      <span class="result-row-lbl">Total Withdrawn</span>
+      <span class="result-row-val">$${formatNum(totalWithdrawn)}</span>
+    </div>` : ''}
+  `;
+
+  // Build table
+  const tbody = document.getElementById('cg-tbody');
+  tbody.innerHTML = rows.map(r => {
+    const barPct = (r.balance / maxBalance) * 100;
+    const growthPct = ((r.balance - startBalance) / startBalance) * 100;
+    return `
+      <tr>
+        <td style="color:var(--muted2)">M${r.month}</td>
+        <td style="color:var(--green2)">+$${formatNum(r.profit)}</td>
+        <td style="color:var(--muted)">${r.withdrawal > 0 ? '-$' + formatNum(r.withdrawal) : '—'}</td>
+        <td style="color:var(--text);font-weight:600">$${formatNum(r.balance)}</td>
+        <td>
+          <div class="growth-bar">
+            <div class="growth-bar-fill" style="width:${barPct}%"></div>
+          </div>
+          <div style="font-size:.6rem;color:var(--muted2);margin-top:.15rem;">+${growthPct.toFixed(0)}%</div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById('cg-table-wrap').style.display = '';
+}
+
+function formatNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(2) + 'M';
+  if (n >= 1000)    return (n / 1000).toFixed(1) + 'K';
+  return n.toFixed(2);
+}
+
+/* ════════════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════════════ */
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>

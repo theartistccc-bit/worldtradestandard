@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>WTS — Strategy Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.style.visibility='hidden';</script>
 <style>
 :root{
   --bg:#07080D;--bg2:#0D0F18;--bg3:#12151F;--bg4:#181C28;
   --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.11);
-  --gold:#C9A84C;--gold2:#E8C96A;--gold-dim:rgba(201,168,76,.10);--gold-b:rgba(201,168,76,.28);
+  --primary:#378ADD;--primary-light:#5DA8F0;--primary-dim:rgba(55,138,221,.10);--primary-b:rgba(55,138,221,.28);
   --blue:#378ADD;--blue-dim:rgba(55,138,221,.12);--blue-b:rgba(55,138,221,.3);
-  --green:#2ECC71;--green-dim:rgba(46,204,113,.12);--green-b:rgba(46,204,113,.3);
+  --green:#1D9E75;--green2:#2ECC71;--green-dim:rgba(29,158,117,.12);--green-b:rgba(29,158,117,.28);
+  --teal:#0F6E56;
   --red:#E74C3C;--red-dim:rgba(231,76,60,.12);--red-b:rgba(231,76,60,.3);
   --purple:#9B59B6;--purple-dim:rgba(155,89,182,.12);
   --orange:#E67E22;--orange-dim:rgba(230,126,34,.12);
@@ -25,17 +27,25 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .topnav{
   position:sticky;top:0;z-index:200;
   background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:.75rem;padding:0 1rem;height:50px;
+  display:flex;align-items:center;gap:.6rem;padding:0 1rem;height:50px;
 }
-.tn-brand{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--gold);cursor:pointer;}
-.tn-div{width:1px;height:16px;background:var(--border2);}
-.tn-title{font-size:.72rem;color:var(--muted);font-weight:500;flex:1;}
-.tn-tier{font-size:.58rem;font-weight:700;letter-spacing:1px;padding:.18rem .55rem;border-radius:20px;background:var(--blue-dim);border:1px solid var(--blue-b);color:var(--blue);}
-.tn-credits{font-size:.62rem;color:var(--gold);font-weight:600;padding:.18rem .55rem;border-radius:20px;background:var(--gold-dim);border:1px solid var(--gold-b);}
+.tn-brand{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--primary);cursor:pointer;flex-shrink:0;}
+.tn-div{width:1px;height:16px;background:var(--border2);flex-shrink:0;}
+.tn-nav{display:flex;flex:1;gap:.1rem;}
+.tn-navlink{
+  display:flex;align-items:center;gap:.3rem;
+  padding:.28rem .6rem;border-radius:5px;
+  font-size:.72rem;color:var(--muted);
+  text-decoration:none;transition:all .15s;white-space:nowrap;
+}
+.tn-navlink:hover{color:var(--text);background:rgba(255,255,255,.04);}
+.tn-navlink.active{color:var(--green2);background:var(--green-dim);}
+.tn-tier{font-size:.58rem;font-weight:700;letter-spacing:1px;padding:.18rem .55rem;border-radius:20px;background:var(--blue-dim);border:1px solid var(--blue-b);color:var(--blue);flex-shrink:0;}
+.tn-credits{font-size:.62rem;color:var(--primary);font-weight:600;padding:.18rem .55rem;border-radius:20px;background:var(--primary-dim);border:1px solid var(--primary-b);flex-shrink:0;}
 .tn-gen-btn{
   font-size:.68rem;font-weight:700;letter-spacing:.8px;
   padding:.38rem .9rem;border-radius:6px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));color:#08090D;
+  background:var(--primary);color:#fff;
   white-space:nowrap;flex-shrink:0;
 }
 
@@ -48,24 +58,24 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   border-radius:14px;overflow:hidden;margin-bottom:1.25rem;
   transition:border-color .25s;
 }
-.main-input-card:focus-within{border-color:var(--gold);}
+.main-input-card:focus-within{border-color:var(--primary);}
 
 .mic-header{
   display:flex;align-items:center;gap:.75rem;
   padding:.85rem 1.1rem;
-  background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(55,138,221,.04));
+  background:linear-gradient(135deg,rgba(55,138,221,.06),rgba(29,158,117,.04));
   border-bottom:1px solid var(--border);
 }
 .mic-icon-wrap{
   width:42px;height:42px;border-radius:10px;flex-shrink:0;
-  background:var(--gold-dim);border:1px solid var(--gold-b);
+  background:var(--primary-dim);border:1px solid var(--primary-b);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   transition:all .2s;
 }
 .mic-icon-wrap:hover,.mic-icon-wrap.listening{background:var(--red-dim);border-color:var(--red-b);}
 .mic-icon-wrap.listening{animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4);}50%{box-shadow:0 0 0 8px rgba(231,76,60,0);}}
-.mic-icon-wrap svg{width:18px;height:18px;fill:none;stroke:var(--gold);stroke-width:2;}
+.mic-icon-wrap svg{width:18px;height:18px;fill:none;stroke:var(--primary);stroke-width:2;}
 .mic-icon-wrap.listening svg{stroke:var(--red);}
 .mic-header-text{flex:1;}
 .mic-header-title{font-size:.85rem;font-weight:600;color:var(--text);}
@@ -101,7 +111,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   font-size:.72rem;color:var(--muted);cursor:pointer;transition:all .2s;
   white-space:nowrap;
 }
-.upload-btn:hover{border-color:var(--gold-b);color:var(--gold);background:var(--gold-dim);}
+.upload-btn:hover{border-color:var(--primary-b);color:var(--primary);background:var(--primary-dim);}
 .upload-btn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;}
 .upload-pills{display:flex;gap:.4rem;flex-wrap:wrap;flex:1;}
 .upill{
@@ -119,7 +129,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   background:var(--bg4);border:1px solid var(--border2);
   color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap;
 }
-.hint-chip:hover,.hint-chip:active{border-color:var(--gold-b);color:var(--gold);background:var(--gold-dim);}
+.hint-chip:hover,.hint-chip:active{border-color:var(--primary-b);color:var(--primary);background:var(--primary-dim);}
 
 /* Generate row */
 .gen-row{
@@ -134,13 +144,13 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 }
 .gen-btn{
   flex:1;padding:.6rem;border-radius:7px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  background:linear-gradient(135deg,var(--primary),var(--green2));
   color:#08090D;font-family:'Bebas Neue',sans-serif;
   font-size:.95rem;letter-spacing:2px;
   display:flex;align-items:center;justify-content:center;gap:.5rem;
   transition:all .2s;
 }
-.gen-btn:hover,.gen-btn:active{box-shadow:0 4px 20px rgba(201,168,76,.35);}
+.gen-btn:hover,.gen-btn:active{box-shadow:0 4px 20px rgba(55,138,221,.35);}
 .gen-btn:disabled{opacity:.5;cursor:not-allowed;}
 .gen-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;}
 
@@ -161,7 +171,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   font-size:.7rem;font-weight:600;color:var(--muted);
   cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;
 }
-.vb-tab.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--bg2);}
+.vb-tab.active{color:var(--primary);border-bottom-color:var(--primary);background:var(--bg2);}
 
 /* Block grid */
 .block-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.55rem;padding:.9rem;}
@@ -174,8 +184,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   transition:all .2s;user-select:none;
   display:flex;flex-direction:column;gap:.35rem;
 }
-.block-card:hover,.block-card:active{border-color:var(--gold-b);background:var(--gold-dim);}
-.block-card.selected{border-color:var(--gold);background:var(--gold-dim);box-shadow:0 0 0 2px rgba(201,168,76,.15);}
+.block-card:hover,.block-card:active{border-color:var(--primary-b);background:var(--primary-dim);}
+.block-card.selected{border-color:var(--primary);background:var(--primary-dim);box-shadow:0 0 0 2px rgba(55,138,221,.15);}
 .bc-icon{font-size:1.1rem;margin-bottom:.1rem;}
 .bc-name{font-size:.73rem;font-weight:600;color:var(--text2);}
 .bc-sub{font-size:.62rem;color:var(--muted);}
@@ -192,8 +202,8 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .block-card.action-sell{border-color:rgba(231,76,60,.2);}
 .block-card.action-sell .bc-icon{color:var(--red);}
 .block-card.action-sell.selected,.block-card.action-sell:active{border-color:var(--red);background:var(--red-dim);}
-.block-card.risk{border-color:rgba(201,168,76,.2);}
-.block-card.risk .bc-icon{color:var(--gold);}
+.block-card.risk{border-color:rgba(211,47,47,.2);}
+.block-card.risk .bc-icon{color:var(--primary);}
 
 /* ══ FLOW CANVAS ══ */
 .flow-area{padding:.9rem;min-height:280px;}
@@ -213,7 +223,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   color:var(--text);border-radius:5px;padding:.35rem .6rem;
   font-size:.76rem;font-family:'Outfit',sans-serif;outline:none;appearance:none;
 }
-.fn-select:focus,.fn-input:focus{border-color:var(--gold);}
+.fn-select:focus,.fn-input:focus{border-color:var(--primary);}
 .fn-row{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;}
 .flow-arrow{text-align:center;font-size:1.2rem;color:var(--muted2);padding:.1rem 0;line-height:1;}
 
@@ -229,9 +239,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .flow-node.sell .fn-head{background:rgba(231,76,60,.07);}
 .flow-node.sell .fn-icon{background:var(--red-dim);color:var(--red);}
 .flow-node.sell .fn-title{color:var(--red);}
-.flow-node.risk .fn-head{background:rgba(201,168,76,.07);}
-.flow-node.risk .fn-icon{background:var(--gold-dim);color:var(--gold);}
-.flow-node.risk .fn-title{color:var(--gold);}
+.flow-node.risk .fn-head{background:rgba(211,47,47,.07);}
+.flow-node.risk .fn-icon{background:var(--primary-dim);color:var(--primary);}
+.flow-node.risk .fn-title{color:var(--primary);}
 
 /* ══ STRATEGY SUMMARY ══ */
 .summary-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.25rem;}
@@ -239,7 +249,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .sc-title{font-size:.68rem;font-weight:700;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;}
 .sc-status{font-size:.68rem;font-weight:600;padding:.2rem .6rem;border-radius:20px;}
 .sc-status.valid{background:var(--green-dim);border:1px solid var(--green-b);color:var(--green);}
-.sc-status.warn{background:var(--gold-dim);border:1px solid var(--gold-b);color:var(--gold);}
+.sc-status.warn{background:var(--primary-dim);border:1px solid var(--primary-b);color:var(--primary);}
 .sc-status.empty{background:var(--bg3);border:1px solid var(--border);color:var(--muted);}
 .sc-rules{display:flex;flex-direction:column;gap:.4rem;}
 .sc-rule{display:flex;align-items:flex-start;gap:.55rem;font-size:.75rem;line-height:1.6;}
@@ -253,16 +263,16 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
   flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;
 }
 .loading-overlay.active{display:flex;}
-.lo-spinner{width:40px;height:40px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--gold);animation:spin .8s linear infinite;}
+.lo-spinner{width:40px;height:40px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--primary);animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .lo-steps{display:flex;flex-direction:column;gap:.4rem;text-align:center;}
 .lo-step{font-size:.74rem;color:var(--muted2);font-family:'IBM Plex Mono',monospace;transition:color .3s;}
-.lo-step.active{color:var(--gold);}
+.lo-step.active{color:var(--primary);}
 
 /* ══ TOAST ══ */
 .toast{
   position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
-  background:var(--bg3);border:1px solid var(--gold-b);color:var(--gold);
+  background:var(--bg3);border:1px solid var(--primary-b);color:var(--primary);
   font-size:.74rem;padding:.5rem 1.1rem;border-radius:20px;
   opacity:0;transition:opacity .3s;pointer-events:none;z-index:1000;
   white-space:nowrap;max-width:90vw;
@@ -281,14 +291,21 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
+@media(max-width:640px){
+  .tn-nav{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+  .tn-nav::-webkit-scrollbar{display:none;}
+  .tn-navlink{flex-shrink:0;}
+  .tn-gen-btn{display:none;}
+}
+
 /* ══ AUTH GATE ══ */
 #authGate{
   position:fixed;inset:0;z-index:9999;
   background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;
 }
-.ag-brand{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:4px;color:var(--gold);}
-.ag-spinner{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--gold);animation:spin .8s linear infinite;}
+.ag-brand{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:4px;color:var(--primary);}
+.ag-spinner{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);border-top-color:var(--primary);animation:spin .8s linear infinite;}
 .ag-sub{font-size:.72rem;color:var(--muted);letter-spacing:1px;}
 </style>
 </head>
@@ -305,7 +322,15 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 <div class="topnav">
   <div class="tn-brand" onclick="window.location.href='index.html'">WTS</div>
   <div class="tn-div"></div>
-  <div class="tn-title">Strategy Builder</div>
+  <nav class="tn-nav">
+    <a class="tn-navlink active" href="builder.html">⚡ Builder</a>
+    <a class="tn-navlink" href="index.html#journal">📓 Journal</a>
+    <a class="tn-navlink" href="index.html#markup">📊 Markup</a>
+    <a class="tn-navlink" href="index.html#debugger">🔧 Debugger</a>
+    <a class="tn-navlink" href="index.html#stats">📈 Performance</a>
+    <a class="tn-navlink" href="calculators.html">🧮 Calculators</a>
+    <a class="tn-navlink" href="index.html#pricing">💳 Plans</a>
+  </nav>
   <div class="tn-tier" id="tierBadge">FREE</div>
   <div class="tn-credits hidden" id="creditsBadge">⚡ 3 left</div>
   <button class="tn-gen-btn" onclick="runGenerate()">⚡ Generate</button>
@@ -499,6 +524,7 @@ No coding knowledge needed. Just describe exactly what you want, and we build it
   });
 
   firebase.auth().onAuthStateChanged(user => {
+    document.documentElement.style.visibility = 'visible';
     if (!user) { window.location.href = 'index.html'; return; }
     document.getElementById('authGate').style.display = 'none';
     const tier = sessionStorage.getItem('wts_tier') || 'free';
@@ -509,6 +535,20 @@ No coding knowledge needed. Just describe exactly what you want, and we build it
     if (tier === 'free' && creditsBadge) {
       creditsBadge.textContent = '⚡ ' + credits + ' left';
       creditsBadge.classList.remove('hidden');
+    }
+
+    // Pre-fill from onboarding strategy selection
+    const prefill = sessionStorage.getItem('wts_prefill');
+    if (prefill) {
+      const ta = document.getElementById('strategyInput');
+      if (ta) ta.value = prefill;
+      sessionStorage.removeItem('wts_prefill');
+      const platform = sessionStorage.getItem('wts_prefill_platform');
+      if (platform) {
+        const sel = document.getElementById('genPlatform');
+        if (sel) sel.value = platform;
+        sessionStorage.removeItem('wts_prefill_platform');
+      }
     }
   });
 
@@ -715,7 +755,7 @@ function updateSummary() {
     rulesEl.innerHTML = '<div class="sc-empty">Add blocks above to see your strategy logic here.</div>';
     statusEl.textContent = 'Empty'; statusEl.className = 'sc-status empty'; return;
   }
-  const colors = { trigger: 'var(--blue)', filter: 'var(--orange)', buy: 'var(--green)', sell: 'var(--red)', risk: 'var(--gold)' };
+  const colors = { trigger: 'var(--blue)', filter: 'var(--orange)', buy: 'var(--green)', sell: 'var(--red)', risk: 'var(--primary)' };
   const order = { trigger: 0, filter: 1, buy: 2, sell: 2, risk: 3 };
   const sorted = [...blocks].sort((a, b) => (order[BLOCK_DEF[a.subtype].type] || 0) - (order[BLOCK_DEF[b.subtype].type] || 0));
   rulesEl.innerHTML = sorted.map(b => {
