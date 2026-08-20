@@ -765,6 +765,585 @@ app.post('/api/nowpayments/webhook', async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════
+//  WTS NEXUS AGENT ENDPOINTS
+// ═══════════════════════════════════════════════════════════
+
+// Send command to user's agent via Firestore
+app.post('/api/agent/command', verifyAuth, async (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Agent service unavailable' });
+  const { type, payload = {} } = req.body;
+  const uid     = req.uid;
+  const allowed = ['login', 'deploy_ea', 'get_status', 'kill_switch'];
+  if (!allowed.includes(type)) return res.status(400).json({ error: `Unknown command: ${type}` });
+  try {
+    const agentDoc = await db.collection('agents').doc(uid).get();
+    if (!agentDoc.exists || !agentDoc.data().registered) {
+      return res.status(404).json({ error: 'No VPS agent found. Contact support to set up your VPS.' });
+    }
+    const cmdRef = await db.collection('agents').doc(uid).collection('commands').add({
+      type, payload, status: 'pending',
+      created_at: new Date().toISOString(),
+      completed_at: null, result: null, error: null
+    });
+    res.json({ success: true, cmd_id: cmdRef.id });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// Poll command result
+app.get('/api/agent/command/:cmdId', verifyAuth, async (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Agent service unavailable' });
+  const uid = req.uid;
+  try {
+    const doc = await db.collection('agents').doc(uid)
+      .collection('commands').doc(req.params.cmdId).get();
+    if (!doc.exists) return res.status(404).json({ error: 'Command not found' });
+    res.json(doc.data());
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// Get agent online status for the logged in user
+app.get('/api/agent/status', verifyAuth, async (req, res) => {
+  if (!db) return res.json({ online: false, registered: false });
+  const uid = req.uid;
+  try {
+    const doc  = await db.collection('agents').doc(uid).get();
+    if (!doc.exists) return res.json({ online: false, registered: false });
+    const data  = doc.data();
+    const stale = !data.last_seen || (Date.now() - new Date(data.last_seen).getTime()) > 90000;
+    res.json({ ...data, online: !stale && !!data.online });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// Admin: register agent for a user after manual VPS setup
+app.post('/api/admin/agent/register', verifyAuth, async (req, res) => {
+  if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
+  if (!db) return res.status(503).json({ error: 'Agent service unavailable' });
+  const { uid, vps_ip, notes } = req.body;
+  if (!uid) return res.status(400).json({ error: 'uid required' });
+  try {
+    await db.collection('agents').doc(uid).set({
+      online: false, registered: true,
+      vps_ip: vps_ip || '', notes: notes || '',
+      registered_by: req.uid,
+      registered_at: new Date().toISOString()
+    }, { merge: true });
+    res.json({ success: true, message: `Agent registered for ${uid}` });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// Admin: get all agents and their status
+app.get('/api/admin/agents', verifyAuth, async (req, res) => {
+  if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
+  if (!db) return res.status(503).json({ error: 'Agent service unavailable' });
+  try {
+    const snap   = await db.collection('agents').get();
+    const agents = snap.docs.map(d => {
+      const data  = d.data();
+      const stale = !data.last_seen || (Date.now() - new Date(data.last_seen).getTime()) > 90000;
+      return { uid: d.id, ...data, online: !stale && !!data.online };
+    });
+    res.json({ agents, total: agents.length, online: agents.filter(a => a.online).length });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  PROP FIRM RULES ENGINE
+// ═══════════════════════════════════════════════════════════
+
+// Save prop firm rules for a user — replaces any currently active rule set
+app.post('/api/propfirm/rules', verifyAuth, async (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Database unavailable' });
+  try {
+    const {
+      firm_name,
+      min_trade_duration_seconds,  // minimum hold time e.g. 10
+      max_daily_loss_pct,          // e.g. 5 (percent)
+      max_total_loss_pct,          // e.g. 10 (percent)
+      max_lot_size,                // e.g. 5.0
+      allowed_pairs,               // [] means all allowed
+      trading_days,                // ['monday','tuesday',...] or [] for all
+      trading_hours_start,         // '08:00' or null
+      trading_hours_end,           // '20:00' or null
+      no_trade_during_news,        // true/false
+      no_overnight_trades,         // true/false
+      no_weekend_trades,           // true/false
+      ea_allowed,                  // true/false — does firm allow EAs
+      notes                        // free text user adds
+    } = req.body;
+
+    const rulesRef = db.collection('users').doc(req.uid).collection('propfirm_rules');
+
+    // Deactivate any existing active rule set first so only one is ever active —
+    // otherwise validate()/GET pick an arbitrary doc among several active ones.
+    const prevActive = await rulesRef.where('active', '==', true).get();
+    const batch = db.batch();
+    prevActive.docs.forEach(d => batch.update(d.ref, { active: false }));
+
+    const newRuleRef = rulesRef.doc();
+    batch.set(newRuleRef, {
+      firm_name:                   firm_name || 'Unknown Firm',
+      min_trade_duration_seconds:  parseInt(min_trade_duration_seconds) || 0,
+      max_daily_loss_pct:          parseFloat(max_daily_loss_pct) || 5,
+      max_total_loss_pct:          parseFloat(max_total_loss_pct) || 10,
+      max_lot_size:                parseFloat(max_lot_size) || 0,
+      allowed_pairs:                allowed_pairs || [],
+      trading_days:                trading_days || [],
+      trading_hours_start:         trading_hours_start || null,
+      trading_hours_end:           trading_hours_end || null,
+      no_trade_during_news:        !!no_trade_during_news,
+      no_overnight_trades:         !!no_overnight_trades,
+      no_weekend_trades:           !!no_weekend_trades,
+      ea_allowed:                  ea_allowed !== false,
+      notes:                       notes || '',
+      active:                      true,
+      created_at:                  new Date().toISOString()
+    });
+    await batch.commit();
+
+    res.json({ success: true, message: 'Prop firm rules saved' });
+  } catch(e) {
+    res.status(500).json({ error: 'Failed to save rules' });
+  }
+});
+
+// Get active prop firm rules for logged in user
+app.get('/api/propfirm/rules', verifyAuth, async (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Database unavailable' });
+  try {
+    const snap = await db
+      .collection('users').doc(req.uid)
+      .collection('propfirm_rules')
+      .where('active', '==', true)
+      .get();
+    const rules = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    res.json({ rules });
+  } catch(e) {
+    res.status(500).json({ error: 'Failed to load rules' });
+  }
+});
+
+// Validate a proposed trade action against saved rules
+// Called by app before user opens a trade
+app.post('/api/propfirm/validate', verifyAuth, async (req, res) => {
+  if (!db) return res.status(503).json({ error: 'Database unavailable' });
+  try {
+    const { action, pair, lot_size, open_time } = req.body;
+    // action: 'open' or 'close'
+    // open_time: ISO string of when trade was opened (for close validation)
+
+    const snap = await db
+      .collection('users').doc(req.uid)
+      .collection('propfirm_rules')
+      .where('active', '==', true)
+      .get();
+
+    if (snap.empty) return res.json({ allowed: true, warnings: [], rules_active: false });
+
+    const rules    = snap.docs[0].data();
+    const warnings = [];
+    const blocks   = [];
+    const now      = new Date();
+
+    // Check minimum hold time on close
+    if (action === 'close' && open_time) {
+      const openMs   = new Date(open_time).getTime();
+      const heldSecs = Math.floor((now.getTime() - openMs) / 1000);
+      const minSecs  = rules.min_trade_duration_seconds || 0;
+      if (heldSecs < minSecs) {
+        const waitSecs = minSecs - heldSecs;
+        blocks.push({
+          rule:    'min_trade_duration',
+          message: `This trade must be held for at least ${minSecs} seconds. You have held it for ${heldSecs} seconds. Wait ${waitSecs} more seconds before closing.`,
+          wait_seconds: waitSecs
+        });
+      }
+    }
+
+    // Check trading hours
+    if (rules.trading_hours_start && rules.trading_hours_end) {
+      const timeStr = now.toTimeString().slice(0, 5);
+      if (timeStr < rules.trading_hours_start || timeStr > rules.trading_hours_end) {
+        blocks.push({
+          rule:    'trading_hours',
+          message: `Your prop firm only allows trading between ${rules.trading_hours_start} and ${rules.trading_hours_end}. Current time is ${timeStr}.`
+        });
+      }
+    }
+
+    // Check weekend trading
+    const dayOfWeek = now.getDay();
+    if (rules.no_weekend_trades && (dayOfWeek === 0 || dayOfWeek === 6)) {
+      blocks.push({
+        rule:    'no_weekend_trades',
+        message: 'Your prop firm does not allow weekend trading. Markets close Friday and reopen Monday.'
+      });
+    }
+
+    // Check lot size
+    if (rules.max_lot_size > 0 && lot_size > rules.max_lot_size) {
+      blocks.push({
+        rule:    'max_lot_size',
+        message: `Lot size ${lot_size} exceeds your prop firm maximum of ${rules.max_lot_size}. Reduce your position size.`
+      });
+    }
+
+    // Check allowed pairs
+    if (rules.allowed_pairs.length > 0 && pair) {
+      const pairUpper = pair.toUpperCase();
+      const allowed   = rules.allowed_pairs.map(p => p.toUpperCase());
+      if (!allowed.includes(pairUpper)) {
+        blocks.push({
+          rule:    'allowed_pairs',
+          message: `Your prop firm only allows trading these pairs: ${rules.allowed_pairs.join(', ')}. ${pair} is not on the allowed list.`
+        });
+      }
+    }
+
+    // Check EA allowed
+    if (action === 'open' && !rules.ea_allowed) {
+      warnings.push({
+        rule:    'ea_not_allowed',
+        message: 'Warning: your prop firm does not allow automated trading. Make sure this trade was placed manually.'
+      });
+    }
+
+    // Overnight trade warning
+    if (rules.no_overnight_trades && action === 'open') {
+      const hour = now.getUTCHours();
+      if (hour >= 20 || hour < 6) {
+        warnings.push({
+          rule:    'overnight_risk',
+          message: 'Warning: your prop firm discourages overnight positions. Consider closing before market close.'
+        });
+      }
+    }
+
+    res.json({
+      allowed:       blocks.length === 0,
+      blocked:       blocks.length > 0,
+      blocks,
+      warnings,
+      rules_active:  true,
+      firm_name:     rules.firm_name
+    });
+  } catch(e) {
+    res.status(500).json({ error: 'Validation failed' });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  HETZNER CLOUD — VPS AUTO-PROVISIONING
+// ═══════════════════════════════════════════════════════════
+const HETZNER_BASE = 'https://api.hetzner.cloud/v1';
+
+async function hetzner(method, endpoint, body = null) {
+  const token = process.env.HETZNER_API_TOKEN;
+  if (!token) throw new Error('HETZNER_API_TOKEN not set');
+  const res = await fetch(`${HETZNER_BASE}${endpoint}`, {
+    method,
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type':  'application/json'
+    },
+    body: body ? JSON.stringify(body) : null
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(`Hetzner ${res.status}: ${data?.error?.message || 'unknown'}`);
+  return data;
+}
+
+async function provisionVps(uid, userEmail) {
+  const name   = `wts-${uid.substring(0, 8).toLowerCase()}`;
+  const result = await hetzner('POST', '/servers', {
+    name,
+    server_type: process.env.HETZNER_SERVER_TYPE || 'cx22',
+    image:       parseInt(process.env.HETZNER_SNAPSHOT_ID),
+    location:    process.env.HETZNER_LOCATION || 'nbg1',
+    labels:      { uid, purpose: 'wts-trading-vps' }
+  });
+  const server = result.server;
+  const ip     = server.public_net?.ipv4?.ip;
+  const id     = String(server.id);
+
+  // Set VPS to provisioning state — frontend shows 72hr countdown
+  await db.collection('users').doc(uid).update({
+    'vps.ip':             ip,
+    'vps.server_id':      id,
+    'vps.provider':       'hetzner',
+    'vps.status':         'provisioning',
+    'vps.provisioned_at': new Date().toISOString()
+  });
+
+  // Register agent entry
+  await db.collection('agents').doc(uid).set({
+    online:         false,
+    registered:     true,
+    vps_ip:         ip,
+    vps_id:         id,
+    vps_provider:   'hetzner',
+    provisioned_at: new Date().toISOString()
+  }, { merge: true });
+
+  console.log(`[hetzner] Created: ${name} — IP: ${ip} — UID: ${uid.substring(0,8)}`);
+  return { ip, id, name };
+}
+
+async function activateVps(uid) {
+  await db.collection('users').doc(uid).update({
+    'vps.status':       'active',
+    'vps.activated_at': new Date().toISOString()
+  });
+}
+
+async function deleteVps(uid) {
+  const doc      = await db.collection('users').doc(uid).get();
+  const serverId = doc.data()?.vps?.server_id;
+  if (!serverId) throw new Error('No server ID found for this user');
+  await hetzner('DELETE', `/servers/${serverId}`);
+  await db.collection('users').doc(uid).update({
+    'vps.status':     'deleted',
+    'vps.deleted_at': new Date().toISOString()
+  });
+  console.log(`[hetzner] Deleted server for UID: ${uid.substring(0,8)}`);
+  return { success: true };
+}
+
+// Simple Telegram push, degrades to a no-op if TELEGRAM_BOT_TOKEN isn't set
+// or the user has no telegram_chat_id on file — nothing currently collects
+// one, so these calls are inert until a Telegram-linking flow exists.
+async function sendTelegram(chatId, text) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  if (!token || !chatId) return;
+  try {
+    await axios.post(`https://api.telegram.org/bot${token}/sendMessage`, {
+      chat_id: chatId, text, parse_mode: 'HTML'
+    });
+  } catch (e) {
+    console.warn('[telegram] Failed:', e.response?.data?.description || e.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  BACHS PAYMENT WEBHOOK
+// ═══════════════════════════════════════════════════════════
+// Bachs sends a POST when payment is confirmed. They transfer funds to your
+// bank within 48 hours — we provision the VPS immediately on the Hetzner
+// float, ahead of settlement.
+//
+// Field names below (status, amount, customer_email, metadata) are
+// PLACEHOLDERS pending Bachs' real webhook payload docs — update in this one
+// place once confirmed.
+//
+// metadata.uid: the frontend must attach the Firebase UID to the Bachs
+// payment link (e.g. a `?uid={firebase_uid}` query param, or a metadata
+// field Bachs echoes back in the webhook) so this handler can identify the
+// payer without relying on email matching alone.
+app.post('/api/payments/bachs/webhook', async (req, res) => {
+  // Respond 200 immediately — Bachs requires fast acknowledgement
+  res.sendStatus(200);
+
+  if (!db) { console.warn('[bachs] Database unavailable — skipping'); return; }
+
+  try {
+    const payload = req.body;
+
+    // Verify webhook secret if Bachs provides one
+    const secret = process.env.BACHS_WEBHOOK_SECRET;
+    if (secret && req.headers['x-bachs-secret'] !== secret) {
+      console.error('[bachs] Invalid webhook secret');
+      return;
+    }
+
+    const { status, amount, customer_email, metadata } = payload;
+
+    // Only process confirmed/completed payments
+    const confirmedStatuses = ['confirmed', 'completed', 'successful', 'paid'];
+    if (!confirmedStatuses.includes(status?.toLowerCase())) {
+      console.log(`[bachs] Skipping status: ${status}`);
+      return;
+    }
+
+    // Determine tier from amount — 'dev'/'exec' matches the tier vocabulary
+    // used everywhere else in this app (client requireTier, wts-agent auth).
+    const amountNum = parseFloat(amount) || 0;
+    let tier = null;
+    if (amountNum >= 23 && amountNum <= 27) tier = 'dev';   // Developer plan
+    if (amountNum >= 77 && amountNum <= 82) tier = 'exec';  // Executive plan
+
+    if (!tier) {
+      console.error(`[bachs] Unrecognised amount: ${amountNum}`);
+      return;
+    }
+
+    // Find user by metadata uid or email
+    let uid = metadata?.uid || null;
+
+    if (!uid && customer_email) {
+      const usersSnap = await db.collection('users')
+        .where('email', '==', customer_email)
+        .limit(1).get();
+      if (!usersSnap.empty) uid = usersSnap.docs[0].id;
+    }
+
+    if (!uid) {
+      console.error(`[bachs] Cannot find user for payment — email: ${customer_email}`);
+      return;
+    }
+
+    const userDoc  = await db.collection('users').doc(uid).get();
+    const userData = userDoc.data() || {};
+
+    // Upgrade tier and set activation countdown
+    const activationDue = new Date(Date.now() + 72 * 3600000).toISOString();
+    await db.collection('users').doc(uid).update({
+      tier,
+      credits:            999999,
+      subscription_start: new Date().toISOString(),
+      activation_due:     activationDue,
+      'vps.status':       'pending'
+    });
+
+    console.log(`[bachs] Upgraded UID ${uid.substring(0,8)} to ${tier}`);
+
+    const tierLabel = tier === 'exec' ? 'Executive' : 'Developer';
+
+    // Send immediate Telegram notification
+    if (userData.telegram_chat_id) {
+      await sendTelegram(userData.telegram_chat_id,
+        `✅ <b>Payment confirmed — Welcome to WTS ${tierLabel}!</b>\n\n` +
+        `⚙️ Your trading server is being prepared.\n` +
+        `📱 Open the WTS app to track progress.\n\n` +
+        `worldtradestandard.com`
+      );
+    }
+
+    // Send welcome email via the existing Resend helper
+    if (userData.email) {
+      await sendEmail(userData.email, `✅ Welcome to WTS ${tierLabel}`, `
+        <div style="font-family:sans-serif;max-width:500px;margin:0 auto;">
+          <h2>Payment confirmed</h2>
+          <p>Your ${tierLabel} plan is now active. Your dedicated trading server is being set up.</p>
+          <p>You will receive another notification when your server is ready — usually within 2 minutes.</p>
+          <p><a href="https://worldtradestandard.com">Open WTS App →</a></p>
+        </div>
+      `);
+    }
+
+    // Provision VPS if Hetzner is configured
+    if (process.env.HETZNER_API_TOKEN && process.env.HETZNER_SNAPSHOT_ID) {
+      const hasVps = userData?.vps?.server_id;
+      if (!hasVps) {
+        provisionVps(uid, userData.email || '')
+          .then(async ({ ip }) => {
+            // Wait 90 seconds for server to boot and agent to start
+            await new Promise(r => setTimeout(r, 90000));
+            await activateVps(uid);
+
+            // Notify user server is ready
+            if (userData.telegram_chat_id) {
+              await sendTelegram(userData.telegram_chat_id,
+                `🟢 <b>Your WTS Trading Server is Ready!</b>\n\n` +
+                `Open the WTS app → My VPS\n` +
+                `Connect your broker account and deploy your first robot.\n\n` +
+                `worldtradestandard.com`
+              );
+            }
+            console.log(`[hetzner] VPS ready for UID ${uid.substring(0,8)} at ${ip}`);
+          })
+          .catch(err => {
+            console.error(`[hetzner] Provision failed for ${uid.substring(0,8)}:`, err.message);
+            // VPS failed but tier upgrade succeeded — user still gets 72hr countdown
+          });
+      }
+    } else {
+      // Hetzner not configured — manual provisioning flow
+      // User sees 72hr countdown, admin provisions manually via admin panel
+      console.log(`[bachs] Hetzner not configured — manual VPS provision needed for ${uid.substring(0,8)}`);
+    }
+
+  } catch(err) {
+    console.error('[bachs] Webhook processing error:', err.message);
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  ADMIN — MANUAL VPS CONTROL
+// ═══════════════════════════════════════════════════════════
+
+// Admin: manually trigger VPS provisioning for a user
+app.post('/api/admin/vps/provision', verifyAuth, async (req, res) => {
+  if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
+  if (!db) return res.status(503).json({ error: 'Database unavailable' });
+  const { uid } = req.body;
+  if (!uid) return res.status(400).json({ error: 'uid required' });
+  try {
+    const userDoc = await db.collection('users').doc(uid).get();
+    const result  = await provisionVps(uid, userDoc.data()?.email || '');
+    res.json({ success: true, ...result });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Admin: activate a user's VPS (mark as ready after manual setup)
+app.post('/api/admin/vps/activate', verifyAuth, async (req, res) => {
+  if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
+  if (!db) return res.status(503).json({ error: 'Database unavailable' });
+  const { uid } = req.body;
+  if (!uid) return res.status(400).json({ error: 'uid required' });
+  try {
+    await activateVps(uid);
+    // Send ready notification
+    const userDoc  = await db.collection('users').doc(uid).get();
+    const userData = userDoc.data() || {};
+    if (userData.telegram_chat_id) {
+      await sendTelegram(userData.telegram_chat_id,
+        `🟢 <b>Your WTS Trading Server is Ready!</b>\n\nOpen the WTS app → My VPS to get started.\n\nworldtradestandard.com`
+      );
+    }
+    res.json({ success: true, message: `VPS activated for ${uid}` });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Admin: delete a user's VPS server
+app.post('/api/admin/vps/delete', verifyAuth, async (req, res) => {
+  if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
+  if (!db) return res.status(503).json({ error: 'Database unavailable' });
+  const { uid } = req.body;
+  if (!uid) return res.status(400).json({ error: 'uid required' });
+  try {
+    await deleteVps(uid);
+    res.json({ success: true });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Admin: list all Hetzner servers tagged as WTS trading VPS
+app.get('/api/admin/vps/list', verifyAuth, async (req, res) => {
+  if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
+  try {
+    const data = await hetzner('GET', '/servers?label_selector=purpose=wts-trading-vps');
+    res.json({ servers: data.servers || [], total: data.servers?.length || 0 });
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// Admin: check Hetzner account balance
+app.get('/api/admin/vps/balance', verifyAuth, async (req, res) => {
+  if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
+  try {
+    const data = await hetzner('GET', '/pricing');
+    res.json(data);
+  } catch(e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
 //  START
 // ═══════════════════════════════════════════════════════════
 const PORT = process.env.PORT || 3000;

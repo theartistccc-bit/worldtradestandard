@@ -484,6 +484,10 @@
         <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         Performance
       </div>
+      <div class="antab" data-view="vps" onclick="switchView('vps',this)">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><line x1="6" y1="7" x2="6.01" y2="7"/><line x1="6" y1="17" x2="6.01" y2="17"/></svg>
+        VPS
+      </div>
       <div class="antab" onclick="window.location.href='calculators.html'">
         <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>
         Calculators
@@ -749,6 +753,87 @@
           <div class="stats-kpis" id="stats-kpis"></div>
           <div id="stats-inst-kpis"></div>
           <div class="stats-panels" id="stats-panels"></div>
+        </div>
+      </div>
+
+      <!-- ── VPS AGENT VIEW ── -->
+      <div class="view hidden" id="view-vps">
+        <div class="view-head">
+          <h2>VPS AGENT</h2>
+          <p>Control your MT5 terminals remotely via the WTS Nexus Agent running on your VPS</p>
+        </div>
+        <div class="view-body">
+
+          <!-- WTS Nexus Agent Status -->
+          <div id="agentStatusCard" style="background:#0D0F18;border:1px solid #1E2130;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
+              <div style="display:flex;align-items:center;gap:.65rem;">
+                <div id="agentDot" style="width:10px;height:10px;border-radius:50%;background:#6B7280;flex-shrink:0;transition:background .3s;"></div>
+                <div>
+                  <div style="font-size:.8rem;font-weight:700;color:#E8EAF0;">WTS Nexus Agent</div>
+                  <div id="agentStatusText" style="font-size:.65rem;color:#6B7280;margin-top:.1rem;">Checking...</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                <button onclick="agentCommand('get_status',{})" style="background:rgba(55,138,221,.12);border:1px solid rgba(55,138,221,.3);color:#378ADD;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">↻ Sync MT5</button>
+                <button onclick="showDeployEaModal()" style="background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.3);color:#2ECC71;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">+ Deploy EA</button>
+                <button onclick="if(confirm('Activate kill switch? This closes ALL open trades.')) agentCommand('kill_switch',{reason:'Manual from app',hours:24})" style="background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:#E74C3C;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">🔒 Kill Switch</button>
+              </div>
+            </div>
+            <div id="agentCmdStatus" style="display:none;margin-top:.75rem;padding:.5rem .75rem;background:#12151F;border-radius:6px;font-size:.72rem;color:#6B7280;"></div>
+          </div>
+
+          <!-- Add Account Button -->
+          <button onclick="document.getElementById('addAccountModal').classList.remove('hidden')"
+            style="width:100%;background:rgba(55,138,221,.08);border:1px dashed rgba(55,138,221,.3);border-radius:10px;padding:.85rem;color:#378ADD;font-size:.78rem;font-weight:600;cursor:pointer;margin-top:.75rem;font-family:inherit;">
+            + Connect Broker Account
+          </button>
+
+          <!-- All Nexus Agents (admin only) -->
+          <div id="adminAgentsPanel" class="hidden" style="background:#0D0F18;border:1px solid #1E2130;border-radius:12px;padding:1.25rem;margin-top:1.25rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+              <div style="font-size:.7rem;font-weight:700;letter-spacing:2px;color:#E8EAF0;">ALL NEXUS AGENTS</div>
+              <button onclick="loadAllAgents()" style="background:none;border:none;color:#378ADD;font-size:.72rem;cursor:pointer;font-family:inherit;">↻ Refresh</button>
+            </div>
+            <div id="allAgentsList">
+              <div style="color:#6B7280;font-size:.78rem;text-align:center;padding:1.5rem 0;">Click Refresh to load</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Add Account Modal -->
+        <div id="addAccountModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9000;display:flex;align-items:flex-end;justify-content:center;padding:1rem;">
+          <div style="background:#0D0F18;border:1px solid #1E2130;border-radius:16px;padding:1.5rem;width:100%;max-width:440px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
+              <div style="font-size:.82rem;font-weight:700;letter-spacing:1.5px;color:#E8EAF0;">CONNECT BROKER ACCOUNT</div>
+              <span onclick="document.getElementById('addAccountModal').classList.add('hidden')" style="cursor:pointer;color:#6B7280;font-size:1.3rem;line-height:1;">✕</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:.6rem;">
+              <input id="acc-nickname" placeholder="Nickname (e.g. My Gold Account)" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
+              <input id="acc-login" placeholder="Broker login number" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
+              <input id="acc-password" type="password" placeholder="Broker password" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
+              <input id="acc-server" placeholder="Server name (e.g. ICMarkets-Live)" list="serverList" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
+              <datalist id="serverList">
+                <option value="ICMarkets-Live"><option value="ICMarkets-Demo">
+                <option value="Exness-Real"><option value="Exness-Demo">
+                <option value="Pepperstone-Live"><option value="Pepperstone-Demo">
+                <option value="FTMO-Server"><option value="Deriv-Server">
+              </datalist>
+              <button onclick="addTradingAccount()" style="background:linear-gradient(135deg,#378ADD,#2ECC71);color:#fff;border:none;padding:12px;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:.25rem;">Connect Account →</button>
+              <p style="font-size:.63rem;color:#4A5568;text-align:center;margin:0;">Your credentials are encrypted. WTS never stores your password in plain text.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lock for free tier -->
+        <div class="tier-lock" id="vpsLock">
+          <div class="lock-body">
+            <div class="lock-icon">🔒</div>
+            <h3>DEVELOPER & EXECUTIVE ONLY</h3>
+            <p>The VPS Agent is available on the Active Developer ($19/mo) and Standard Executive ($79/mo) plans.</p>
+            <button class="btn-gold" onclick="switchView('pricing',document.querySelector('[data-view=pricing]'))">View Plans →</button>
+          </div>
         </div>
       </div>
 

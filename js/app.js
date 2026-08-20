@@ -343,6 +343,10 @@ function switchView(viewName, tabEl) {
 
   state.currentView = viewName;
   if (viewName === 'stats') renderStats();
+  if (viewName === 'vps') {
+    loadAgentStatus();
+    document.getElementById('adminAgentsPanel')?.classList.toggle('hidden', !isAdmin());
+  }
 }
 
 /* ── Tier Management ────────────────────────────────────────*/
@@ -359,23 +363,31 @@ function activateTier(tier) {
     if (chip)       { chip.textContent = `⚡ ${state.credits} left`; chip.style.display = ''; }
     if (upgradeBtn) upgradeBtn.style.display = '';
     unlockDebugger(false);
+    unlockVps(false);
   } else if (tier === 'dev') {
     if (label)      label.textContent = 'DEVELOPER';
     if (dot)        dot.className = 'tier-dot dev-dot';
     if (chip)       chip.style.display = 'none';
     if (upgradeBtn) upgradeBtn.style.display = '';
     unlockDebugger(true);
+    unlockVps(true);
   } else if (tier === 'exec') {
     if (label)      label.textContent = 'EXECUTIVE';
     if (dot)        dot.className = 'tier-dot exec-dot';
     if (chip)       chip.style.display = 'none';
     if (upgradeBtn) upgradeBtn.style.display = 'none';
     unlockDebugger(true);
+    unlockVps(true);
   }
 }
 
 function unlockDebugger(unlocked) {
   const lock = document.getElementById('debugLock');
+  if (lock) lock.style.display = unlocked ? 'none' : '';
+}
+
+function unlockVps(unlocked) {
+  const lock = document.getElementById('vpsLock');
   if (lock) lock.style.display = unlocked ? 'none' : '';
 }
 
@@ -1189,4 +1201,138 @@ function obLaunchBuilder() {
   localStorage.setItem('wts_onboarded', '1');
   document.getElementById('onboarding')?.classList.add('hidden');
   window.location.href = 'builder.html';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   WTS NEXUS AGENT
+═══════════════════════════════════════════════════════════ */
+
+// Must match ADMIN_UID in server .env — used only to show/hide the
+// admin "All Nexus Agents" panel client-side; the server enforces the
+// real check on /api/admin/agents.
+const ADMIN_UID = 'sQpMGQApvVQcuRpWeb7j3EMDawG2';
+
+function isAdmin() {
+  return !!(ADMIN_UID && state.user && state.user.uid === ADMIN_UID);
+}
+
+async function loadAgentStatus() {
+  const dot = document.getElementById('agentDot');
+  const txt = document.getElementById('agentStatusText');
+  if (!dot || !txt) return;
+  try {
+    const data = await callAPIGet('/api/agent/status');
+    if (data.online) {
+      dot.style.background = '#2ECC71';
+      dot.style.boxShadow  = '0 0 8px rgba(46,204,113,.6)';
+      txt.textContent      = `Online · ${data.hostname || 'VPS'} · v${data.version || '1.0'}`;
+      txt.style.color      = '#2ECC71';
+    } else if (data.registered) {
+      dot.style.background = '#E74C3C';
+      dot.style.boxShadow  = 'none';
+      txt.textContent      = 'Offline — VPS may be restarting';
+      txt.style.color      = '#E74C3C';
+    } else {
+      dot.style.background = '#6B7280';
+      dot.style.boxShadow  = 'none';
+      txt.textContent      = 'No agent configured — contact support';
+      txt.style.color      = '#6B7280';
+    }
+  } catch (e) {
+    txt.textContent = 'Could not reach agent';
+  }
+}
+
+async function agentCommand(type, payload) {
+  const statusEl = document.getElementById('agentCmdStatus');
+  if (statusEl) { statusEl.style.display = 'block'; statusEl.textContent = `Sending: ${type}...`; statusEl.style.color = '#6B7280'; }
+  try {
+    const data = await callAPI('/api/agent/command', { type, payload });
+    if (statusEl) statusEl.textContent = 'Command sent — agent processing...';
+    pollCommandResult(data.cmd_id, statusEl);
+  } catch (e) {
+    if (statusEl) { statusEl.textContent = 'Error: ' + e.message; statusEl.style.color = '#E74C3C'; }
+  }
+}
+
+async function pollCommandResult(cmdId, statusEl, attempts = 0) {
+  if (attempts > 24) {
+    if (statusEl) statusEl.textContent = 'Timeout — agent may be busy. Try syncing again.';
+    return;
+  }
+  try {
+    const cmd = await callAPIGet('/api/agent/command/' + cmdId);
+    if (cmd.status === 'done') {
+      const msg = cmd.result?.message || 'Done';
+      if (statusEl) { statusEl.textContent = '✓ ' + msg; statusEl.style.color = '#2ECC71'; }
+      loadAgentStatus();
+      return;
+    }
+    if (cmd.status === 'error') {
+      if (statusEl) { statusEl.textContent = '✗ ' + (cmd.error || 'Error'); statusEl.style.color = '#E74C3C'; }
+      return;
+    }
+    if (statusEl) statusEl.textContent = `Agent working... (${attempts + 1})`;
+    setTimeout(() => pollCommandResult(cmdId, statusEl, attempts + 1), 5000);
+  } catch (e) {
+    setTimeout(() => pollCommandResult(cmdId, statusEl, attempts + 1), 5000);
+  }
+}
+
+// EA list comes from state.savedEAs (loaded via /api/eas in loadUserData) —
+// eas/{id} docs have no `title` field, so the picker labels by strategy/symbol/platform instead.
+async function showDeployEaModal() {
+  const eas = state.savedEAs || [];
+  if (!eas.length) { toast('No EAs found — build one in the Builder first.'); return; }
+  const choice = prompt(
+    'Choose EA to deploy to your VPS:\n\n' +
+    eas.map((e, i) => `${i + 1}. ${e.strategy_type || 'EA'} · ${e.symbol || 'Any'} (${(e.platform || 'MT5').toUpperCase()})`).join('\n') +
+    '\n\nEnter number:'
+  );
+  const idx = parseInt(choice) - 1;
+  if (isNaN(idx) || idx < 0 || idx >= eas.length) return;
+  await agentCommand('deploy_ea', { ea_id: eas[idx].id });
+}
+
+// Account registration happens entirely on the agent side (mt5-login.js writes
+// agents/{uid}/accounts/{account_id} on successful login) — the client only
+// generates the account_id and sends credentials through the command queue,
+// it never talks to Firestore directly.
+async function addTradingAccount() {
+  const login    = document.getElementById('acc-login').value.trim();
+  const password = document.getElementById('acc-password').value.trim();
+  const server   = document.getElementById('acc-server').value.trim();
+  if (!login || !password || !server) { toast('Please fill in login, password and server'); return; }
+  const accountId = Date.now().toString();
+  document.getElementById('addAccountModal').classList.add('hidden');
+  document.getElementById('acc-nickname').value = '';
+  document.getElementById('acc-login').value    = '';
+  document.getElementById('acc-password').value = '';
+  document.getElementById('acc-server').value   = '';
+  await agentCommand('login', { account_id: accountId, login, password, server });
+}
+
+async function loadAllAgents() {
+  if (!isAdmin()) return;
+  const el = document.getElementById('allAgentsList');
+  if (!el) return;
+  el.innerHTML = '<div style="color:#6B7280;font-size:.78rem;text-align:center;padding:1.5rem 0;">Loading...</div>';
+  try {
+    const data = await callAPIGet('/api/admin/agents');
+    if (!data.agents?.length) {
+      el.innerHTML = '<div style="color:#6B7280;font-size:.78rem;text-align:center;padding:1.5rem 0;">No agents registered yet</div>';
+      return;
+    }
+    el.innerHTML = data.agents.map(a => `
+      <div style="display:flex;align-items:center;gap:.75rem;padding:.65rem 0;border-bottom:1px solid #1E2130;">
+        <div style="width:8px;height:8px;border-radius:50%;background:${a.online ? '#2ECC71' : '#E74C3C'};flex-shrink:0;"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:.75rem;color:#E8EAF0;font-family:monospace;">${(a.uid || '').substring(0,14)}...</div>
+          <div style="font-size:.63rem;color:#6B7280;margin-top:.1rem;">${a.hostname || 'unknown'} · ${a.vps_ip || 'no IP'}</div>
+        </div>
+        <div style="font-size:.63rem;font-weight:700;color:${a.online ? '#2ECC71' : '#6B7280'};">${a.online ? 'ONLINE' : 'OFFLINE'}</div>
+      </div>`).join('');
+  } catch (e) {
+    el.innerHTML = `<div style="color:#E74C3C;font-size:.78rem;text-align:center;padding:1.5rem 0;">${e.message}</div>`;
+  }
 }
