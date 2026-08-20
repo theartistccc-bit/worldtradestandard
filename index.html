@@ -764,6 +764,47 @@
         </div>
         <div class="view-body">
 
+          <!-- 72-hour countdown — shown when tier is active but VPS is still pending -->
+          <div id="vpsCountdown" style="display:none;">
+            <div style="background:#0D0F18;border:1px solid rgba(55,138,221,.2);border-radius:16px;padding:2rem 1.5rem;text-align:center;margin-bottom:1rem;">
+              <div style="font-size:2.5rem;margin-bottom:.5rem;">⚙️</div>
+              <div style="font-size:.7rem;font-weight:700;letter-spacing:3px;color:#378ADD;text-transform:uppercase;margin-bottom:.75rem;">Setting Up Your Trading Server</div>
+              <div style="font-size:.88rem;color:#E8EAF0;line-height:1.7;margin-bottom:1.5rem;max-width:320px;margin-left:auto;margin-right:auto;">
+                Your payment is confirmed and your dedicated trading server is being prepared. Everything will be ready soon.
+              </div>
+              <div style="background:#12151F;border:1px solid #1E2130;border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
+                <div style="font-size:.65rem;font-weight:700;letter-spacing:2px;color:#6B7280;text-transform:uppercase;margin-bottom:.5rem;">Everything active by</div>
+                <div id="countdownTimer" style="font-family:'IBM Plex Mono',monospace;font-size:1.8rem;font-weight:700;color:#378ADD;letter-spacing:4px;">72:00:00</div>
+                <div style="font-size:.65rem;color:#6B7280;margin-top:.35rem;">Hours : Minutes : Seconds</div>
+              </div>
+              <div style="text-align:left;background:#12151F;border:1px solid #1E2130;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;">
+                <div style="font-size:.7rem;font-weight:700;letter-spacing:1.5px;color:#E8EAF0;margin-bottom:.75rem;">WHAT HAPPENS NEXT</div>
+                <div style="display:flex;flex-direction:column;gap:.6rem;">
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
+                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#2ECC71;">✓</div>
+                    Payment confirmed — your account is active
+                  </div>
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
+                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(55,138,221,.1);border:1px solid rgba(55,138,221,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#378ADD;">2</div>
+                    Your dedicated VPS server is being configured
+                  </div>
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
+                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(55,138,221,.1);border:1px solid rgba(55,138,221,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#378ADD;">3</div>
+                    MetaTrader 5 installed and ready to connect
+                  </div>
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
+                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(55,138,221,.1);border:1px solid rgba(55,138,221,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#378ADD;">4</div>
+                    You receive Telegram + email when everything is live
+                  </div>
+                </div>
+              </div>
+              <div style="font-size:.72rem;color:#6B7280;line-height:1.6;">
+                Questions? Message us on Telegram<br>
+                <a href="https://t.me/WorldtradestandardBot" target="_blank" style="color:#378ADD;text-decoration:none;">@WorldtradestandardBot</a>
+              </div>
+            </div>
+          </div>
+
           <!-- WTS Nexus Agent Status -->
           <div id="agentStatusCard" style="background:#0D0F18;border:1px solid #1E2130;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">

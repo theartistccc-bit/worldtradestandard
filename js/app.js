@@ -344,7 +344,7 @@ function switchView(viewName, tabEl) {
   state.currentView = viewName;
   if (viewName === 'stats') renderStats();
   if (viewName === 'vps') {
-    loadAgentStatus();
+    loadVpsStatus();
     document.getElementById('adminAgentsPanel')?.classList.toggle('hidden', !isAdmin());
   }
 }
@@ -1214,6 +1214,64 @@ const ADMIN_UID = 'sQpMGQApvVQcuRpWeb7j3EMDawG2';
 
 function isAdmin() {
   return !!(ADMIN_UID && state.user && state.user.uid === ADMIN_UID);
+}
+
+function startCountdown(activationTimestamp) {
+  const target  = new Date(activationTimestamp).getTime();
+  const timerEl = document.getElementById('countdownTimer');
+  if (!timerEl) return;
+
+  const tick = () => {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      timerEl.textContent = 'READY ✓';
+      timerEl.style.color = '#2ECC71';
+      clearInterval(countdownInterval);
+      setTimeout(() => loadVpsStatus(), 2000);
+      return;
+    }
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    timerEl.textContent =
+      String(h).padStart(2, '0') + ':' +
+      String(m).padStart(2, '0') + ':' +
+      String(s).padStart(2, '0');
+  };
+  clearInterval(countdownInterval);
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+let countdownInterval = null;
+
+async function loadVpsStatus() {
+  const countdown = document.getElementById('vpsCountdown');
+  const agentCard = document.getElementById('agentStatusCard');
+
+  try {
+    const data   = await callAPIGet('/api/vps/status');
+    const status = data.status || 'none';
+    const isPaid = state.currentTier === 'dev' || state.currentTier === 'exec';
+
+    // Show countdown only if paid and VPS is still being provisioned
+    if (isPaid && (status === 'pending' || status === 'provisioning')) {
+      if (countdown) countdown.style.display = 'block';
+      if (agentCard) agentCard.style.display  = 'none';
+      startCountdown(data.activation_due || new Date(Date.now() + 72 * 3600000).toISOString());
+      return;
+    }
+
+    // VPS active (or dev mode / no VPS record yet) — show normal agent card
+    clearInterval(countdownInterval);
+    if (countdown) countdown.style.display = 'none';
+    if (agentCard) agentCard.style.display  = 'block';
+    loadAgentStatus();
+
+  } catch(e) {
+    if (countdown) countdown.style.display = 'none';
+    if (agentCard) agentCard.style.display  = 'block';
+    loadAgentStatus();
+  }
 }
 
 async function loadAgentStatus() {

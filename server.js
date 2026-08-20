@@ -814,6 +814,19 @@ app.get('/api/agent/status', verifyAuth, async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+// Get VPS provisioning status for the logged in user (drives the 72hr countdown)
+app.get('/api/vps/status', verifyAuth, async (req, res) => {
+  if (!db) return res.json({ status: 'active', activation_due: null });
+  try {
+    const doc  = await db.collection('users').doc(req.uid).get();
+    const data = doc.exists ? doc.data() : {};
+    res.json({
+      status:         data.vps?.status || 'none',
+      activation_due: data.activation_due || null
+    });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 // Admin: register agent for a user after manual VPS setup
 app.post('/api/admin/agent/register', verifyAuth, async (req, res) => {
   if (req.uid !== process.env.ADMIN_UID) return res.status(403).json({ error: 'Admin only' });
