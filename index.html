@@ -6,7 +6,9 @@
 <title>WorldTradeStandard — Artificial Trading Assistant</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
 <link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/landing.css">
 <script>document.documentElement.style.visibility='hidden';</script>
 <style>
 /* ── AUTH MODAL ─────────────────────────────────────── */
@@ -304,147 +306,137 @@
     <button class="btn-gold" onclick="launchApp('free')">Start Free →</button>
   </nav>
 
-  <section class="hero-section">
-    <div class="hero-left">
-      <div class="hero-badge"><span class="live-dot"></span>AI Engine Online · MQL5/MQL4</div>
-      <h1 class="hero-title">The <em>Artificial<br>Trading Assistant</em><br>for Serious Traders</h1>
-      <p class="hero-sub">Build MT4/MT5 robots, get daily chart markups in your style, journal every trade, and auto-debug your EA errors. WorldTradeStandard is the official standard for a high-level trader's workflow.</p>
-      <div class="hero-actions">
-        <button class="btn-gold btn-lg" onclick="window.location.href='builder.html'">Start Free — 3 Generations</button>
-        <button class="btn-ghost btn-lg" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">View Executive Plan</button>
+  <!-- SECTION 1 — HERO -->
+  <section class="cinematic-section hero-cin">
+    <div class="cinematic-bg hero-cin-bg" style="background-image:linear-gradient(135deg, #0a0612, #1a0a2e, #050508), url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1920&q=75&fm=webp');"></div>
+    <div class="cinematic-overlay hero-cin-overlay"></div>
+    <div class="hero-cin-fade"></div>
+    <div class="cinematic-content hero-cin-content">
+      <div class="hero-badge-new"><span class="live-dot"></span>AI Engine Online</div>
+      <h1 class="hero-cin-title">
+        THE ARTIFICIAL<br>
+        <span class="glitch" data-text="TRADING ASSISTANT">TRADING ASSISTANT</span>
+      </h1>
+      <p class="hero-cin-sub">Build robots. Journal trades.<br>Trade with intelligence.</p>
+      <div class="hero-cin-actions">
+        <button class="btn-primary" onclick="launchApp('free')">Start Free →</button>
+        <button class="btn-ghost" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">Watch Demo</button>
       </div>
-      <div class="hero-proof">
-        <div class="proof-item"><span class="proof-num">4,800+</span><span class="proof-label">Robots Built</span></div>
-        <div class="proof-sep"></div>
-        <div class="proof-item"><span class="proof-num">MT4 & MT5</span><span class="proof-label">Native Code</span></div>
-        <div class="proof-sep"></div>
-        <div class="proof-item"><span class="proof-num">$0</span><span class="proof-label">To Start</span></div>
-      </div>
-    </div>
-    <div class="hero-right">
-      <div class="terminal-card">
-        <div class="terminal-bar">
-          <div class="t-dots"><span class="td r"></span><span class="td y"></span><span class="td g"></span></div>
-          <span class="t-filename">WTS_XAUUSD_Breakout.mq5</span>
-        </div>
-        <div class="terminal-body">
-          <div><span class="tc-dim">// WorldTradeStandard.com · v1.0</span></div>
-          <div><span class="tc-dim">// XAUUSD Breakout EA · H1</span></div>
-          <br>
-          <div><span class="tc-kw">input</span> <span class="tc-fn">int</span> <span class="tc-str">lookback</span> = <span class="tc-num">20</span>;</div>
-          <div><span class="tc-kw">input</span> <span class="tc-fn">double</span> <span class="tc-str">lotSize</span> = <span class="tc-num">0.10</span>;</div>
-          <div><span class="tc-kw">input</span> <span class="tc-fn">int</span> <span class="tc-str">stopLoss</span> = <span class="tc-num">500</span>;</div>
-          <div><span class="tc-kw">input</span> <span class="tc-fn">int</span> <span class="tc-str">takeProfit</span> = <span class="tc-num">1000</span>;</div>
-          <br>
-          <div><span class="tc-fn">CTrade</span> trade;</div>
-          <div><span class="tc-fn">int</span> OnInit() {</div>
-          <div>&nbsp;&nbsp;<span class="tc-out">Print</span>(<span class="tc-str">"WTS EA Active"</span>);</div>
-          <div>&nbsp;&nbsp;<span class="tc-kw">return</span>(<span class="tc-num">INIT_SUCCEEDED</span>);</div>
-          <div>}</div>
-          <br>
-          <div class="tc-success">▸ 0 errors · 0 warnings · Ready<span class="cursor-blink"></span></div>
+      <div class="hero-cin-proof">
+        <div class="hero-cin-proof-line">── 4,800+ robots built ──</div>
+        <div class="hero-cin-chips">
+          <span class="chip">MT4 & MT5</span>
+          <span class="chip">AI-Powered</span>
+          <span class="chip">$0 Start</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES -->
-  <section class="features-section" id="features">
+  <!-- SECTION 2 — FEATURES -->
+  <section class="landing-section" id="features">
     <div class="section-eyebrow">What's Inside</div>
-    <h2 class="section-title">Four tools. One standard.</h2>
-    <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-icon">⚡</div>
+    <h2 class="section-title-new">Four tools. One standard.</h2>
+    <div class="features-grid-new">
+      <div class="card feat-card-new">
+        <div class="feat-icon-new">⚡</div>
         <h3>MQL Code Builder</h3>
         <p>Describe your strategy in plain English. Get production-ready MT4/MT5 Expert Advisors, indicators, and scripts — fully compilable, no placeholders.</p>
-        <div class="feat-tags"><span>EA Generator</span><span>Indicator Builder</span><span>PineScript Translator</span></div>
+        <div class="feat-tags-new"><span class="chip">EA Generator</span><span class="chip">Indicator Builder</span><span class="chip">PineScript Translator</span></div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">📊</div>
+      <div class="card feat-card-new">
+        <div class="feat-icon-new">📊</div>
         <h3>Chart Markup AI</h3>
         <p>Train the AI once on your style. Every morning it opens your charts and marks up setups that match your personal edge — breakout, trend, or reversal.</p>
-        <div class="feat-tags"><span>Daily Mentor</span><span>Style Profile</span><span>Screenshot Analysis</span></div>
+        <div class="feat-tags-new"><span class="chip">Daily Mentor</span><span class="chip">Style Profile</span><span class="chip">Screenshot Analysis</span></div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">📓</div>
+      <div class="card feat-card-new">
+        <div class="feat-icon-new">📓</div>
         <h3>Trade Journal</h3>
         <p>Log every trade with chart screenshots, emotional state, and pre/post notes. AI writes your post-trade analysis automatically and spots your patterns over time.</p>
-        <div class="feat-tags"><span>AI Analysis</span><span>Pattern Detection</span><span>PDF Export</span></div>
+        <div class="feat-tags-new"><span class="chip">AI Analysis</span><span class="chip">Pattern Detection</span><span class="chip">PDF Export</span></div>
       </div>
-      <div class="feat-card">
-        <div class="feat-icon">🔧</div>
+      <div class="card feat-card-new">
+        <div class="feat-icon-new">🔧</div>
         <h3>Auto-Debugger</h3>
         <p>Paste your MetaEditor error log. The AI reads every error, explains the cause, and delivers fixed code lines. Executive tier: errors detected and fixed automatically.</p>
-        <div class="feat-tags"><span>Error Analysis</span><span>Auto-Fix</span><span>Live Detection</span></div>
+        <div class="feat-tags-new"><span class="chip">Error Analysis</span><span class="chip">Auto-Fix</span><span class="chip">Live Detection</span></div>
       </div>
     </div>
   </section>
 
-  <!-- PRICING -->
-  <section class="pricing-section" id="pricing">
+  <!-- SECTION 3 — MANIFESTO CTA -->
+  <section class="manifesto-section" id="showcase">
+    <div class="manifesto-inner">
+      <h2 class="glitch manifesto-title" data-text="THE MARKET IS AN OCEAN.">THE MARKET IS AN OCEAN.</h2>
+      <p class="manifesto-sub">— Learn to navigate it. —</p>
+      <button class="btn-primary" onclick="launchApp('free')">Start Free — 3 Generations</button>
+    </div>
+  </section>
+
+  <!-- SECTION 4 — PRICING -->
+  <section class="landing-section" id="pricing">
     <div class="section-eyebrow">Choose Your Standard</div>
-    <h2 class="section-title">From first robot to full execution.</h2>
-    <div class="pricing-grid">
-      <div class="plan-card">
-        <div class="plan-tier-label">Tier 1 · Free</div>
-        <div class="plan-name">Proof of Concept</div>
-        <div class="plan-price">$0<span>/mo</span></div>
-        <div class="plan-pitch">Experience the logic. Zero commitment.</div>
-        <ul class="plan-list">
-          <li class="yes">3 total generations</li>
-          <li class="yes">Standard indicators (RSI, MA, MACD)</li>
-          <li class="no">Source code — compiled .ex5 only</li>
-          <li class="no">Chart markup & journal</li>
-          <li class="no">Auto-debugger</li>
+    <h2 class="section-title-new">From first robot to full execution.</h2>
+    <div class="pricing-grid-new">
+      <div class="card plan-card-new">
+        <div class="plan-tier-label-new">Tier 1 · Free</div>
+        <div class="plan-name-new">Proof of Concept</div>
+        <div class="plan-price-new">$0<span>/forever</span></div>
+        <ul class="plan-list-new">
+          <li class="yes">3 EA generations</li>
+          <li class="yes">Standard indicators</li>
+          <li class="no">Source code</li>
+          <li class="no">Journal & markup</li>
         </ul>
-        <button class="plan-btn" onclick="window.location.href='builder.html'">Start Free</button>
+        <button class="btn-ghost plan-btn-new" onclick="launchApp('free')">Start Free</button>
       </div>
-      <div class="plan-card plan-featured">
-        <div class="plan-badge-top">ACTIVE DEVELOPER</div>
-        <div class="plan-tier-label">Tier 2 · $15/mo</div>
-        <div class="plan-name" style="color:#378ADD">Active Developer</div>
-        <div class="plan-price" style="color:#378ADD">$15<span>/mo</span></div>
-        <div class="plan-pitch">Unlimited builds. Full source code. Learn the why.</div>
-        <ul class="plan-list">
-          <li class="yes">Unlimited EA/Indicator generations</li>
-          <li class="yes"><strong>Full source code access</strong></li>
+
+      <div class="card-blue plan-card-new">
+        <span class="badge badge-blue plan-badge-new">Most Popular</span>
+        <div class="plan-tier-label-new">Tier 2</div>
+        <div class="plan-name-new" style="color:var(--blue)">Active Developer</div>
+        <div class="plan-price-new" style="color:var(--blue)">$25<span>/month</span></div>
+        <ul class="plan-list-new">
+          <li class="yes">Unlimited generations</li>
+          <li class="yes">Full MQL source code</li>
           <li class="yes">MT4 + MT5 output</li>
-          <li class="yes">YouTube → Robot converter</li>
-          <li class="yes">PineScript → MQL Translator</li>
-          <li class="yes">Chart Markup (manual upload)</li>
+          <li class="yes">VPS included — runs 24/7</li>
+          <li class="yes">Auto-import from MT5</li>
           <li class="yes">Trade Journal + AI analysis</li>
           <li class="yes">Auto-Debugger</li>
         </ul>
-        <button class="plan-btn plan-btn-blue" onclick="upgradePlan('dev')">Pay with Crypto — $15/mo</button>
+        <button class="btn-primary plan-btn-new" onclick="upgradePlan('dev')">Pay with Crypto →</button>
       </div>
-      <div class="plan-card plan-exec">
-        <div class="plan-badge-top" style="background:var(--green);color:#08090D">STANDARD EXECUTIVE</div>
-        <div class="plan-tier-label">Tier 3 · $79/mo</div>
-        <div class="plan-name" style="color:var(--green)">Sovereign Executive</div>
-        <div class="plan-price" style="color:var(--green)">$79<span>/mo</span></div>
-        <div class="plan-pitch">Zero friction. Your AI trades alongside you daily.</div>
-        <ul class="plan-list">
+
+      <div class="card-gold plan-card-new">
+        <span class="badge badge-gold plan-badge-new">Sovereign</span>
+        <div class="plan-tier-label-new">Tier 3</div>
+        <div class="plan-name-new" style="color:var(--gold)">Sovereign Executive</div>
+        <div class="plan-price-new" style="color:var(--gold)">$79<span>/month</span></div>
+        <ul class="plan-list-new">
           <li class="yes">Everything in Developer</li>
-          <li class="yes"><strong>Daily Mentor</strong> — morning chart markups</li>
-          <li class="yes"><strong>Auto-Debugger Live</strong> — detects & fixes automatically</li>
-          <li class="yes">Prop-Firm Stealth (SL/TP hidden)</li>
-          <li class="yes">News Shield (auto-pause on events)</li>
-          <li class="yes">Code Health Audit (unlimited)</li>
-          <li class="yes">Priority processing</li>
-          <li class="yes">Auto-injection to MetaTrader</li>
+          <li class="yes">Institutional metrics</li>
+          <li class="yes">Daily Mentor — morning markups</li>
+          <li class="yes">Prop firm toolkit + kill switch</li>
+          <li class="yes">Copy trading signals</li>
+          <li class="yes">Marketplace selling (80/20)</li>
+          <li class="yes">Monte Carlo simulation</li>
         </ul>
-        <button class="plan-btn plan-btn-gold" onclick="upgradePlan('exec')">Pay with Crypto — $79/mo</button>
+        <button class="btn-gold plan-btn-new" onclick="upgradePlan('exec')">Become Sovereign →</button>
       </div>
     </div>
+    <p class="pricing-footnote-new">VPS included — your EA runs 24/7 even when your computer is off.</p>
   </section>
 
-  <footer class="l-footer">
-    <div class="footer-brand">WORLDTRADESTANDARD</div>
-    <div class="footer-links">
-      <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Docs</a><a href="#">Support</a>
+  <!-- SECTION 5 — FOOTER -->
+  <footer class="landing-footer-new">
+    <div class="footer-brand-new">WORLDTRADESTANDARD</div>
+    <div class="footer-cities-new">Lagos · Dubai · London · Singapore</div>
+    <div class="footer-links-new">
+      <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Support</a><a href="#">Docs</a>
     </div>
-    <div class="footer-copy">© 2025 WorldTradeStandard. Built for traders who operate at the highest level.</div>
-    <div class="footer-cities">Lagos · Dubai · London · Singapore</div>
+    <div class="footer-copy-new">© 2025 WorldTradeStandard. Built for traders who operate at the highest level.</div>
   </footer>
 </div>
 

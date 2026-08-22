@@ -57,3 +57,6 @@ No framework. All UI is a state machine in `app.js` around a global `state` obje
 - **free**: 3 lifetime credits for `/api/generate` only
 - **dev** (`$15/mo`): unlimited generate + markup, debug, journal AI
 - **exec** (`$79/mo`): same as dev; hides "Upgrade" button in nav
+
+## Reference Documents
+Read all files in the docs/ folder for full WTS platform context before building any feature.

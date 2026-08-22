@@ -49,6 +49,15 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 .btn-gold:hover { opacity: .88; transform: translateY(-1px); }
 .btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--muted); border-radius: 5px; transition: all .2s; }
 .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+
+/* design-system.css sets an unscoped mobile width:100% rule for .btn-gold/.btn-primary
+   intended for the new landing page — this keeps existing app-shell gold buttons
+   (Upgrade, Kill Switch, Log Trade, Save & AI Analyse, View Plans) at their normal
+   width on mobile instead of stretching full-width. */
+@media (max-width: 768px) {
+  #appShell .btn-gold { width: auto; }
+}
+
 .btn-lg { padding: .75rem 1.75rem; font-size: .92rem; }
 .btn-sm { padding: .35rem .9rem; font-size: .75rem; }
 

@@ -1,0 +1,280 @@
+/* ═══════════════════════════════════════════════════
+   WTS LANDING PAGE — Cinematic Redesign
+   Scoped under #landing so shared class names
+   (.btn-gold, .btn-ghost, .live-dot, .section-eyebrow)
+   never leak into the app shell.
+═══════════════════════════════════════════════════ */
+
+/* ── Scoped overrides: give the landing page the NEW design-system
+   look for classnames main.css already owns for the app shell ── */
+#landing .btn-gold {
+  background: var(--gold);
+  color: #08090D;
+  border-radius: var(--radius-md);
+  padding: 13px 28px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+}
+#landing .btn-ghost {
+  border-color: var(--border);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+}
+#landing .btn-ghost:hover { border-color: var(--blue-border); color: var(--blue); }
+#landing .live-dot { width: 7px; height: 7px; background: var(--green); }
+#landing .section-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-2);
+}
+
+/* ── Base ── */
+#landing { background: var(--bg-void); overflow-x: hidden; }
+#landing .btn-primary,
+#landing .btn-ghost,
+#landing .btn-gold { font-family: var(--font-body); cursor: pointer; }
+
+/* ── Nav ── */
+#landing .l-nav {
+  background: var(--bg-overlay-lt);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+}
+#landing .brand-logo {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  letter-spacing: 3px;
+}
+#landing .l-nav-links a { font-family: var(--font-body); }
+#landing .l-nav-links a:hover { color: var(--text-primary); }
+
+/* ── Section shell ── */
+.landing-section {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: var(--sp-16) var(--sp-6);
+}
+.section-title-new {
+  font-family: var(--font-display);
+  font-size: 42px;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-8);
+  max-width: var(--content-max);
+}
+
+/* ── SECTION 1 — Hero ── */
+.hero-cin { min-height: 100vh; padding-top: 60px; }
+.hero-cin-bg { background-size: cover; background-position: center; }
+.hero-cin-overlay { background: rgba(5, 5, 8, 0.72); }
+.hero-cin-fade {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, #050508 0%, transparent 60%);
+}
+.hero-cin-content { max-width: 620px; }
+
+.hero-badge-new {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--blue-dim);
+  border: 1px solid var(--blue-border);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--sp-6);
+  font-family: var(--font-mono);
+}
+
+.hero-cin-title {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 1.02;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-6);
+}
+
+.hero-cin-sub {
+  font-family: var(--font-body);
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto var(--sp-8);
+}
+
+.hero-cin-actions {
+  display: flex;
+  gap: var(--sp-4);
+  justify-content: center;
+  margin-bottom: var(--sp-12);
+  flex-wrap: wrap;
+}
+
+.hero-cin-proof-line {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-4);
+}
+
+.hero-cin-chips {
+  display: flex;
+  gap: var(--sp-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── SECTION 2 — Features ── */
+.features-grid-new {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-4);
+}
+.feat-card-new { text-align: left; }
+.feat-icon-new { font-size: 28px; margin-bottom: var(--sp-3); }
+.feat-card-new h3 {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+.feat-card-new p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: var(--sp-4);
+}
+.feat-tags-new { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.feat-tags-new .chip { font-size: 10px; padding: 4px 10px; cursor: default; }
+.feat-tags-new .chip:hover { background: none; border-color: var(--border); color: var(--text-muted); }
+
+/* ── SECTION 3 — Manifesto CTA ── */
+.manifesto-section {
+  text-align: center;
+  padding: var(--sp-16) var(--sp-6);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.manifesto-inner { max-width: var(--content-max); margin: 0 auto; }
+.manifesto-title {
+  font-family: var(--font-display);
+  font-size: 72px;
+  line-height: 1.05;
+  letter-spacing: 1px;
+  margin-bottom: var(--sp-4);
+}
+.manifesto-sub {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-8);
+}
+
+/* ── SECTION 4 — Pricing ── */
+.pricing-grid-new {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-6);
+  align-items: stretch;
+}
+.plan-card-new {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  text-align: left;
+}
+.plan-badge-new { position: absolute; top: var(--sp-4); right: var(--sp-4); }
+.plan-tier-label-new {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-subtle);
+  letter-spacing: 1px;
+  margin-bottom: var(--sp-2);
+}
+.plan-name-new {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+.plan-price-new {
+  font-family: var(--font-display);
+  font-size: 40px;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-6);
+}
+.plan-price-new span { font-family: var(--font-body); font-size: 13px; color: var(--text-muted); margin-left: 4px; }
+.plan-list-new { list-style: none; margin-bottom: var(--sp-8); flex-grow: 1; }
+.plan-list-new li {
+  font-size: 13px;
+  color: var(--text-muted);
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: var(--sp-3);
+  line-height: 1.4;
+}
+.plan-list-new li.yes { color: var(--text-primary); }
+.plan-list-new li.yes::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+.plan-list-new li.no::before { content: '✕'; position: absolute; left: 0; color: var(--text-subtle); }
+.plan-btn-new { width: 100%; justify-content: center; }
+
+.pricing-footnote-new {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: var(--sp-8);
+}
+
+/* ── SECTION 5 — Footer ── */
+.landing-footer-new {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  text-align: center;
+  padding: var(--sp-12) var(--sp-6);
+}
+.footer-brand-new {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+.footer-cities-new { font-size: 12px; color: var(--text-subtle); margin-bottom: var(--sp-6); }
+.footer-links-new { display: flex; gap: var(--sp-6); justify-content: center; margin-bottom: var(--sp-6); }
+.footer-links-new a { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+.footer-links-new a:hover { color: var(--blue); }
+.footer-copy-new { font-size: 12px; color: var(--text-subtle); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .l-nav-links { display: none; }
+  .hero-cin-title { font-size: 40px; }
+  .hero-cin-sub { font-size: 16px; }
+  .section-title-new { font-size: 32px; }
+  .manifesto-title { font-size: 48px; }
+  .features-grid-new { grid-template-columns: 1fr; }
+  .pricing-grid-new { grid-template-columns: 1fr; }
+  .landing-section { padding: var(--sp-12) var(--sp-4); }
+  .footer-links-new { flex-wrap: wrap; gap: var(--sp-4); }
+}
