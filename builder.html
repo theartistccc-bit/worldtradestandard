@@ -5,18 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>WTS — Strategy Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
 <script>document.documentElement.style.visibility='hidden';</script>
 <style>
 :root{
-  --bg:#07080D;--bg2:#0D0F18;--bg3:#12151F;--bg4:#181C28;
-  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.11);
-  --primary:#378ADD;--primary-light:#5DA8F0;--primary-dim:rgba(55,138,221,.10);--primary-b:rgba(55,138,221,.28);
-  --blue:#378ADD;--blue-dim:rgba(55,138,221,.12);--blue-b:rgba(55,138,221,.3);
-  --green:#1D9E75;--green2:#2ECC71;--green-dim:rgba(29,158,117,.12);--green-b:rgba(29,158,117,.28);
+  /* Aligned to css/design-system.css tokens */
+  --bg:#050508;--bg2:#0D0F18;--bg3:#12151F;--bg4:#181C28;
+  --border:#1E2130;--border2:rgba(255,255,255,.11);
+  --primary:#378ADD;--primary-light:#5DA8F0;--primary-dim:rgba(55,138,221,.12);--primary-b:rgba(55,138,221,.25);
+  --blue:#378ADD;--blue-dim:rgba(55,138,221,.12);--blue-b:rgba(55,138,221,.25);
+  --green:#2ECC71;--green2:#2ECC71;--green-dim:rgba(46,204,113,.12);--green-b:rgba(46,204,113,.25);
   --teal:#0F6E56;
-  --red:#E74C3C;--red-dim:rgba(231,76,60,.12);--red-b:rgba(231,76,60,.3);
+  --red:#E74C3C;--red-dim:rgba(231,76,60,.10);--red-b:rgba(231,76,60,.3);
   --purple:#9B59B6;--purple-dim:rgba(155,89,182,.12);
   --orange:#E67E22;--orange-dim:rgba(230,126,34,.12);
+  --gold:#C9A84C;--gold-dim:rgba(201,168,76,.10);--gold-b:rgba(201,168,76,.3);
   --muted:#6B7280;--muted2:#4A5568;--text:#E8EAF0;--text2:#C5C8D4;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -153,6 +156,29 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .gen-btn:hover,.gen-btn:active{box-shadow:0 4px 20px rgba(55,138,221,.35);}
 .gen-btn:disabled{opacity:.5;cursor:not-allowed;}
 .gen-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.5;}
+
+/* Platform chips (replaces the old platform <select>) */
+.platform-chips{display:flex;gap:.4rem;flex-shrink:0;}
+.gen-chip{
+  padding:.38rem .85rem;border-radius:20px;
+  background:var(--bg4);border:1px solid var(--border2);
+  color:var(--muted);font-size:.75rem;font-weight:600;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.gen-chip:hover{border-color:var(--blue-b);color:var(--blue);}
+.gen-chip.active{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+
+/* EA Library */
+.ea-library{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.25rem;}
+.ea-lib-empty{font-size:.78rem;color:var(--muted2);text-align:center;padding:1.25rem;background:var(--bg2);border:1px solid var(--border);border-radius:10px;}
+.ea-lib-item{
+  display:flex;align-items:center;justify-content:space-between;gap:.75rem;
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:.7rem .9rem;cursor:pointer;transition:border-color .2s;
+}
+.ea-lib-item:hover{border-color:var(--blue-b);}
+.ea-lib-name{font-size:.8rem;font-weight:600;color:var(--text);}
+.ea-lib-meta{font-size:.68rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
 
 /* ══ SECTION LABEL ══ */
 .section-label{
@@ -395,21 +421,29 @@ No coding knowledge needed. Just describe exactly what you want, and we build it
     </div>
 
     <!-- Generate row -->
-    <div class="gen-row">
-      <select class="gen-platform" id="genPlatform">
-        <option value="MT5">MT5 · MQL5</option>
-        <option value="MT4">MT4 · MQL4</option>
-      </select>
+    <div class="gen-row" style="flex-wrap:wrap;">
+      <div class="platform-chips" id="platformChips">
+        <span class="gen-chip active" data-platform="MT5" onclick="selectPlatform('MT5',this)">MT5</span>
+        <span class="gen-chip" data-platform="MT4" onclick="selectPlatform('MT4',this)">MT4</span>
+        <span class="gen-chip" data-platform="PINE" onclick="selectPlatform('PINE',this)">PineScript</span>
+      </div>
+      <input type="hidden" id="genPlatform" value="MT5">
       <select class="gen-platform" id="genType">
         <option>Expert Advisor</option>
         <option>Custom Indicator</option>
         <option>Script</option>
       </select>
-      <button class="gen-btn" id="genBtn" onclick="runGenerate()">
+      <button class="gen-btn" id="genBtn" onclick="runGenerate()" style="width:100%;">
         <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         GENERATE CODE
       </button>
     </div>
+  </div>
+
+  <!-- ══ EA LIBRARY ══ -->
+  <div class="section-label">Your EA Library</div>
+  <div class="ea-library" id="eaLibrary">
+    <div class="ea-lib-empty">Loading your saved EAs...</div>
   </div>
 
   <!-- ══ VISUAL BUILDER ══ -->
@@ -545,12 +579,19 @@ No coding knowledge needed. Just describe exactly what you want, and we build it
       sessionStorage.removeItem('wts_prefill');
       const platform = sessionStorage.getItem('wts_prefill_platform');
       if (platform) {
-        const sel = document.getElementById('genPlatform');
-        if (sel) sel.value = platform;
+        const chip = document.querySelector(`#platformChips .gen-chip[data-platform="${platform}"]`);
+        if (chip) selectPlatform(platform, chip);
         sessionStorage.removeItem('wts_prefill_platform');
       }
     }
+    loadEaLibrary();
   });
+
+  function selectPlatform(val, el) {
+    document.getElementById('genPlatform').value = val;
+    document.querySelectorAll('#platformChips .gen-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+  }
 
   async function getToken() {
     const user = firebase.auth().currentUser;
@@ -869,6 +910,48 @@ function addHint(text) {
   ta.scrollTop = ta.scrollHeight;
 }
 
+async function loadEaLibrary() {
+  const box = document.getElementById('eaLibrary');
+  if (!box) return;
+  try {
+    const token = await getToken();
+    const res   = await fetch(API_BASE + '/api/eas', { headers: { 'Authorization': 'Bearer ' + token } });
+    const data  = await res.json();
+    const eas   = data.eas || [];
+    if (!eas.length) {
+      box.innerHTML = '<div class="ea-lib-empty">No EAs yet — generate one above and it will show up here.</div>';
+      return;
+    }
+    box.innerHTML = eas.map(ea => `
+      <div class="ea-lib-item" onclick="openEaFromLibrary('${ea.id}')">
+        <div class="ea-lib-name">${ea.strategy_type || 'EA'} · ${ea.symbol || 'Any'}</div>
+        <div class="ea-lib-meta">${(ea.platform || 'MT5').toUpperCase()} · ${ea.created ? new Date(ea.created).toLocaleDateString() : ''}</div>
+      </div>
+    `).join('');
+  } catch (e) {
+    box.innerHTML = '<div class="ea-lib-empty">Could not load your EA library.</div>';
+  }
+}
+
+async function openEaFromLibrary(id) {
+  try {
+    const token = await getToken();
+    const res   = await fetch(API_BASE + '/api/eas', { headers: { 'Authorization': 'Bearer ' + token } });
+    const data  = await res.json();
+    const ea    = (data.eas || []).find(e => e.id === id);
+    if (!ea) { showToast('❌ Could not find that EA'); return; }
+    const ext = (ea.platform || 'MT5').toUpperCase() === 'MT4' ? 'mq4' : 'mq5';
+    sessionStorage.setItem('wts_code',     ea.code || '');
+    sessionStorage.setItem('wts_fname',    'WTS_' + (ea.strategy_type || 'Strategy').replace(/[^a-zA-Z0-9]/g, '_') + '.' + ext);
+    sessionStorage.setItem('wts_platform', ea.platform || 'MT5');
+    sessionStorage.setItem('wts_type',     ea.strategy_type || 'Expert Advisor');
+    sessionStorage.setItem('wts_desc',     `${ea.strategy_type || 'EA'} · ${ea.symbol || 'Any'}`);
+    window.location.href = 'results.html';
+  } catch (e) {
+    showToast('❌ Could not open that EA');
+  }
+}
+
 /* ════════════════════════════════════════════════════════
    GENERATE — main function (fixed, no duplicate declarations)
 ════════════════════════════════════════════════════════ */
@@ -881,7 +964,11 @@ async function runGenerate() {
     return;
   }
 
-  const platform   = document.getElementById('genPlatform').value;
+  const platform = document.getElementById('genPlatform').value;
+  if (platform === 'PINE') {
+    showToast('⚠ PineScript output is coming soon — switch to MT5 or MT4');
+    return;
+  }
   const type       = document.getElementById('genType').value;
   const ext        = platform === 'MT5' ? 'mq5' : 'mq4';
   const stratName  = userText.slice(0, 30).replace(/[^a-zA-Z0-9]/g, '_') || 'Strategy';

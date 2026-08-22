@@ -1275,11 +1275,17 @@ async function loadVpsStatus() {
 }
 
 async function loadAgentStatus() {
-  const dot = document.getElementById('agentDot');
-  const txt = document.getElementById('agentStatusText');
+  const dot     = document.getElementById('agentDot');
+  const txt     = document.getElementById('agentStatusText');
+  const ipBlock = document.getElementById('agentIpBlock');
+  const ipEl    = document.getElementById('agentIp');
   if (!dot || !txt) return;
   try {
     const data = await callAPIGet('/api/agent/status');
+    if (ipBlock && ipEl) {
+      if (data.vps_ip) { ipEl.textContent = data.vps_ip; ipBlock.style.display = 'block'; }
+      else { ipBlock.style.display = 'none'; }
+    }
     if (data.online) {
       dot.style.background = '#2ECC71';
       dot.style.boxShadow  = '0 0 8px rgba(46,204,113,.6)';

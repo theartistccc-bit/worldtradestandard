@@ -5,16 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>WTS — Code Ready</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@300;400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/design-system.css">
 <script>document.documentElement.style.visibility='hidden';</script>
 <style>
 :root{
-  --bg:#07080D;--bg2:#0D0F18;--bg3:#12151F;--bg4:#181C28;
-  --border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.11);
-  --primary:#378ADD;--primary-light:#5DA8F0;--primary-dim:rgba(55,138,221,.10);--primary-b:rgba(55,138,221,.28);
-  --blue:#378ADD;--blue-dim:rgba(55,138,221,.12);--blue-b:rgba(55,138,221,.3);
-  --green:#1D9E75;--green2:#2ECC71;--green-dim:rgba(29,158,117,.12);--green-b:rgba(29,158,117,.28);
+  /* Aligned to css/design-system.css tokens */
+  --bg:#050508;--bg2:#0D0F18;--bg3:#12151F;--bg4:#181C28;
+  --border:#1E2130;--border2:rgba(255,255,255,.11);
+  --primary:#378ADD;--primary-light:#5DA8F0;--primary-dim:rgba(55,138,221,.12);--primary-b:rgba(55,138,221,.25);
+  --blue:#378ADD;--blue-dim:rgba(55,138,221,.12);--blue-b:rgba(55,138,221,.25);
+  --green:#2ECC71;--green2:#2ECC71;--green-dim:rgba(46,204,113,.12);--green-b:rgba(46,204,113,.25);
   --teal:#0F6E56;
-  --red:#E74C3C;--red-dim:rgba(231,76,60,.12);--red-b:rgba(231,76,60,.3);
+  --red:#E74C3C;--red-dim:rgba(231,76,60,.10);--red-b:rgba(231,76,60,.3);
+  --gold:#C9A84C;--gold2:#C9A84C;--gold-dim:rgba(201,168,76,.10);--gold-b:rgba(201,168,76,.3);
   --muted:#6B7280;--muted2:#4A5568;--text:#E8EAF0;--text2:#C5C8D4;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -50,7 +53,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .sb-badges{display:flex;gap:.4rem;margin-top:.45rem;flex-wrap:wrap;}
 .sb-badge{font-size:.6rem;font-weight:700;letter-spacing:.8px;padding:.18rem .55rem;border-radius:20px;}
 .sb-badge.green{background:var(--green-dim);border:1px solid var(--green-b);color:var(--green);}
-.sb-badge.gold{background:var(--primary-dim);border:1px solid var(--primary-b);color:var(--primary);}
+.sb-badge.gold{background:var(--gold-dim);border:1px solid var(--gold-b);color:var(--gold);}
 .sb-badge.blue{background:var(--blue-dim);border:1px solid var(--blue-b);color:var(--blue);}
 
 .page{max-width:900px;margin:0 auto;padding:1.1rem 1rem 5rem;}
@@ -99,23 +102,23 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .ep-text{font-size:.8rem;color:var(--text2);line-height:1.75;}
 .ep-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem;}
 .ep-tag{font-size:.67rem;padding:.2rem .6rem;border-radius:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);}
-.ep-tag.gold{background:var(--primary-dim);border-color:var(--primary-b);color:var(--primary);}
+.ep-tag.gold{background:var(--gold-dim);border-color:var(--gold-b);color:var(--gold);}
 
 .info-panel{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1.25rem;display:none;}
 .info-panel.active{display:block;}
 .ip-head{display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:var(--bg3);border-bottom:1px solid var(--border);}
 .ip-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;}
 .ip-icon.ok{background:var(--green-dim);border:1px solid var(--green-b);}
-.ip-icon.gold{background:var(--primary-dim);border:1px solid var(--primary-b);}
+.ip-icon.gold{background:var(--gold-dim);border:1px solid var(--gold-b);}
 .ip-title{font-size:.78rem;font-weight:600;}
 .ip-title.ok{color:var(--green);}
-.ip-title.gold{color:var(--primary);}
+.ip-title.gold{color:var(--gold);}
 .ip-body{padding:1rem 1.1rem;}
 .ip-item{display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--border);}
 .ip-item:last-child{border-bottom:none;}
 .ip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:.4rem;}
 .ip-dot.ok{background:var(--green);}
-.ip-dot.gold{background:var(--primary);}
+.ip-dot.gold{background:var(--gold);}
 .ip-text{font-size:.77rem;color:var(--text2);line-height:1.6;}
 .ip-code{font-family:'IBM Plex Mono',monospace;font-size:.68rem;background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:.2rem .5rem;color:var(--primary);}
 
@@ -125,7 +128,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 .quick-actions{display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.25rem;}
 .qa-btn{font-size:.7rem;font-weight:600;padding:.4rem .9rem;border-radius:6px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .2s;}
 .qa-btn:hover,.qa-btn:active{color:var(--text);border-color:var(--border2);}
-.qa-btn.gold{background:var(--primary-dim);border-color:var(--primary-b);color:var(--primary);}
+.qa-btn.gold{background:var(--gold-dim);border-color:var(--gold-b);color:var(--gold);}
 .qa-btn:disabled{opacity:.5;cursor:not-allowed;}
 
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--bg2);border-top:1px solid var(--border);padding:.75rem 1rem;display:flex;gap:.55rem;}
@@ -294,9 +297,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif
 </div><!-- /page -->
 
 <div class="bottom-bar">
-  <div class="bb-copy" onclick="copyCode()">📋 Copy</div>
+  <div class="btn-ghost bb-copy" onclick="copyCode()">📋 Copy</div>
   <div class="bb-regen" onclick="regenCode()">↺ Regen</div>
-  <div class="bb-dl" id="dlBtn" onclick="downloadCode()">⬇ DOWNLOAD .MQ5</div>
+  <div class="btn-primary bb-dl" id="dlBtn" onclick="downloadCode()">⬇ DOWNLOAD .MQ5</div>
 </div>
 
 <div class="toast" id="toast"></div>

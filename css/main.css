@@ -4,29 +4,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap');
 
 :root {
+  /* Aligned to css/design-system.css tokens so the app shell shares one palette */
   --primary: #378ADD;
   --primary-light: #5DA8F0;
-  --primary-dim: rgba(55,138,221,0.10);
+  --primary-dim: rgba(55,138,221,0.12);
   --primary-b: rgba(55,138,221,0.25);
-  --bg: #08090D;
-  --bg2: #0E1018;
-  --bg3: #141720;
-  --bg4: #1A1F2E;
-  --border: #1C2030;
-  --border2: #252A3A;
-  --text: #E2E8F4;
-  --muted: #5A6480;
-  --muted2: #3A4060;
-  --green: #1D9E75;
+  --bg: #050508;
+  --bg2: #0D0F18;
+  --bg3: #12151F;
+  --bg4: #181C28;
+  --border: #1E2130;
+  --border2: #2A2E42;
+  --text: #E8EAF0;
+  --muted: #6B7280;
+  --muted2: #4A5568;
+  --green: #2ECC71;
   --green2: #2ECC71;
-  --green-dim: rgba(29,158,117,0.10);
-  --green-b: rgba(29,158,117,0.28);
+  --green-dim: rgba(46,204,113,0.12);
+  --green-b: rgba(46,204,113,0.25);
   --teal: #0F6E56;
-  --red: #E24B4A;
-  --red-dim: rgba(226,75,74,0.1);
+  --red: #E74C3C;
+  --red-dim: rgba(231,76,60,0.10);
   --blue: #378ADD;
-  --blue-dim: rgba(55,138,221,0.1);
-  --blue-b: rgba(55,138,221,0.3);
+  --blue-dim: rgba(55,138,221,0.12);
+  --blue-b: rgba(55,138,221,0.25);
+  --gold: #C9A84C;
+  --gold-dim: rgba(201,168,76,0.10);
+  --gold-b: rgba(201,168,76,0.30);
   --nav-h: 54px;
 }
 
@@ -42,22 +46,11 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 
 .hidden { display: none !important; }
 
-/* ── UTILITIES ── */
-.live-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; flex-shrink: 0; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-.btn-gold { background: var(--green); color: #fff; border: none; border-radius: 5px; font-weight: 700; letter-spacing: .3px; transition: opacity .2s, transform .15s; }
-.btn-gold:hover { opacity: .88; transform: translateY(-1px); }
-.btn-ghost { background: transparent; border: 1px solid var(--border2); color: var(--muted); border-radius: 5px; transition: all .2s; }
-.btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
-
-/* design-system.css sets an unscoped mobile width:100% rule for .btn-gold/.btn-primary
-   intended for the new landing page — this keeps existing app-shell gold buttons
-   (Upgrade, Kill Switch, Log Trade, Save & AI Analyse, View Plans) at their normal
-   width on mobile instead of stretching full-width. */
-@media (max-width: 768px) {
-  #appShell .btn-gold { width: auto; }
-}
-
+/* ── UTILITIES ──
+   .btn-gold / .btn-ghost / .live-dot / .section-eyebrow / .field-input now come
+   from css/design-system.css — the app shell adopts them directly (Prompt 3).
+   Only #landing keeps its own scoped copies (css/landing.css) since the landing
+   page section is out of scope for this redesign. */
 .btn-lg { padding: .75rem 1.75rem; font-size: .92rem; }
 .btn-sm { padding: .35rem .9rem; font-size: .75rem; }
 
@@ -100,7 +93,7 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 
 /* Features */
 .features-section { padding: 5rem 3rem; max-width: 1200px; margin: 0 auto; }
-.section-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; color: var(--primary); letter-spacing: 2px; text-transform: uppercase; margin-bottom: .6rem; }
+/* .section-eyebrow now comes from design-system.css (used app-wide, incl. sidebar) */
 .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 2px; color: #F0F4FF; margin-bottom: 2.5rem; }
 .features-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
 .feat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; transition: border-color .2s; }
@@ -159,7 +152,7 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 .antab { display: flex; align-items: center; gap: .4rem; padding: 0 .9rem; height: var(--nav-h); font-size: .78rem; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; }
 .antab svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; opacity: .7; }
 .antab:hover { color: var(--text); }
-.antab.active { color: var(--green2); border-bottom-color: var(--green2); }
+.antab.active { color: var(--primary); border-bottom-color: var(--primary); }
 .antab.active svg { opacity: 1; }
 .app-nav-right { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
 .tier-display { display: flex; align-items: center; gap: .4rem; font-family: 'IBM Plex Mono', monospace; font-size: .68rem; font-weight: 600; color: var(--muted); letter-spacing: .5px; }
@@ -167,6 +160,9 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 .dev-dot { background: var(--blue); }
 .exec-dot { background: var(--green); }
 .credits-chip { background: var(--bg3); border: 1px solid var(--border2); padding: .25rem .7rem; border-radius: 3px; font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: var(--primary); }
+.nav-bell { background: transparent; border: 1px solid var(--border2); color: var(--muted); width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .2s; }
+.nav-bell svg { fill: none; stroke: currentColor; stroke-width: 2; }
+.nav-bell:hover { border-color: var(--primary-b); color: var(--primary); }
 
 /* Guard Banner */
 .guard-banner { display: flex; align-items: center; gap: .75rem; background: rgba(226,75,74,.07); border-bottom: 1px solid rgba(226,75,74,.2); padding: .5rem 1.25rem; font-size: .77rem; color: var(--red); flex-shrink: 0; }
@@ -180,11 +176,14 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 /* Sidebar */
 .app-sidebar { width: 210px; background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
 .sb-section { padding: .75rem 0; flex: 1; }
-.sb-lbl { font-size: .6rem; font-weight: 700; color: var(--muted2); letter-spacing: 2px; text-transform: uppercase; padding: .3rem .9rem .45rem; }
+/* Visual styling (font/color/letter-spacing) now comes from .section-eyebrow
+   (design-system.css), applied alongside this class in the HTML. Only layout
+   (padding) stays here. */
+.sb-lbl { padding: .3rem .9rem .45rem; margin-bottom: 0; }
 .sb-i { display: flex; align-items: center; gap: .55rem; padding: .5rem .9rem; cursor: pointer; font-size: .8rem; color: var(--muted); transition: all .15s; border-left: 2px solid transparent; }
 .sb-i svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; flex-shrink: 0; }
-.sb-i:hover { background: var(--bg3); color: var(--text); }
-.sb-i.active { background: var(--primary-dim); color: var(--primary); border-left-color: var(--primary); }
+.sb-i:hover { background: var(--bg3); color: var(--text); border-left-color: var(--primary-b); }
+.sb-i.active { background: var(--primary-dim); color: var(--text); border-left-color: var(--primary); }
 .sb-lock { margin-left: auto; font-size: .58rem; background: var(--bg4); border: 1px solid var(--border2); color: var(--muted2); padding: .1rem .35rem; border-radius: 2px; letter-spacing: .5px; font-family: 'IBM Plex Mono', monospace; }
 .exec-lock { color: var(--green); border-color: var(--green-b); background: var(--green-dim); }
 .sb-bottom { padding: .75rem .9rem; border-top: 1px solid var(--border); margin-top: auto; }
@@ -221,7 +220,12 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 
 /* Views container */
 .views-container { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
-.view { flex: 1; overflow: hidden; display: none; flex-direction: column; }
+/* Base view pattern (design-system.css): flex:1, bg var(--bg-void). overflow stays
+   hidden and display:none/flex is driven by .active — each view's inner layout
+   (grid columns in Journal/Debugger/Markup, .view-head/.view-body elsewhere)
+   owns its own padding and scrolling, so this outer container can't also scroll
+   or pad without doubling up and breaking their independent-scroll columns. */
+.view { flex: 1; overflow: hidden; display: none; flex-direction: column; background: var(--bg); }
 .view.active { display: flex; }
 
 /* Shared view elements */
@@ -248,8 +252,10 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 /* Form elements */
 .field-group { margin-bottom: 1rem; }
 .field-label { font-size: .63rem; font-weight: 700; color: var(--muted2); letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-bottom: .4rem; }
-.field-sel, .field-input, .field-ta { width: 100%; background: var(--bg3); border: 1px solid var(--border2); color: var(--text); padding: .55rem .8rem; border-radius: 5px; font-size: .82rem; outline: none; transition: border-color .2s; appearance: none; }
-.field-sel:focus, .field-input:focus, .field-ta:focus { border-color: var(--primary); }
+/* .field-input itself now comes from design-system.css — kept here only for
+   .field-sel/.field-ta which aren't covered by that class. */
+.field-sel, .field-ta { width: 100%; background: var(--bg3); border: 1px solid var(--border2); color: var(--text); padding: .55rem .8rem; border-radius: 5px; font-size: .82rem; outline: none; transition: border-color .2s; appearance: none; }
+.field-sel:focus, .field-ta:focus { border-color: var(--primary); }
 .field-ta { resize: vertical; min-height: 75px; line-height: 1.5; }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
 .param-table { background: var(--bg3); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
@@ -381,7 +387,8 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 .debug-col-head { display: flex; align-items: center; justify-content: space-between; padding: .68rem 1.1rem; border-bottom: 1px solid var(--border); background: var(--bg2); font-size: .68rem; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; }
 .debug-status { font-size: .65rem; }
 .debug-input-area { flex: 1; overflow: hidden; padding: 1rem; }
-.debug-error-input { width: 100%; height: 100%; background: transparent; border: none; color: var(--red); font-family: 'IBM Plex Mono', monospace; font-size: .77rem; line-height: 1.85; outline: none; resize: none; }
+.debug-error-input { width: 100%; height: 100%; background: var(--bg-card-2, var(--bg3)); border: 1px solid var(--border); border-radius: 10px; padding: 13px 16px; color: var(--red); font-family: 'IBM Plex Mono', monospace; font-size: .77rem; line-height: 1.85; outline: none; resize: none; transition: border-color .2s; }
+.debug-error-input:focus { border-color: var(--primary); }
 .debug-action { padding: .85rem 1.1rem; border-top: 1px solid var(--border); background: var(--bg2); flex-shrink: 0; }
 .debug-output-area { flex: 1; overflow-y: auto; padding: 1rem; }
 .debug-placeholder { font-family: 'IBM Plex Mono', monospace; font-size: .77rem; line-height: 1.9; color: var(--muted2); }
@@ -431,8 +438,8 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 .pricing-head p { font-size: .82rem; color: var(--muted); }
 .pricing-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; max-width: 920px; }
 .pc { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; position: relative; }
-.pc-blue { border-color: rgba(55,138,221,.3); }
-.pc-gold { border-color: var(--primary-b); }
+.pc-blue { border-color: var(--blue-b); }
+.pc-gold { border-color: var(--gold-b); }
 .pc-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); color: #fff; font-size: .63rem; font-weight: 700; padding: .18rem .85rem; border-radius: 20px; font-family: 'IBM Plex Mono', monospace; letter-spacing: .5px; white-space: nowrap; }
 .pc-tier { font-size: .63rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; margin-bottom: .35rem; }
 .pc-name { font-family: 'Bebas Neue', sans-serif; font-size: 1.15rem; letter-spacing: 2px; margin-bottom: .2rem; }
@@ -447,7 +454,7 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 .pc-btn { width: 100%; padding: .65rem; border-radius: 5px; font-size: .82rem; font-weight: 600; border: 1px solid var(--border2); background: transparent; color: var(--text); cursor: pointer; transition: all .2s; }
 .pc-btn:hover { opacity: .85; }
 .pc-btn-blue { background: var(--blue); color: #fff; border-color: var(--blue); }
-.pc-btn-gold { background: var(--green); color: #fff; border-color: var(--green); }
+.pc-btn-gold { background: var(--gold); color: #08090D; border-color: var(--gold); }
 
 /* ── MODAL ── */
 .modal-overlay { position: fixed; inset: 0; background: rgba(8,9,13,.9); display: flex; align-items: center; justify-content: center; z-index: 500; backdrop-filter: blur(4px); }
@@ -527,11 +534,6 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
 
 /* Code explain text */
 .explain-text { font-size:.82rem; color:var(--muted); line-height:1.75; padding:1.1rem; white-space:pre-wrap; }
-
-/* View + builders already have these but ensure consistency */
-.views-container { flex:1; overflow:hidden; display:flex; flex-direction:column; }
-.view { flex:1; overflow:hidden; display:none; flex-direction:column; }
-.view.active { display:flex; }
 
 /* ════════════════════════════════
    MOBILE — ≤ 768px

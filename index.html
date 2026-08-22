@@ -449,10 +449,10 @@
   <!-- APP NAV -->
   <nav class="app-nav">
     <div class="brand-mark">
-      <span class="brand-wts">WTS</span>
-      <div class="brand-text">
-        <span class="brand-full">WORLDTRADESTANDARD</span>
-        <span class="brand-sub">Artificial Trading Assistant</span>
+      <span style="font-family:var(--font-display);font-size:22px;color:var(--gold);letter-spacing:2px;">WTS</span>
+      <div class="brand-text" style="display:flex;flex-direction:column;margin-left:8px;">
+        <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-primary);">WORLDTRADESTANDARD</span>
+        <span style="font-size:10px;color:var(--text-subtle);letter-spacing:1px;">ARTIFICIAL TRADING ASSISTANT</span>
       </div>
     </div>
     <div class="app-nav-tabs" id="appNavTabs">
@@ -495,6 +495,9 @@
         <span id="tierLabel">FREE TIER</span>
       </div>
       <div class="credits-chip" id="creditsChip">⚡ 3 left</div>
+      <button class="nav-bell" onclick="toast('No new notifications')" title="Notifications">
+        <svg viewBox="0 0 24 24" width="15" height="15"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
       <button class="btn-gold btn-sm" onclick="switchView('pricing',document.querySelector('[data-view=pricing]'))">Upgrade</button>
       <button class="btn-ghost btn-sm" onclick="exitApp()">← Exit</button>
     </div>
@@ -514,7 +517,7 @@
     <aside class="app-sidebar" id="appSidebar">
       <!-- Builder sidebar -->
       <div class="sb-section hidden" id="sb-builder">
-        <div class="sb-lbl">Create</div>
+        <div class="sb-lbl section-eyebrow">Create</div>
         <div class="sb-i active" onclick="setBuilderMode('ea',this)">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>Expert Advisor
         </div>
@@ -524,7 +527,7 @@
         <div class="sb-i" onclick="setBuilderMode('script',this)">
           <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Script / Utility
         </div>
-        <div class="sb-lbl" style="margin-top:.75rem">Pro Tools</div>
+        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">Pro Tools</div>
         <div class="sb-i" onclick="requireTier('dev','YouTube → Robot')">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>YouTube → Robot
           <span class="sb-lock">PRO</span>
@@ -533,7 +536,7 @@
           <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>PineScript → MQL
           <span class="sb-lock">PRO</span>
         </div>
-        <div class="sb-lbl" style="margin-top:.75rem">Executive</div>
+        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">Executive</div>
         <div class="sb-i" onclick="requireTier('exec','Daily Mentor')">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Daily Mentor
           <span class="sb-lock exec-lock">EXEC</span>
@@ -546,7 +549,7 @@
 
       <!-- Journal sidebar -->
       <div class="sb-section" id="sb-journal">
-        <div class="sb-lbl">Filter</div>
+        <div class="sb-lbl section-eyebrow">Filter</div>
         <div class="sb-i active" onclick="filterTrades('all',this)">
           <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>All Trades
         </div>
@@ -559,7 +562,7 @@
         <div class="sb-i" onclick="filterTrades('open',this)">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Open Trades
         </div>
-        <div class="sb-lbl" style="margin-top:.75rem">By Pair</div>
+        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">By Pair</div>
         <div class="sb-i" onclick="filterTrades('XAUUSD',this)">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>XAUUSD
         </div>
@@ -576,7 +579,7 @@
 
       <!-- Markup sidebar -->
       <div class="sb-section hidden" id="sb-markup">
-        <div class="sb-lbl">Style Profile</div>
+        <div class="sb-lbl section-eyebrow">Style Profile</div>
         <div class="style-tags" id="styleTags">
           <div class="st-group">
             <div class="st-label">Setup Style</div>
@@ -599,7 +602,7 @@
             <span class="st" onclick="this.classList.toggle('active')">3.0 RR</span>
           </div>
         </div>
-        <div class="sb-lbl" style="margin-top:.75rem">Upload Chart</div>
+        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">Upload Chart</div>
         <div class="sb-upload-zone" onclick="document.getElementById('markupFile').click()">
           <svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           <span>Attach PNG/JPG chart</span>
@@ -609,18 +612,18 @@
 
       <!-- Empty sidebars for other views -->
       <div class="sb-section hidden" id="sb-debugger">
-        <div class="sb-lbl">How It Works</div>
+        <div class="sb-lbl section-eyebrow">How It Works</div>
         <div class="debug-steps-info">
           <div class="dsi"><span class="dsi-n">01</span><span>Paste MetaEditor error log</span></div>
           <div class="dsi"><span class="dsi-n">02</span><span>AI reads each error line</span></div>
           <div class="dsi"><span class="dsi-n">03</span><span>Explains root cause</span></div>
           <div class="dsi"><span class="dsi-n">04</span><span>Returns fixed code</span></div>
         </div>
-        <div class="sb-lbl" style="margin-top:1rem">Executive Tier</div>
+        <div class="sb-lbl section-eyebrow" style="margin-top:1rem">Executive Tier</div>
         <div style="font-size:.75rem;color:var(--muted);padding:.5rem;line-height:1.6">App detects compile errors automatically and fixes them without you pasting anything.</div>
       </div>
       <div class="sb-section hidden" id="sb-stats">
-        <div class="sb-lbl">Overview</div>
+        <div class="sb-lbl section-eyebrow">Overview</div>
         <div class="sb-stat-cards">
           <div class="sb-stat"><div class="sb-stat-label">Win Rate</div><div class="sb-stat-val green" id="sb-wr">67%</div></div>
           <div class="sb-stat"><div class="sb-stat-label">Net P&L</div><div class="sb-stat-val green" id="sb-pl">+$1,240</div></div>
@@ -703,10 +706,10 @@
               <span style="color:var(--red);font-size:.65rem">PASTE FROM METAEDITOR</span>
             </div>
             <div class="debug-input-area">
-              <textarea class="debug-error-input" id="errorLog" placeholder="; Paste your MetaEditor error log here&#10;; Example:&#10;; EA_Strategy.mq5(47,15): error C0207: 'OrderSend' - wrong number of parameters&#10;; EA_Strategy.mq5(112,8): error C0301: undeclared identifier 'MagicNumber'&#10;; EA_Strategy.mq5(89,22): warning: possible loss of data"></textarea>
+              <textarea class="debug-error-input" id="errorLog" rows="8" placeholder="; Paste your MetaEditor error log here&#10;; Example:&#10;; EA_Strategy.mq5(47,15): error C0207: 'OrderSend' - wrong number of parameters&#10;; EA_Strategy.mq5(112,8): error C0301: undeclared identifier 'MagicNumber'&#10;; EA_Strategy.mq5(89,22): warning: possible loss of data"></textarea>
             </div>
             <div class="debug-action">
-              <button class="btn-generate" onclick="runDebugger()">ANALYSE & FIX ERRORS</button>
+              <button class="btn-primary" onclick="runDebugger()" style="width:100%;">FIX MY ERRORS →</button>
             </div>
           </div>
           <div class="debug-col">
@@ -758,78 +761,82 @@
 
           <!-- 72-hour countdown — shown when tier is active but VPS is still pending -->
           <div id="vpsCountdown" style="display:none;">
-            <div style="background:#0D0F18;border:1px solid rgba(55,138,221,.2);border-radius:16px;padding:2rem 1.5rem;text-align:center;margin-bottom:1rem;">
+            <div style="background:var(--bg-card);border:1px solid var(--blue-border);border-radius:16px;padding:2rem 1.5rem;text-align:center;margin-bottom:1rem;box-shadow:var(--shadow-glow-blue);">
               <div style="font-size:2.5rem;margin-bottom:.5rem;">⚙️</div>
-              <div style="font-size:.7rem;font-weight:700;letter-spacing:3px;color:#378ADD;text-transform:uppercase;margin-bottom:.75rem;">Setting Up Your Trading Server</div>
-              <div style="font-size:.88rem;color:#E8EAF0;line-height:1.7;margin-bottom:1.5rem;max-width:320px;margin-left:auto;margin-right:auto;">
+              <div style="font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:.75rem;">Setting Up Your Trading Server</div>
+              <div style="font-size:.88rem;color:var(--text-primary);line-height:1.7;margin-bottom:1.5rem;max-width:320px;margin-left:auto;margin-right:auto;">
                 Your payment is confirmed and your dedicated trading server is being prepared. Everything will be ready soon.
               </div>
-              <div style="background:#12151F;border:1px solid #1E2130;border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
-                <div style="font-size:.65rem;font-weight:700;letter-spacing:2px;color:#6B7280;text-transform:uppercase;margin-bottom:.5rem;">Everything active by</div>
-                <div id="countdownTimer" style="font-family:'IBM Plex Mono',monospace;font-size:1.8rem;font-weight:700;color:#378ADD;letter-spacing:4px;">72:00:00</div>
-                <div style="font-size:.65rem;color:#6B7280;margin-top:.35rem;">Hours : Minutes : Seconds</div>
+              <div style="background:var(--bg-card-2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
+                <div style="font-size:.65rem;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:.5rem;">Everything active by</div>
+                <div id="countdownTimer" style="font-family:var(--font-mono);font-size:2rem;font-weight:700;color:var(--blue);letter-spacing:4px;">72:00:00</div>
+                <div style="font-size:.65rem;color:var(--text-muted);margin-top:.35rem;">Hours : Minutes : Seconds</div>
               </div>
-              <div style="text-align:left;background:#12151F;border:1px solid #1E2130;border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;">
-                <div style="font-size:.7rem;font-weight:700;letter-spacing:1.5px;color:#E8EAF0;margin-bottom:.75rem;">WHAT HAPPENS NEXT</div>
+              <div style="text-align:left;background:var(--bg-card-2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;">
+                <div style="font-size:.7rem;font-weight:700;letter-spacing:1.5px;color:var(--text-primary);margin-bottom:.75rem;">WHAT HAPPENS NEXT</div>
                 <div style="display:flex;flex-direction:column;gap:.6rem;">
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
-                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#2ECC71;">✓</div>
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
+                    <div style="width:20px;height:20px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--green);">✓</div>
                     Payment confirmed — your account is active
                   </div>
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
-                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(55,138,221,.1);border:1px solid rgba(55,138,221,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#378ADD;">2</div>
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
+                    <div style="width:20px;height:20px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--blue);">2</div>
                     Your dedicated VPS server is being configured
                   </div>
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
-                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(55,138,221,.1);border:1px solid rgba(55,138,221,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#378ADD;">3</div>
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
+                    <div style="width:20px;height:20px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--blue);">3</div>
                     MetaTrader 5 installed and ready to connect
                   </div>
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:#9CA3AF;">
-                    <div style="width:20px;height:20px;border-radius:50%;background:rgba(55,138,221,.1);border:1px solid rgba(55,138,221,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:#378ADD;">4</div>
+                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
+                    <div style="width:20px;height:20px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--blue);">4</div>
                     You receive Telegram + email when everything is live
                   </div>
                 </div>
               </div>
-              <div style="font-size:.72rem;color:#6B7280;line-height:1.6;">
+              <div style="font-size:.72rem;color:var(--text-muted);line-height:1.6;">
                 Questions? Message us on Telegram<br>
-                <a href="https://t.me/WorldtradestandardBot" target="_blank" style="color:#378ADD;text-decoration:none;">@WorldtradestandardBot</a>
+                <a href="https://t.me/WorldtradestandardBot" target="_blank" style="color:var(--blue);text-decoration:none;">@WorldtradestandardBot</a>
               </div>
             </div>
           </div>
 
-          <!-- WTS Nexus Agent Status -->
-          <div id="agentStatusCard" style="background:#0D0F18;border:1px solid #1E2130;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;">
+          <!-- WTS Nexus Agent Status — hero card -->
+          <div id="agentStatusCard" style="background:linear-gradient(135deg, rgba(55,138,221,0.08), var(--bg-card));border:1px solid var(--blue-border);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
               <div style="display:flex;align-items:center;gap:.65rem;">
-                <div id="agentDot" style="width:10px;height:10px;border-radius:50%;background:#6B7280;flex-shrink:0;transition:background .3s;"></div>
+                <div id="agentDot" style="width:10px;height:10px;border-radius:50%;background:var(--text-muted);flex-shrink:0;transition:background .3s;"></div>
                 <div>
-                  <div style="font-size:.8rem;font-weight:700;color:#E8EAF0;">WTS Nexus Agent</div>
-                  <div id="agentStatusText" style="font-size:.65rem;color:#6B7280;margin-top:.1rem;">Checking...</div>
+                  <div style="font-size:.8rem;font-weight:700;color:var(--text-primary);">WTS Nexus Agent</div>
+                  <div id="agentStatusText" style="font-size:.65rem;color:var(--text-muted);margin-top:.1rem;">Checking...</div>
                 </div>
               </div>
-              <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-                <button onclick="agentCommand('get_status',{})" style="background:rgba(55,138,221,.12);border:1px solid rgba(55,138,221,.3);color:#378ADD;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">↻ Sync MT5</button>
-                <button onclick="showDeployEaModal()" style="background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.3);color:#2ECC71;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">+ Deploy EA</button>
-                <button onclick="if(confirm('Activate kill switch? This closes ALL open trades.')) agentCommand('kill_switch',{reason:'Manual from app',hours:24})" style="background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);color:#E74C3C;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">🔒 Kill Switch</button>
+              <div id="agentIpBlock" style="text-align:right;display:none;">
+                <div style="font-family:var(--font-mono);font-size:.78rem;color:var(--blue);" id="agentIp"></div>
+                <div style="font-size:.6rem;color:var(--text-subtle);letter-spacing:.5px;">IP ADDRESS</div>
               </div>
             </div>
-            <div id="agentCmdStatus" style="display:none;margin-top:.75rem;padding:.5rem .75rem;background:#12151F;border-radius:6px;font-size:.72rem;color:#6B7280;"></div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;">
+              <button onclick="agentCommand('get_status',{})" style="background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">↻ Sync MT5</button>
+              <button onclick="showDeployEaModal()" style="background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">+ Deploy EA</button>
+              <button onclick="if(confirm('Activate kill switch? This closes ALL open trades.')) agentCommand('kill_switch',{reason:'Manual from app',hours:24})" style="background:var(--red-dim);border:1px solid rgba(231,76,60,.3);color:var(--red);padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">🔒 Kill Switch</button>
+            </div>
+            <div id="agentCmdStatus" style="display:none;margin-top:.75rem;padding:.5rem .75rem;background:var(--bg-card-2);border-radius:6px;font-size:.72rem;color:var(--text-muted);"></div>
           </div>
 
           <!-- Add Account Button -->
           <button onclick="document.getElementById('addAccountModal').classList.remove('hidden')"
-            style="width:100%;background:rgba(55,138,221,.08);border:1px dashed rgba(55,138,221,.3);border-radius:10px;padding:.85rem;color:#378ADD;font-size:.78rem;font-weight:600;cursor:pointer;margin-top:.75rem;font-family:inherit;">
+            style="width:100%;background:var(--blue-dim);border:1px dashed var(--blue-border);border-radius:10px;padding:.85rem;color:var(--blue);font-size:.78rem;font-weight:600;cursor:pointer;margin-top:.75rem;font-family:inherit;">
             + Connect Broker Account
           </button>
 
           <!-- All Nexus Agents (admin only) -->
-          <div id="adminAgentsPanel" class="hidden" style="background:#0D0F18;border:1px solid #1E2130;border-radius:12px;padding:1.25rem;margin-top:1.25rem;">
+          <div id="adminAgentsPanel" class="hidden card" style="margin-top:1.25rem;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-              <div style="font-size:.7rem;font-weight:700;letter-spacing:2px;color:#E8EAF0;">ALL NEXUS AGENTS</div>
-              <button onclick="loadAllAgents()" style="background:none;border:none;color:#378ADD;font-size:.72rem;cursor:pointer;font-family:inherit;">↻ Refresh</button>
+              <div class="section-eyebrow" style="margin-bottom:0;">All Nexus Agents</div>
+              <button onclick="loadAllAgents()" style="background:none;border:none;color:var(--blue);font-size:.72rem;cursor:pointer;font-family:inherit;">↻ Refresh</button>
             </div>
             <div id="allAgentsList">
-              <div style="color:#6B7280;font-size:.78rem;text-align:center;padding:1.5rem 0;">Click Refresh to load</div>
+              <div style="color:var(--text-muted);font-size:.78rem;text-align:center;padding:1.5rem 0;">Click Refresh to load</div>
             </div>
           </div>
 
@@ -837,24 +844,24 @@
 
         <!-- Add Account Modal -->
         <div id="addAccountModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9000;display:flex;align-items:flex-end;justify-content:center;padding:1rem;">
-          <div style="background:#0D0F18;border:1px solid #1E2130;border-radius:16px;padding:1.5rem;width:100%;max-width:440px;">
+          <div class="card" style="width:100%;max-width:440px;">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-              <div style="font-size:.82rem;font-weight:700;letter-spacing:1.5px;color:#E8EAF0;">CONNECT BROKER ACCOUNT</div>
-              <span onclick="document.getElementById('addAccountModal').classList.add('hidden')" style="cursor:pointer;color:#6B7280;font-size:1.3rem;line-height:1;">✕</span>
+              <div style="font-size:.82rem;font-weight:700;letter-spacing:1.5px;color:var(--text-primary);">CONNECT BROKER ACCOUNT</div>
+              <span onclick="document.getElementById('addAccountModal').classList.add('hidden')" style="cursor:pointer;color:var(--text-muted);font-size:1.3rem;line-height:1;">✕</span>
             </div>
             <div style="display:flex;flex-direction:column;gap:.6rem;">
-              <input id="acc-nickname" placeholder="Nickname (e.g. My Gold Account)" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
-              <input id="acc-login" placeholder="Broker login number" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
-              <input id="acc-password" type="password" placeholder="Broker password" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
-              <input id="acc-server" placeholder="Server name (e.g. ICMarkets-Live)" list="serverList" style="background:#12151F;border:1px solid #1E2130;border-radius:8px;padding:.65rem .9rem;color:#E8EAF0;font-size:.82rem;font-family:inherit;outline:none;width:100%;box-sizing:border-box;">
+              <input id="acc-nickname" class="field-input" placeholder="Nickname (e.g. My Gold Account)">
+              <input id="acc-login" class="field-input" placeholder="Broker login number">
+              <input id="acc-password" class="field-input" type="password" placeholder="Broker password">
+              <input id="acc-server" class="field-input" placeholder="Server name (e.g. ICMarkets-Live)" list="serverList">
               <datalist id="serverList">
                 <option value="ICMarkets-Live"><option value="ICMarkets-Demo">
                 <option value="Exness-Real"><option value="Exness-Demo">
                 <option value="Pepperstone-Live"><option value="Pepperstone-Demo">
                 <option value="FTMO-Server"><option value="Deriv-Server">
               </datalist>
-              <button onclick="addTradingAccount()" style="background:linear-gradient(135deg,#378ADD,#2ECC71);color:#fff;border:none;padding:12px;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:.25rem;">Connect Account →</button>
-              <p style="font-size:.63rem;color:#4A5568;text-align:center;margin:0;">Your credentials are encrypted. WTS never stores your password in plain text.</p>
+              <button class="btn-primary" onclick="addTradingAccount()" style="width:100%;margin-top:.25rem;">Connect Account →</button>
+              <p style="font-size:.63rem;color:var(--text-subtle);text-align:center;margin:0;">Your credentials are encrypted. WTS never stores your password in plain text.</p>
             </div>
           </div>
         </div>
@@ -893,10 +900,10 @@
               <button class="pc-btn" onclick="activateTier('free');switchView('builder',document.querySelector('[data-view=builder]'))">Current Plan</button>
             </div>
             <div class="pc pc-blue">
-              <div class="pc-badge" style="background:#378ADD">ACTIVE DEVELOPER</div>
+              <div class="pc-badge" style="background:var(--blue)">ACTIVE DEVELOPER</div>
               <div class="pc-tier">$15/mo</div>
-              <div class="pc-name" style="color:#378ADD">Active Developer</div>
-              <div class="pc-price" style="color:#378ADD">$15<span>/mo</span></div>
+              <div class="pc-name" style="color:var(--blue)">Active Developer</div>
+              <div class="pc-price" style="color:var(--blue)">$15<span>/mo</span></div>
               <div class="pc-pitch">Unlimited builds. Full source code. Learn the why.</div>
               <ul class="pc-list">
                 <li class="y">Unlimited EA/Indicator generations</li>
@@ -911,10 +918,10 @@
               <button class="pc-btn pc-btn-blue" onclick="upgradePlan('dev')">Pay with Crypto — $15/mo</button>
             </div>
             <div class="pc pc-gold">
-              <div class="pc-badge" style="background:var(--green);color:#08090D">STANDARD EXECUTIVE</div>
+              <div class="pc-badge" style="background:var(--gold);color:#08090D">STANDARD EXECUTIVE</div>
               <div class="pc-tier">$79/mo</div>
-              <div class="pc-name" style="color:var(--green)">Sovereign Executive</div>
-              <div class="pc-price" style="color:var(--green)">$79<span>/mo</span></div>
+              <div class="pc-name" style="color:var(--gold)">Sovereign Executive</div>
+              <div class="pc-price" style="color:var(--gold)">$79<span>/mo</span></div>
               <div class="pc-pitch">Zero friction. Your AI trades alongside you daily.</div>
               <ul class="pc-list">
                 <li class="y">Everything in Developer</li>
