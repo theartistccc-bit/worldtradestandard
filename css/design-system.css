@@ -1,0 +1,317 @@
+/* ═══════════════════════════════════════════════════
+   WTS DESIGN SYSTEM — Visual Tokens
+   worldtradestandard.com
+═══════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* ── Backgrounds ── */
+  --bg-void:        #050508;
+  --bg-card:        #0D0F18;
+  --bg-card-2:      #12151F;
+  --bg-overlay:     rgba(5, 5, 8, 0.80);
+  --bg-overlay-lt:  rgba(5, 5, 8, 0.55);
+
+  /* ── Accent Colors ── */
+  --blue:           #378ADD;
+  --blue-dim:       rgba(55, 138, 221, 0.12);
+  --blue-border:    rgba(55, 138, 221, 0.25);
+  --green:          #2ECC71;
+  --green-dim:      rgba(46, 204, 113, 0.12);
+  --green-border:   rgba(46, 204, 113, 0.25);
+  --gold:           #C9A84C;
+  --gold-dim:       rgba(201, 168, 76, 0.10);
+  --gold-border:    rgba(201, 168, 76, 0.30);
+  --red:            #E74C3C;
+  --red-dim:        rgba(231, 76, 60, 0.10);
+  --purple:         #9B59B6;
+
+  /* ── Text ── */
+  --text-primary:   #E8EAF0;
+  --text-muted:     #6B7280;
+  --text-subtle:    #4A5568;
+
+  /* ── Borders ── */
+  --border:         #1E2130;
+  --border-light:   rgba(255, 255, 255, 0.06);
+
+  /* ── Typography ── */
+  --font-display:   'Bebas Neue', sans-serif;
+  --font-body:      'Outfit', sans-serif;
+  --font-mono:      'IBM Plex Mono', monospace;
+
+  /* ── Spacing (4px base unit) ── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* ── Border Radius ── */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-glow-blue:  0 0 20px rgba(55, 138, 221, 0.25);
+  --shadow-glow-green: 0 0 20px rgba(46, 204, 113, 0.20);
+  --shadow-glow-gold:  0 0 20px rgba(201, 168, 76, 0.20);
+
+  /* ── Layout ── */
+  --page-max:    1200px;
+  --content-max: 900px;
+  --form-max:    480px;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-void);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Cinematic Section Base ── */
+.cinematic-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cinematic-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* CSS gradient fallback while image loads */
+  background-color: #0a0612;
+}
+
+.cinematic-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-overlay);
+  z-index: 1;
+}
+
+.cinematic-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--sp-4);
+  text-align: center;
+}
+
+/* ── Glitch Typography ── */
+.glitch {
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  position: relative;
+  display: inline-block;
+}
+.glitch::before {
+  content: attr(data-text);
+  position: absolute;
+  left: -2px; top: 0;
+  color: #00FFFF;
+  opacity: 0.65;
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+}
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 2px; top: 0;
+  color: #FF00FF;
+  opacity: 0.65;
+  clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+}
+
+/* ── Cards ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-card);
+}
+
+.card-blue {
+  background: var(--bg-card);
+  border: 1px solid var(--blue-border);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+}
+
+.card-gold {
+  background: linear-gradient(135deg, var(--gold-dim), rgba(13,15,24,0.95));
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  background: linear-gradient(135deg, var(--blue), var(--green));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 13px 28px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-ghost:hover { border-color: var(--blue-border); color: var(--blue); }
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  background: var(--gold);
+  color: #08090D;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 13px 28px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-gold:hover { opacity: 0.9; }
+
+/* ── Inputs ── */
+.field-input {
+  width: 100%;
+  background: var(--bg-card-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 13px 16px;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+.field-input:focus { border-color: var(--blue); }
+.field-input::placeholder { color: var(--text-muted); }
+
+/* ── Chips ── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chip.active, .chip:hover {
+  background: var(--blue-dim);
+  border-color: var(--blue-border);
+  color: var(--blue);
+}
+
+/* ── Badges ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.badge-blue  { background: var(--blue-dim);  border: 1px solid var(--blue-border);  color: var(--blue); }
+.badge-green { background: var(--green-dim); border: 1px solid var(--green-border); color: var(--green); }
+.badge-gold  { background: var(--gold-dim);  border: 1px solid var(--gold-border);  color: var(--gold); }
+
+/* ── Live Dot ── */
+.live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s infinite;
+  display: inline-block;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+/* ── Section Label (Perplexity-style eyebrow) ── */
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: var(--sp-2);
+}
+
+/* ── Divider ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: var(--sp-8) 0;
+}
+
+/* ── Image Optimization ── */
+.cinematic-bg img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  loading: lazy;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .cinematic-content { padding: 0 var(--sp-4); }
+  .btn-primary, .btn-gold { width: 100%; justify-content: center; }
+}
