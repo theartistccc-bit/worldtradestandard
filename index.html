@@ -3,1046 +3,488 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WorldTradeStandard — Artificial Trading Assistant</title>
-
-<!-- Preload hero image for instant above-fold render -->
-<link rel="preload" as="image" href="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1920&q=75&fm=webp" fetchpriority="high">
-
-<!-- Preconnect to font and image CDNs -->
+<title>WorldTradeStandard — The Artificial Trading Assistant</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://images.unsplash.com">
-
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#378ADD">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<link rel="stylesheet" href="css/design-system.css">
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/landing.css">
-<script>document.documentElement.style.visibility='hidden';</script>
 <style>
-/* ── AUTH MODAL ─────────────────────────────────────── */
-.auth-overlay {
-  position: fixed; inset: 0; z-index: 9999;
-  background: #08090D;
-  display: flex; align-items: center; justify-content: center;
-  padding: 1rem;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Outfit',sans-serif;
+  background:#08080e;
+  color:#E8EAF0;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-.auth-overlay.hidden { display: none; }
-.auth-card {
-  background: #0E1117; border: 1px solid #1E2332;
-  border-radius: 12px; padding: 2.5rem 2rem;
-  width: 100%; max-width: 400px;
-  box-shadow: 0 24px 64px rgba(0,0,0,.6);
-}
-.auth-brand {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.6rem; letter-spacing: .06em;
-  color: #378ADD; text-align: center; margin-bottom: .2rem;
-}
-.auth-sub {
-  font-size: .7rem; letter-spacing: .12em;
-  color: #5A6480; text-align: center; text-transform: uppercase;
-  margin-bottom: 2rem;
-}
-.auth-tabs {
-  display: flex; gap: .5rem; margin-bottom: 1.5rem;
-  background: #0A0B0F; border-radius: 8px; padding: 4px;
-}
-.auth-tab {
-  flex: 1; padding: .5rem; border: none;
-  background: transparent; color: #5A6480;
-  font-size: .82rem; font-family: 'Outfit', sans-serif;
-  border-radius: 6px; cursor: pointer; transition: all .2s;
-}
-.auth-tab.active {
-  background: #1E2332; color: #E8EAEF;
-}
-.auth-error {
-  background: rgba(255,70,70,.1); border: 1px solid rgba(255,70,70,.3);
-  color: #FF6B6B; font-size: .78rem; border-radius: 6px;
-  padding: .6rem .85rem; margin-bottom: 1rem;
-}
-.auth-error.hidden { display: none; }
-.auth-input {
-  width: 100%; padding: .7rem .9rem;
-  background: #0A0B0F; border: 1px solid #1E2332;
-  border-radius: 8px; color: #E8EAEF;
-  font-size: .9rem; font-family: 'Outfit', sans-serif;
-  margin-bottom: .75rem; outline: none; box-sizing: border-box;
-  transition: border-color .2s;
-}
-.auth-input:focus { border-color: #378ADD; }
-.auth-btn {
-  width: 100%; padding: .8rem;
-  background: #1D9E75; border: none; border-radius: 8px;
-  color: #fff; font-size: .9rem; font-weight: 600;
-  font-family: 'Outfit', sans-serif; cursor: pointer;
-  transition: opacity .2s; margin-bottom: .75rem;
-}
-.auth-btn:hover { opacity: .9; }
-.auth-btn:disabled { opacity: .5; cursor: default; }
-.auth-divider {
-  display: flex; align-items: center; gap: .75rem;
-  margin-bottom: .75rem; color: #2A3040;
-}
-.auth-divider::before, .auth-divider::after {
-  content: ''; flex: 1; height: 1px; background: #1E2332;
-}
-.auth-divider span { font-size: .75rem; color: #5A6480; }
-.auth-btn-google {
-  width: 100%; padding: .75rem;
-  background: #1E2332; border: 1px solid #2A3040;
-  border-radius: 8px; color: #E8EAEF;
-  font-size: .88rem; font-family: 'Outfit', sans-serif;
-  cursor: pointer; display: flex; align-items: center;
-  justify-content: center; gap: .6rem; transition: background .2s;
-}
-.auth-btn-google:hover { background: #252D40; }
-.auth-btn-google:disabled { opacity: .5; cursor: default; }
-.auth-spinner {
-  display: inline-block; width: 16px; height: 16px;
-  border: 2px solid #378ADD; border-top-color: transparent;
-  border-radius: 50%; animation: spin .7s linear infinite;
-}
-/* ── PAYMENT SUCCESS BANNER ─────────────────────────── */
-.payment-banner {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-  background: #1A3A2A; border-bottom: 1px solid #2A6A4A;
-  color: #4ADE80; padding: .7rem 1.5rem;
-  display: flex; align-items: center; justify-content: space-between;
-  font-size: .85rem; font-family: 'Outfit', sans-serif;
-}
-.payment-banner.hidden { display: none; }
-.payment-banner-close { cursor: pointer; color: #4ADE80; font-size: 1.1rem; }
 
-/* ── ONBOARDING ─────────────────────────────────────── */
-#onboarding {
-  position: fixed; inset: 0; z-index: 8000;
-  background: #08090D;
-  display: flex; align-items: center; justify-content: center;
-  padding: 1rem; overflow-y: auto;
+/* ── SHARED NAV BAR ── */
+.s-nav{
+  position:absolute;top:0;left:0;right:0;z-index:10;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:28px 48px;
 }
-#onboarding.hidden { display: none; }
-.ob-card {
-  background: #0E1117; border: 1px solid #1E2332;
-  border-radius: 16px; width: 100%; max-width: 520px;
-  padding: 2.5rem 2rem;
-  box-shadow: 0 24px 64px rgba(0,0,0,.6);
+.s-nav-brand{
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:700;
+  letter-spacing:0.5px;
+  color:#E8EAF0;
 }
-.ob-progress { display: flex; gap: .35rem; margin-bottom: 2rem; }
-.ob-prog-dot { flex: 1; height: 2px; border-radius: 2px; background: #1E2332; transition: background .3s; }
-.ob-prog-dot.done { background: #1D9E75; }
-.ob-prog-dot.active { background: #378ADD; }
-.ob-step { display: none; }
-.ob-step.active { display: block; }
-.ob-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .06em; color: #378ADD; margin-bottom: .25rem; }
-.ob-eyebrow { font-size: .65rem; letter-spacing: .15em; color: #5A6480; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; margin-bottom: 1.5rem; }
-.ob-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; letter-spacing: 2px; color: #F0F4FF; line-height: 1.1; margin-bottom: .75rem; }
-.ob-sub { font-size: .85rem; color: #5A6480; line-height: 1.7; margin-bottom: 1.75rem; }
-.ob-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: .6rem; margin-bottom: 1.75rem; }
-.ob-stat { background: #0A0B0F; border: 1px solid #1E2332; border-radius: 8px; padding: .75rem .5rem; text-align: center; }
-.ob-stat-num { font-family: 'IBM Plex Mono', monospace; font-size: 1rem; font-weight: 600; color: #378ADD; }
-.ob-stat-lbl { font-size: .65rem; color: #5A6480; margin-top: .2rem; }
-.ob-q { margin-bottom: 1.25rem; }
-.ob-q-label { font-size: .65rem; font-weight: 700; letter-spacing: 1.5px; color: #5A6480; text-transform: uppercase; margin-bottom: .6rem; font-family: 'IBM Plex Mono', monospace; }
-.ob-opts { display: flex; gap: .45rem; flex-wrap: wrap; }
-.ob-opt { padding: .45rem 1rem; border-radius: 6px; border: 1px solid #1E2332; background: #0A0B0F; color: #8892A4; font-size: .82rem; cursor: pointer; transition: all .2s; font-family: 'Outfit', sans-serif; }
-.ob-opt:hover { border-color: #378ADD; color: #E8EAEF; }
-.ob-opt.selected { background: rgba(55,138,221,.12); border-color: rgba(55,138,221,.5); color: #378ADD; }
-.ob-strategies { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 1.5rem; }
-.ob-strat { background: #0A0B0F; border: 1px solid #1E2332; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.ob-strat:hover { border-color: rgba(55,138,221,.4); background: rgba(55,138,221,.04); }
-.ob-strat-left { flex: 1; }
-.ob-strat-name { font-size: .88rem; font-weight: 600; color: #E8EAF0; margin-bottom: .25rem; }
-.ob-strat-desc { font-size: .74rem; color: #5A6480; line-height: 1.5; }
-.ob-strat-tag { font-size: .6rem; font-weight: 700; letter-spacing: .8px; padding: .18rem .6rem; border-radius: 20px; background: rgba(29,158,117,.12); border: 1px solid rgba(29,158,117,.28); color: #1D9E75; white-space: nowrap; flex-shrink: 0; }
-.ob-strat-arrow { font-size: .9rem; color: #378ADD; flex-shrink: 0; }
-.ob-btn { width: 100%; padding: .85rem; background: #1D9E75; border: none; border-radius: 8px; color: #fff; font-size: .92rem; font-weight: 600; font-family: 'Outfit', sans-serif; cursor: pointer; transition: opacity .2s; }
-.ob-btn:hover { opacity: .9; }
-.ob-btn-ghost { width: 100%; padding: .65rem; background: transparent; border: 1px solid #1E2332; border-radius: 8px; color: #5A6480; font-size: .82rem; cursor: pointer; margin-top: .5rem; transition: all .2s; font-family: 'Outfit', sans-serif; }
-.ob-btn-ghost:hover { color: #E8EAEF; border-color: #2A3040; }
-.ob-success-icon { width: 64px; height: 64px; border-radius: 50%; background: rgba(29,158,117,.12); border: 1.5px solid rgba(29,158,117,.3); display: flex; align-items: center; justify-content: center; font-size: 1.75rem; margin: 0 auto 1.25rem; }
-@media (max-width: 480px) {
-  .ob-card { padding: 1.75rem 1.25rem; }
-  .ob-title { font-size: 1.5rem; }
+.s-nav-brand em{font-style:normal;color:#7C5CFC;}
+.s-nav-right{display:flex;align-items:center;gap:24px;}
+.s-nav-label{
+  font-size:11px;font-weight:600;
+  letter-spacing:3px;text-transform:uppercase;
+  color:#7C5CFC;
+}
+.s-nav-signin{
+  font-size:13px;font-weight:500;
+  color:rgba(232,234,240,0.6);
+  text-decoration:none;
+  border:1px solid rgba(232,234,240,0.15);
+  border-radius:6px;padding:7px 18px;
+  transition:all 0.2s;letter-spacing:0.3px;
+}
+.s-nav-signin:hover{color:#E8EAF0;border-color:rgba(232,234,240,0.3);}
+
+/* ── SECTION BASE ── */
+.scene{
+  position:relative;
+  height:100vh;min-height:640px;
+  overflow:hidden;
+  display:flex;align-items:flex-end;
+}
+.scene-bg{
+  position:absolute;inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+.scene-content{
+  position:relative;z-index:2;
+  width:100%;
+}
+
+/* ── BTN BASE ── */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;
+  border-radius:8px;padding:13px 28px;
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;border:none;
+  transition:all 0.2s;
+}
+.btn-violet{
+  background:#7C5CFC;
+  color:#fff;
+}
+.btn-violet:hover{background:#6a4de8;transform:translateY(-1px);}
+.btn-outline{
+  background:transparent;
+  border:1px solid rgba(232,234,240,0.3);
+  color:rgba(232,234,240,0.8);
+}
+.btn-outline:hover{border-color:rgba(232,234,240,0.6);color:#E8EAF0;}
+
+/* ─────────────────────────────────────
+   SECTION 1 — ARRIVAL
+───────────────────────────────────── */
+#s1{align-items:stretch;}
+#s1 .scene-bg{
+  background-color:#0a0c14;
+  background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=60&fm=webp');
+  background-position:center right;
+}
+#s1 .scene-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(
+    105deg,
+    rgba(8,8,20,0.97) 0%,
+    rgba(8,8,20,0.85) 35%,
+    rgba(8,8,20,0.45) 65%,
+    rgba(8,8,20,0.2)  100%
+  );
+}
+#s1 .scene-content{
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:0 48px 80px;
+  max-width:680px;
+}
+#s1 .s-nav{position:absolute;}
+
+.s1-headline{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(72px,10vw,128px);
+  line-height:0.90;
+  letter-spacing:2px;
+  color:#E8EAF0;
+  margin-bottom:20px;
+}
+.s1-headline .glitch-word{
+  position:relative;
+  display:inline-block;
+  color:#E8EAF0;
+}
+.s1-headline .glitch-word::before{
+  content:attr(data-text);
+  position:absolute;left:-3px;top:0;
+  color:#00E5FF;opacity:0.55;
+  clip-path:polygon(0 12%,100% 12%,100% 38%,0 38%);
+  pointer-events:none;
+}
+.s1-headline .glitch-word::after{
+  content:attr(data-text);
+  position:absolute;left:3px;top:0;
+  color:#FF00CC;opacity:0.45;
+  clip-path:polygon(0 62%,100% 62%,100% 84%,0 84%);
+  pointer-events:none;
+}
+.s1-sub{
+  font-size:16px;font-weight:400;
+  color:rgba(232,234,240,0.55);
+  margin-bottom:36px;
+  letter-spacing:0.5px;
+}
+
+/* ─────────────────────────────────────
+   SECTION 2 — OCEAN
+───────────────────────────────────── */
+#s2{align-items:center;justify-content:center;}
+#s2 .scene-bg{
+  background-color:#060c14;
+  background-image:url('https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1920&q=60&fm=webp');
+  background-position:center 40%;
+}
+#s2 .scene-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(
+    to bottom,
+    rgba(6,12,20,0.78) 0%,
+    rgba(6,12,20,0.38) 45%,
+    rgba(6,12,20,0.72) 100%
+  );
+}
+#s2 .scene-content{
+  text-align:center;
+  padding:0 48px;
+  max-width:900px;
+  margin:0 auto;
+}
+#s2 .s-nav{position:absolute;}
+
+.s2-headline{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(60px,9vw,120px);
+  line-height:0.92;
+  letter-spacing:2px;
+  color:#E8EAF0;
+  margin-bottom:20px;
+}
+.s2-headline .glitch-word{
+  position:relative;display:inline-block;
+  color:#E8EAF0;
+}
+.s2-headline .glitch-word::before{
+  content:attr(data-text);
+  position:absolute;left:-3px;top:0;
+  color:#00E5FF;opacity:0.5;
+  clip-path:polygon(0 10%,100% 10%,100% 36%,0 36%);
+  pointer-events:none;
+}
+.s2-headline .glitch-word::after{
+  content:attr(data-text);
+  position:absolute;left:3px;top:0;
+  color:#FF00CC;opacity:0.4;
+  clip-path:polygon(0 64%,100% 64%,100% 88%,0 88%);
+  pointer-events:none;
+}
+.s2-sub{
+  font-size:18px;font-weight:400;
+  color:rgba(232,234,240,0.6);
+  margin-bottom:40px;
+  letter-spacing:0.3px;
+}
+
+/* ─────────────────────────────────────
+   SECTION 3 — THE FORGE
+───────────────────────────────────── */
+#s3{align-items:stretch;}
+#s3 .scene-bg{
+  background-color:#080c14;
+  background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=60&fm=webp');
+  background-position:center right;
+}
+#s3 .scene-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(
+    105deg,
+    rgba(8,10,20,0.97) 0%,
+    rgba(8,10,20,0.88) 38%,
+    rgba(8,10,20,0.45) 65%,
+    rgba(8,10,20,0.15) 100%
+  );
+}
+#s3 .scene-content{
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:0 48px 80px;
+  max-width:620px;
+}
+#s3 .s-nav{position:absolute;}
+
+.s3-label{
+  font-size:11px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;
+  color:#7C5CFC;margin-bottom:20px;
+}
+.s3-headline{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(64px,9vw,112px);
+  line-height:0.92;
+  letter-spacing:2px;
+  color:#E8EAF0;
+  margin-bottom:20px;
+}
+.s3-headline .glitch-word{
+  position:relative;display:inline-block;color:#E8EAF0;
+}
+.s3-headline .glitch-word::before{
+  content:attr(data-text);
+  position:absolute;left:-3px;top:0;
+  color:#00E5FF;opacity:0.5;
+  clip-path:polygon(0 10%,100% 10%,100% 40%,0 40%);
+  pointer-events:none;
+}
+.s3-headline .glitch-word::after{
+  content:attr(data-text);
+  position:absolute;left:3px;top:0;
+  color:#FF00CC;opacity:0.4;
+  clip-path:polygon(0 62%,100% 62%,100% 85%,0 85%);
+  pointer-events:none;
+}
+.s3-body{
+  font-size:16px;font-weight:400;
+  color:rgba(232,234,240,0.5);
+  margin-bottom:36px;
+  line-height:1.65;
+  max-width:380px;
+}
+
+/* ─────────────────────────────────────
+   SECTION 4 — COMMUNITY
+───────────────────────────────────── */
+#s4{align-items:stretch;}
+#s4 .scene-bg{
+  background-color:#080810;
+  background-image:url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1920&q=60&fm=webp');
+  background-position:center right;
+}
+#s4 .scene-overlay{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(
+    105deg,
+    rgba(8,8,16,0.97) 0%,
+    rgba(8,8,16,0.88) 38%,
+    rgba(8,8,16,0.5)  62%,
+    rgba(8,8,16,0.2)  100%
+  );
+}
+#s4 .scene-content{
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  padding:0 48px 80px;
+  max-width:640px;
+}
+#s4 .s-nav{position:absolute;}
+
+.s4-headline{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(56px,8vw,104px);
+  line-height:0.92;
+  letter-spacing:2px;
+  color:#E8EAF0;
+  margin-bottom:20px;
+}
+.s4-headline .glitch-word{
+  position:relative;display:inline-block;color:#E8EAF0;
+}
+.s4-headline .glitch-word::before{
+  content:attr(data-text);
+  position:absolute;left:-3px;top:0;
+  color:#00E5FF;opacity:0.5;
+  clip-path:polygon(0 10%,100% 10%,100% 38%,0 38%);
+  pointer-events:none;
+}
+.s4-headline .glitch-word::after{
+  content:attr(data-text);
+  position:absolute;left:3px;top:0;
+  color:#FF00CC;opacity:0.4;
+  clip-path:polygon(0 62%,100% 62%,100% 86%,0 86%);
+  pointer-events:none;
+}
+.s4-body{
+  font-size:17px;font-weight:400;
+  color:rgba(232,234,240,0.55);
+  margin-bottom:36px;
+  letter-spacing:0.3px;
+}
+
+/* ── FOOTER ── */
+footer{
+  background:#050508;
+  border-top:1px solid rgba(232,234,240,0.07);
+  padding:32px 48px;
+  display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:16px;
+}
+.footer-brand{
+  font-size:11px;font-weight:700;letter-spacing:0.5px;
+  color:rgba(232,234,240,0.25);
+}
+.footer-brand em{font-style:normal;color:rgba(124,92,252,0.5);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{
+  font-size:12px;color:rgba(232,234,240,0.2);
+  text-decoration:none;letter-spacing:0.3px;transition:color 0.2s;
+}
+.footer-links a:hover{color:rgba(232,234,240,0.5);}
+.footer-cities{
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(232,234,240,0.12);
+}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .s-nav{padding:20px 24px;}
+  .s-nav-label{display:none;}
+  #s1 .scene-content,
+  #s3 .scene-content,
+  #s4 .scene-content{padding:0 24px 60px;max-width:100%;}
+  #s2 .scene-content{padding:0 24px;}
+  #s1 .scene-bg{background-position:60% center;}
+  #s3 .scene-bg{background-position:70% center;}
+  #s4 .scene-bg{background-position:65% center;}
+  footer{padding:24px;flex-direction:column;align-items:flex-start;}
+  .footer-cities{display:none;}
+}
+@media(max-width:480px){
+  .s1-headline{font-size:64px;}
+  .s2-headline{font-size:52px;}
+  .s3-headline{font-size:58px;}
+  .s4-headline{font-size:52px;}
+  .btn{padding:12px 22px;font-size:11px;}
 }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     ONBOARDING OVERLAY
-═══════════════════════════════════════════ -->
-<div id="onboarding" class="hidden">
-  <div class="ob-card">
+<!-- ═══════════════════════════════════
+     SECTION 1 — ARRIVAL
+═══════════════════════════════════ -->
+<section class="scene" id="s1">
+  <div class="scene-bg"></div>
+  <div class="scene-overlay"></div>
 
-    <div class="ob-progress">
-      <div class="ob-prog-dot active" id="obp0"></div>
-      <div class="ob-prog-dot" id="obp1"></div>
-      <div class="ob-prog-dot" id="obp2"></div>
-      <div class="ob-prog-dot" id="obp3"></div>
-    </div>
-
-    <!-- Step 1: Welcome -->
-    <div class="ob-step active" id="ob-step-0">
-      <div class="ob-brand">WORLDTRADESTANDARD</div>
-      <div class="ob-eyebrow">Your AI Trading Assistant</div>
-      <h2 class="ob-title">Welcome to<br>The Standard.</h2>
-      <p class="ob-sub">You're 60 seconds away from your first automated trading strategy. Describe your idea in plain English — no code needed.</p>
-      <div class="ob-stats">
-        <div class="ob-stat"><div class="ob-stat-num">4,800+</div><div class="ob-stat-lbl">EAs Built</div></div>
-        <div class="ob-stat"><div class="ob-stat-num">MT4 & MT5</div><div class="ob-stat-lbl">Native Code</div></div>
-        <div class="ob-stat"><div class="ob-stat-num">$0</div><div class="ob-stat-lbl">To Start</div></div>
-      </div>
-      <button class="ob-btn" onclick="obNext(1)">Get Started →</button>
-    </div>
-
-    <!-- Step 2: Profile -->
-    <div class="ob-step" id="ob-step-1">
-      <div class="ob-eyebrow">Step 2 of 4 · Quick Setup</div>
-      <h2 class="ob-title">Tell us about yourself.</h2>
-      <p class="ob-sub">Three quick questions so we can suggest the right starting strategies for you.</p>
-
-      <div class="ob-q">
-        <div class="ob-q-label">Trading Experience</div>
-        <div class="ob-opts" id="ob-exp">
-          <div class="ob-opt" data-val="beginner" onclick="obSelect('exp',this)">New to trading</div>
-          <div class="ob-opt" data-val="learning" onclick="obSelect('exp',this)">1–2 years</div>
-          <div class="ob-opt" data-val="experienced" onclick="obSelect('exp',this)">3+ years</div>
-        </div>
-      </div>
-
-      <div class="ob-q">
-        <div class="ob-q-label">Main Market</div>
-        <div class="ob-opts" id="ob-market">
-          <div class="ob-opt" data-val="forex" onclick="obSelect('market',this)">Forex</div>
-          <div class="ob-opt" data-val="gold" onclick="obSelect('market',this)">Gold (XAUUSD)</div>
-          <div class="ob-opt" data-val="crypto" onclick="obSelect('market',this)">Crypto</div>
-          <div class="ob-opt" data-val="indices" onclick="obSelect('market',this)">Indices</div>
-        </div>
-      </div>
-
-      <div class="ob-q">
-        <div class="ob-q-label">Platform</div>
-        <div class="ob-opts" id="ob-platform">
-          <div class="ob-opt selected" data-val="MT5" onclick="obSelect('platform',this)">MT5 (recommended)</div>
-          <div class="ob-opt" data-val="MT4" onclick="obSelect('platform',this)">MT4</div>
-        </div>
-      </div>
-
-      <button class="ob-btn" onclick="obNext(2)">Continue →</button>
-      <button class="ob-btn-ghost" onclick="obNext(2)">Skip</button>
-    </div>
-
-    <!-- Step 3: Strategy suggestions -->
-    <div class="ob-step" id="ob-step-2">
-      <div class="ob-eyebrow">Step 3 of 4 · First Strategy</div>
-      <h2 class="ob-title">Pick a starting point.</h2>
-      <p class="ob-sub">Select one to pre-load it in the builder — or start with your own idea.</p>
-      <div class="ob-strategies" id="ob-strategies"></div>
-      <button class="ob-btn-ghost" onclick="obFinish('')">Start with my own idea →</button>
-    </div>
-
-    <!-- Step 4: Done -->
-    <div class="ob-step" id="ob-step-3">
-      <div class="ob-success-icon">✓</div>
-      <h2 class="ob-title" style="text-align:center">You're all set.</h2>
-      <p class="ob-sub" style="text-align:center">Your profile is saved. The builder is ready. Let's build your first robot.</p>
-      <button class="ob-btn" onclick="obLaunchBuilder()">Open Strategy Builder →</button>
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     PAYMENT SUCCESS BANNER
-═══════════════════════════════════════════ -->
-<div class="payment-banner hidden" id="paymentBanner">
-  <span>✓ Payment confirmed — your plan has been activated. Welcome to WorldTradeStandard.</span>
-  <span class="payment-banner-close" onclick="document.getElementById('paymentBanner').classList.add('hidden')">✕</span>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     AUTH MODAL
-═══════════════════════════════════════════ -->
-<div id="authModal" class="auth-overlay">
-  <div class="auth-card">
-    <div class="auth-brand">WORLDTRADESTANDARD</div>
-    <div class="auth-sub">The Artificial Trading Assistant</div>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="loginTab" onclick="switchAuthTab('login')">Sign In</button>
-      <button class="auth-tab" id="signupTab" onclick="switchAuthTab('signup')">Create Account</button>
-    </div>
-    <div class="auth-error hidden" id="authError"></div>
-
-    <!-- Login Form -->
-    <div id="loginForm">
-      <input class="auth-input" id="loginEmail" type="email" placeholder="Email address" autocomplete="email">
-      <input class="auth-input" id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
-      <button class="auth-btn" id="loginBtn" onclick="signInEmail()">Sign In</button>
-      <div class="auth-divider"><span>or</span></div>
-      <button class="auth-btn-google" id="googleLoginBtn" onclick="signInGoogle()">
-        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-    </div>
-
-    <!-- Signup Form -->
-    <div id="signupForm" class="hidden">
-      <input class="auth-input" id="signupEmail" type="email" placeholder="Email address" autocomplete="email">
-      <input class="auth-input" id="signupPassword" type="password" placeholder="Password (min 6 characters)" autocomplete="new-password">
-      <button class="auth-btn" id="signupBtn" onclick="signUpEmail()">Create Account</button>
-      <div class="auth-divider"><span>or</span></div>
-      <button class="auth-btn-google" id="googleSignupBtn" onclick="signInGoogle()">
-        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════
-     LANDING PAGE
-═══════════════════════════════════════════ -->
-<div id="landing" class="landing-page">
-  <nav class="l-nav">
-    <div class="brand-logo">WORLDTRADESTANDARD</div>
-    <div class="l-nav-links">
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#" onclick="launchApp('free')">Sign In</a>
-    </div>
-    <button class="btn-gold" onclick="launchApp('free')">Start Free →</button>
-  </nav>
-
-  <!-- SECTION 1 — HERO -->
-  <section class="cinematic-section hero-cin">
-    <div class="cinematic-bg hero-cin-bg" style="background-image:linear-gradient(135deg, #0a0612, #1a0a2e, #050508), url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1920&q=75&fm=webp');"></div>
-    <div class="cinematic-overlay hero-cin-overlay"></div>
-    <div class="hero-cin-fade"></div>
-    <div class="cinematic-content hero-cin-content">
-      <div class="hero-badge-new"><span class="live-dot"></span>AI Engine Online</div>
-      <h1 class="hero-cin-title">
-        THE ARTIFICIAL<br>
-        <span class="glitch" data-text="TRADING ASSISTANT">TRADING ASSISTANT</span>
-      </h1>
-      <p class="hero-cin-sub">Build robots. Journal trades.<br>Trade with intelligence.</p>
-      <div class="hero-cin-actions">
-        <button class="btn-primary" onclick="launchApp('free')">Start Free →</button>
-        <button class="btn-ghost" onclick="document.getElementById('showcase').scrollIntoView({behavior:'smooth'})">Watch Demo</button>
-      </div>
-      <div class="hero-cin-proof">
-        <div class="hero-cin-proof-line">── 4,800+ robots built ──</div>
-        <div class="hero-cin-chips">
-          <span class="chip">MT4 & MT5</span>
-          <span class="chip">AI-Powered</span>
-          <span class="chip">$0 Start</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 2 — FEATURES -->
-  <section class="landing-section" id="features">
-    <div class="section-eyebrow">What's Inside</div>
-    <h2 class="section-title-new">Four tools. One standard.</h2>
-    <div class="features-grid-new">
-      <div class="card feat-card-new">
-        <div class="feat-icon-new">⚡</div>
-        <h3>MQL Code Builder</h3>
-        <p>Describe your strategy in plain English. Get production-ready MT4/MT5 Expert Advisors, indicators, and scripts — fully compilable, no placeholders.</p>
-        <div class="feat-tags-new"><span class="chip">EA Generator</span><span class="chip">Indicator Builder</span><span class="chip">PineScript Translator</span></div>
-      </div>
-      <div class="card feat-card-new">
-        <div class="feat-icon-new">📊</div>
-        <h3>Chart Markup AI</h3>
-        <p>Train the AI once on your style. Every morning it opens your charts and marks up setups that match your personal edge — breakout, trend, or reversal.</p>
-        <div class="feat-tags-new"><span class="chip">Daily Mentor</span><span class="chip">Style Profile</span><span class="chip">Screenshot Analysis</span></div>
-      </div>
-      <div class="card feat-card-new">
-        <div class="feat-icon-new">📓</div>
-        <h3>Trade Journal</h3>
-        <p>Log every trade with chart screenshots, emotional state, and pre/post notes. AI writes your post-trade analysis automatically and spots your patterns over time.</p>
-        <div class="feat-tags-new"><span class="chip">AI Analysis</span><span class="chip">Pattern Detection</span><span class="chip">PDF Export</span></div>
-      </div>
-      <div class="card feat-card-new">
-        <div class="feat-icon-new">🔧</div>
-        <h3>Auto-Debugger</h3>
-        <p>Paste your MetaEditor error log. The AI reads every error, explains the cause, and delivers fixed code lines. Executive tier: errors detected and fixed automatically.</p>
-        <div class="feat-tags-new"><span class="chip">Error Analysis</span><span class="chip">Auto-Fix</span><span class="chip">Live Detection</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 3 — MANIFESTO CTA -->
-  <section class="manifesto-section" id="showcase">
-    <div class="manifesto-inner">
-      <h2 class="glitch manifesto-title" data-text="THE MARKET IS AN OCEAN.">THE MARKET IS AN OCEAN.</h2>
-      <p class="manifesto-sub">— Learn to navigate it. —</p>
-      <button class="btn-primary" onclick="launchApp('free')">Start Free — 3 Generations</button>
-    </div>
-  </section>
-
-  <!-- SECTION 4 — PRICING -->
-  <section class="landing-section" id="pricing">
-    <div class="section-eyebrow">Choose Your Standard</div>
-    <h2 class="section-title-new">From first robot to full execution.</h2>
-    <div class="pricing-grid-new">
-      <div class="card plan-card-new">
-        <div class="plan-tier-label-new">Tier 1 · Free</div>
-        <div class="plan-name-new">Proof of Concept</div>
-        <div class="plan-price-new">$0<span>/forever</span></div>
-        <ul class="plan-list-new">
-          <li class="yes">3 EA generations</li>
-          <li class="yes">Standard indicators</li>
-          <li class="no">Source code</li>
-          <li class="no">Journal & markup</li>
-        </ul>
-        <button class="btn-ghost plan-btn-new" onclick="launchApp('free')">Start Free</button>
-      </div>
-
-      <div class="card-blue plan-card-new">
-        <span class="badge badge-blue plan-badge-new">Most Popular</span>
-        <div class="plan-tier-label-new">Tier 2</div>
-        <div class="plan-name-new" style="color:var(--blue)">Active Developer</div>
-        <div class="plan-price-new" style="color:var(--blue)">$25<span>/month</span></div>
-        <ul class="plan-list-new">
-          <li class="yes">Unlimited generations</li>
-          <li class="yes">Full MQL source code</li>
-          <li class="yes">MT4 + MT5 output</li>
-          <li class="yes">VPS included — runs 24/7</li>
-          <li class="yes">Auto-import from MT5</li>
-          <li class="yes">Trade Journal + AI analysis</li>
-          <li class="yes">Auto-Debugger</li>
-        </ul>
-        <button class="btn-primary plan-btn-new" onclick="upgradePlan('dev')">Pay with Crypto →</button>
-      </div>
-
-      <div class="card-gold plan-card-new">
-        <span class="badge badge-gold plan-badge-new">Sovereign</span>
-        <div class="plan-tier-label-new">Tier 3</div>
-        <div class="plan-name-new" style="color:var(--gold)">Sovereign Executive</div>
-        <div class="plan-price-new" style="color:var(--gold)">$79<span>/month</span></div>
-        <ul class="plan-list-new">
-          <li class="yes">Everything in Developer</li>
-          <li class="yes">Institutional metrics</li>
-          <li class="yes">Daily Mentor — morning markups</li>
-          <li class="yes">Prop firm toolkit + kill switch</li>
-          <li class="yes">Copy trading signals</li>
-          <li class="yes">Marketplace selling (80/20)</li>
-          <li class="yes">Monte Carlo simulation</li>
-        </ul>
-        <button class="btn-gold plan-btn-new" onclick="upgradePlan('exec')">Become Sovereign →</button>
-      </div>
-    </div>
-    <p class="pricing-footnote-new">VPS included — your EA runs 24/7 even when your computer is off.</p>
-  </section>
-
-  <!-- SECTION 5 — FOOTER -->
-  <footer class="landing-footer-new">
-    <div class="footer-brand-new">WORLDTRADESTANDARD</div>
-    <div class="footer-cities-new">Lagos · Dubai · London · Singapore</div>
-    <div class="footer-links-new">
-      <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Support</a><a href="#">Docs</a>
-    </div>
-    <div class="footer-copy-new">© 2025 WorldTradeStandard. Built for traders who operate at the highest level.</div>
-  </footer>
-</div>
-
-
-<!-- ═══════════════════════════════════════════
-     MAIN APP SHELL
-═══════════════════════════════════════════ -->
-<div id="appShell" class="app-shell hidden">
-
-  <!-- APP NAV -->
-  <nav class="app-nav">
-    <div class="brand-mark">
-      <span style="font-family:var(--font-display);font-size:22px;color:var(--gold);letter-spacing:2px;">WTS</span>
-      <div class="brand-text" style="display:flex;flex-direction:column;margin-left:8px;">
-        <span style="font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text-primary);">WORLDTRADESTANDARD</span>
-        <span style="font-size:10px;color:var(--text-subtle);letter-spacing:1px;">ARTIFICIAL TRADING ASSISTANT</span>
-      </div>
-    </div>
-    <div class="app-nav-tabs" id="appNavTabs">
-      <div class="antab" data-view="builder" onclick="window.location.href='builder.html'">
-        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        Builder
-      </div>
-      <div class="antab active" data-view="journal" onclick="switchView('journal',this)">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Journal
-      </div>
-      <div class="antab" data-view="markup" onclick="switchView('markup',this)">
-        <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        Chart Markup
-      </div>
-      <div class="antab" data-view="debugger" onclick="switchView('debugger',this)">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Debugger
-      </div>
-      <div class="antab" data-view="stats" onclick="switchView('stats',this)">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Performance
-      </div>
-      <div class="antab" data-view="vps" onclick="switchView('vps',this)">
-        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="8" rx="2"/><rect x="2" y="13" width="20" height="8" rx="2"/><line x1="6" y1="7" x2="6.01" y2="7"/><line x1="6" y1="17" x2="6.01" y2="17"/></svg>
-        VPS
-      </div>
-      <div class="antab" onclick="window.location.href='calculators.html'">
-        <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>
-        Calculators
-      </div>
-      <div class="antab" data-view="pricing" onclick="switchView('pricing',this)">
-        <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        Plans
-      </div>
-    </div>
-    <div class="app-nav-right">
-      <div class="tier-display" id="tierDisplay">
-        <span class="tier-dot free-dot"></span>
-        <span id="tierLabel">FREE TIER</span>
-      </div>
-      <div class="credits-chip" id="creditsChip">⚡ 3 left</div>
-      <button class="nav-bell" onclick="toast('No new notifications')" title="Notifications">
-        <svg viewBox="0 0 24 24" width="15" height="15"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      </button>
-      <button class="btn-gold btn-sm" onclick="switchView('pricing',document.querySelector('[data-view=pricing]'))">Upgrade</button>
-      <button class="btn-ghost btn-sm" onclick="exitApp()">← Exit</button>
+  <nav class="s-nav">
+    <span class="s-nav-brand">WORLDTRADE<em>STANDARD</em></span>
+    <div class="s-nav-right">
+      <a href="#" class="s-nav-signin">Sign In</a>
     </div>
   </nav>
 
-  <!-- GUARD BANNER -->
-  <div class="guard-banner hidden" id="guardBanner">
-    <svg viewBox="0 0 24 24" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span>WorldTradeStandard is a <strong>trading assistant only.</strong> This platform handles MQL coding, chart analysis, and trade journaling — nothing else.</span>
-    <span class="guard-close" onclick="document.getElementById('guardBanner').classList.add('hidden')">✕</span>
+  <div class="scene-content">
+    <h1 class="s1-headline">
+      THE <span class="glitch-word" data-text="ARTIFICIAL">ARTIFICIAL</span><br>
+      TRADING<br>
+      ASSISTANT
+    </h1>
+    <p class="s1-sub">Build. Test. Deploy.</p>
+    <a href="#" class="btn btn-violet">Enter The Market →</a>
   </div>
+</section>
 
-  <!-- APP BODY -->
-  <div class="app-body">
+<!-- ═══════════════════════════════════
+     SECTION 2 — THE OCEAN
+═══════════════════════════════════ -->
+<section class="scene" id="s2">
+  <div class="scene-bg"></div>
+  <div class="scene-overlay"></div>
 
-    <!-- SIDEBAR -->
-    <aside class="app-sidebar" id="appSidebar">
-      <!-- Builder sidebar -->
-      <div class="sb-section hidden" id="sb-builder">
-        <div class="sb-lbl section-eyebrow">Create</div>
-        <div class="sb-i active" onclick="setBuilderMode('ea',this)">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></svg>Expert Advisor
-        </div>
-        <div class="sb-i" onclick="setBuilderMode('indicator',this)">
-          <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Custom Indicator
-        </div>
-        <div class="sb-i" onclick="setBuilderMode('script',this)">
-          <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Script / Utility
-        </div>
-        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">Pro Tools</div>
-        <div class="sb-i" onclick="requireTier('dev','YouTube → Robot')">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>YouTube → Robot
-          <span class="sb-lock">PRO</span>
-        </div>
-        <div class="sb-i" onclick="requireTier('dev','PineScript Translator')">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>PineScript → MQL
-          <span class="sb-lock">PRO</span>
-        </div>
-        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">Executive</div>
-        <div class="sb-i" onclick="requireTier('exec','Daily Mentor')">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Daily Mentor
-          <span class="sb-lock exec-lock">EXEC</span>
-        </div>
-        <div class="sb-i" onclick="requireTier('exec','Prop-Firm Stealth')">
-          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Prop Stealth
-          <span class="sb-lock exec-lock">EXEC</span>
-        </div>
-      </div>
+  <nav class="s-nav">
+    <span class="s-nav-brand">WORLDTRADE<em>STANDARD</em></span>
+  </nav>
 
-      <!-- Journal sidebar -->
-      <div class="sb-section" id="sb-journal">
-        <div class="sb-lbl section-eyebrow">Filter</div>
-        <div class="sb-i active" onclick="filterTrades('all',this)">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>All Trades
-        </div>
-        <div class="sb-i" onclick="filterTrades('win',this)">
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Winners
-        </div>
-        <div class="sb-i" onclick="filterTrades('loss',this)">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Losers
-        </div>
-        <div class="sb-i" onclick="filterTrades('open',this)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Open Trades
-        </div>
-        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">By Pair</div>
-        <div class="sb-i" onclick="filterTrades('XAUUSD',this)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>XAUUSD
-        </div>
-        <div class="sb-i" onclick="filterTrades('EURUSD',this)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>EURUSD
-        </div>
-        <div class="sb-i" onclick="filterTrades('US30',this)">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>US30
-        </div>
-        <div class="sb-action-area">
-          <button class="sb-action-btn" onclick="openLogModal()">+ Log New Trade</button>
-        </div>
-      </div>
-
-      <!-- Markup sidebar -->
-      <div class="sb-section hidden" id="sb-markup">
-        <div class="sb-lbl section-eyebrow">Style Profile</div>
-        <div class="style-tags" id="styleTags">
-          <div class="st-group">
-            <div class="st-label">Setup Style</div>
-            <span class="st active" onclick="this.classList.toggle('active')">Breakout</span>
-            <span class="st" onclick="this.classList.toggle('active')">Trend Follow</span>
-            <span class="st" onclick="this.classList.toggle('active')">Reversal</span>
-            <span class="st" onclick="this.classList.toggle('active')">Scalping</span>
-          </div>
-          <div class="st-group">
-            <div class="st-label">Pairs</div>
-            <span class="st active" onclick="this.classList.toggle('active')">XAUUSD</span>
-            <span class="st active" onclick="this.classList.toggle('active')">US30</span>
-            <span class="st" onclick="this.classList.toggle('active')">EURUSD</span>
-            <span class="st" onclick="this.classList.toggle('active')">NAS100</span>
-          </div>
-          <div class="st-group">
-            <div class="st-label">Risk Ratio</div>
-            <span class="st active" onclick="this.classList.toggle('active')">1.5 RR</span>
-            <span class="st" onclick="this.classList.toggle('active')">2.0 RR</span>
-            <span class="st" onclick="this.classList.toggle('active')">3.0 RR</span>
-          </div>
-        </div>
-        <div class="sb-lbl section-eyebrow" style="margin-top:.75rem">Upload Chart</div>
-        <div class="sb-upload-zone" onclick="document.getElementById('markupFile').click()">
-          <svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Attach PNG/JPG chart</span>
-          <input type="file" id="markupFile" accept="image/*" style="display:none" onchange="handleChartUpload(this)">
-        </div>
-      </div>
-
-      <!-- Empty sidebars for other views -->
-      <div class="sb-section hidden" id="sb-debugger">
-        <div class="sb-lbl section-eyebrow">How It Works</div>
-        <div class="debug-steps-info">
-          <div class="dsi"><span class="dsi-n">01</span><span>Paste MetaEditor error log</span></div>
-          <div class="dsi"><span class="dsi-n">02</span><span>AI reads each error line</span></div>
-          <div class="dsi"><span class="dsi-n">03</span><span>Explains root cause</span></div>
-          <div class="dsi"><span class="dsi-n">04</span><span>Returns fixed code</span></div>
-        </div>
-        <div class="sb-lbl section-eyebrow" style="margin-top:1rem">Executive Tier</div>
-        <div style="font-size:.75rem;color:var(--muted);padding:.5rem;line-height:1.6">App detects compile errors automatically and fixes them without you pasting anything.</div>
-      </div>
-      <div class="sb-section hidden" id="sb-stats">
-        <div class="sb-lbl section-eyebrow">Overview</div>
-        <div class="sb-stat-cards">
-          <div class="sb-stat"><div class="sb-stat-label">Win Rate</div><div class="sb-stat-val green" id="sb-wr">67%</div></div>
-          <div class="sb-stat"><div class="sb-stat-label">Net P&L</div><div class="sb-stat-val green" id="sb-pl">+$1,240</div></div>
-          <div class="sb-stat"><div class="sb-stat-label">Total Trades</div><div class="sb-stat-val" id="sb-tt">18</div></div>
-          <div class="sb-stat"><div class="sb-stat-label">Best Setup</div><div class="sb-stat-val gold">Breakout</div></div>
-        </div>
-      </div>
-      <div class="sb-section hidden" id="sb-pricing"></div>
-
-      <!-- Bottom always shown -->
-      <div class="sb-bottom">
-        <div class="sb-status"><div class="live-dot"></div>AI Engine Online</div>
-      </div>
-    </aside>
-
-    <!-- VIEWS -->
-    <div class="views-container">
-
-      <!-- ── BUILDER VIEW (dedicated page: builder.html) ── -->
-      <div class="view" id="view-builder"></div>
-
-      <!-- ── JOURNAL VIEW ── -->
-      <div class="view active" id="view-journal">
-        <div class="journal-layout">
-          <!-- Trade List -->
-          <div class="trade-list">
-            <div class="tl-head">
-              <h3>TRADE LOG</h3>
-              <button class="btn-gold btn-sm" onclick="openLogModal()">+ Log Trade</button>
-            </div>
-            <div class="tl-body" id="tradeList"></div>
-          </div>
-          <!-- Trade Detail -->
-          <div class="trade-detail" id="tradeDetail">
-            <div class="empty-state">
-              <div class="empty-icon"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-              <h3>SELECT A TRADE</h3>
-              <p>Click any trade on the left to view full details, chart markup, and AI post-trade analysis.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── MARKUP VIEW ── -->
-      <div class="view hidden" id="view-markup">
-        <div class="markup-layout">
-          <div class="markup-chat-area">
-            <div class="chat-head">
-              <div>
-                <h2>CHART MARKUP AI</h2>
-                <p>Upload a screenshot or describe your chart — AI responds in your personal style only</p>
-              </div>
-              <div class="scope-pill">TRADING ANALYSIS ONLY</div>
-            </div>
-            <div class="chat-thread" id="markupThread">
-              <div class="chat-msg ai">
-                <div class="chat-avatar ai">WTS</div>
-                <div class="chat-bubble">Good morning. Style profile loaded: <strong style="color:var(--green)">Breakout · XAUUSD/US30 · 1.5 RR</strong>.<br><br>Upload a chart screenshot or describe what you're seeing. I'll identify key levels, confirm if the setup fits your edge, and suggest entry/SL/TP.<br><br><em style="color:var(--muted);font-size:.75em">Note: I only discuss trading setups, MQL code, and market structure.</em></div>
-              </div>
-            </div>
-            <div class="chat-input-area">
-              <div class="chat-input-row">
-                <textarea class="chat-input" id="markupInput" placeholder="Describe your chart setup or ask about a level..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMarkup()}" rows="1"></textarea>
-                <button class="chat-send-btn" onclick="sendMarkup()">
-                  <svg viewBox="0 0 24 24" width="14" height="14"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                </button>
-              </div>
-              <div class="chat-hint">Tier 2: Manual upload markup · Tier 3 Executive: AI marks up your charts every morning automatically</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── DEBUGGER VIEW ── -->
-      <div class="view hidden" id="view-debugger">
-        <div class="debugger-layout" id="debuggerInner">
-          <div class="debug-col">
-            <div class="debug-col-head">
-              <span>MetaEditor Error Log</span>
-              <span style="color:var(--red);font-size:.65rem">PASTE FROM METAEDITOR</span>
-            </div>
-            <div class="debug-input-area">
-              <textarea class="debug-error-input" id="errorLog" rows="8" placeholder="; Paste your MetaEditor error log here&#10;; Example:&#10;; EA_Strategy.mq5(47,15): error C0207: 'OrderSend' - wrong number of parameters&#10;; EA_Strategy.mq5(112,8): error C0301: undeclared identifier 'MagicNumber'&#10;; EA_Strategy.mq5(89,22): warning: possible loss of data"></textarea>
-            </div>
-            <div class="debug-action">
-              <button class="btn-primary" onclick="runDebugger()" style="width:100%;">FIX MY ERRORS →</button>
-            </div>
-          </div>
-          <div class="debug-col">
-            <div class="debug-col-head">
-              <span>AI Diagnosis</span>
-              <span class="debug-status" id="debugStatus">WAITING</span>
-            </div>
-            <div class="debug-output-area" id="debugOutput">
-              <div class="debug-placeholder">
-                <span class="tc-dim">// Paste your error log on the left</span><br>
-                <span class="tc-dim">// Click Analyse & Fix Errors</span><br>
-                <span class="tc-dim">// AI will explain each error and</span><br>
-                <span class="tc-dim">// return corrected code lines</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Lock for free tier -->
-        <div class="tier-lock" id="debugLock">
-          <div class="lock-body">
-            <div class="lock-icon">🔒</div>
-            <h3>DEVELOPER & EXECUTIVE ONLY</h3>
-            <p>The Auto-Debugger is available on the Active Developer ($19/mo) and Standard Executive ($79/mo) plans.</p>
-            <button class="btn-gold" onclick="switchView('pricing',document.querySelector('[data-view=pricing]'))">View Plans →</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── STATS VIEW ── -->
-      <div class="view hidden" id="view-stats">
-        <div class="stats-layout">
-          <div class="stats-head">
-            <h2>PERFORMANCE OVERVIEW</h2>
-            <p>Live metrics from your closed trade journal</p>
-          </div>
-          <div class="stats-kpis" id="stats-kpis"></div>
-          <div id="stats-inst-kpis"></div>
-          <div class="stats-panels" id="stats-panels"></div>
-        </div>
-      </div>
-
-      <!-- ── VPS AGENT VIEW ── -->
-      <div class="view hidden" id="view-vps">
-        <div class="view-head">
-          <h2>VPS AGENT</h2>
-          <p>Control your MT5 terminals remotely via the WTS Nexus Agent running on your VPS</p>
-        </div>
-        <div class="view-body">
-
-          <!-- 72-hour countdown — shown when tier is active but VPS is still pending -->
-          <div id="vpsCountdown" style="display:none;">
-            <div style="background:var(--bg-card);border:1px solid var(--blue-border);border-radius:16px;padding:2rem 1.5rem;text-align:center;margin-bottom:1rem;box-shadow:var(--shadow-glow-blue);">
-              <div style="font-size:2.5rem;margin-bottom:.5rem;">⚙️</div>
-              <div style="font-size:.7rem;font-weight:700;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:.75rem;">Setting Up Your Trading Server</div>
-              <div style="font-size:.88rem;color:var(--text-primary);line-height:1.7;margin-bottom:1.5rem;max-width:320px;margin-left:auto;margin-right:auto;">
-                Your payment is confirmed and your dedicated trading server is being prepared. Everything will be ready soon.
-              </div>
-              <div style="background:var(--bg-card-2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;">
-                <div style="font-size:.65rem;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:.5rem;">Everything active by</div>
-                <div id="countdownTimer" style="font-family:var(--font-mono);font-size:2rem;font-weight:700;color:var(--blue);letter-spacing:4px;">72:00:00</div>
-                <div style="font-size:.65rem;color:var(--text-muted);margin-top:.35rem;">Hours : Minutes : Seconds</div>
-              </div>
-              <div style="text-align:left;background:var(--bg-card-2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1.5rem;">
-                <div style="font-size:.7rem;font-weight:700;letter-spacing:1.5px;color:var(--text-primary);margin-bottom:.75rem;">WHAT HAPPENS NEXT</div>
-                <div style="display:flex;flex-direction:column;gap:.6rem;">
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
-                    <div style="width:20px;height:20px;border-radius:50%;background:var(--green-dim);border:1px solid var(--green-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--green);">✓</div>
-                    Payment confirmed — your account is active
-                  </div>
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
-                    <div style="width:20px;height:20px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--blue);">2</div>
-                    Your dedicated VPS server is being configured
-                  </div>
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
-                    <div style="width:20px;height:20px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--blue);">3</div>
-                    MetaTrader 5 installed and ready to connect
-                  </div>
-                  <div style="display:flex;align-items:center;gap:.65rem;font-size:.75rem;color:var(--text-muted);">
-                    <div style="width:20px;height:20px;border-radius:50%;background:var(--blue-dim);border:1px solid var(--blue-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;color:var(--blue);">4</div>
-                    You receive Telegram + email when everything is live
-                  </div>
-                </div>
-              </div>
-              <div style="font-size:.72rem;color:var(--text-muted);line-height:1.6;">
-                Questions? Message us on Telegram<br>
-                <a href="https://t.me/WorldtradestandardBot" target="_blank" style="color:var(--blue);text-decoration:none;">@WorldtradestandardBot</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- WTS Nexus Agent Status — hero card -->
-          <div id="agentStatusCard" style="background:linear-gradient(135deg, rgba(55,138,221,0.08), var(--bg-card));border:1px solid var(--blue-border);border-radius:16px;padding:1.25rem 1.5rem;margin-bottom:1rem;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;">
-              <div style="display:flex;align-items:center;gap:.65rem;">
-                <div id="agentDot" style="width:10px;height:10px;border-radius:50%;background:var(--text-muted);flex-shrink:0;transition:background .3s;"></div>
-                <div>
-                  <div style="font-size:.8rem;font-weight:700;color:var(--text-primary);">WTS Nexus Agent</div>
-                  <div id="agentStatusText" style="font-size:.65rem;color:var(--text-muted);margin-top:.1rem;">Checking...</div>
-                </div>
-              </div>
-              <div id="agentIpBlock" style="text-align:right;display:none;">
-                <div style="font-family:var(--font-mono);font-size:.78rem;color:var(--blue);" id="agentIp"></div>
-                <div style="font-size:.6rem;color:var(--text-subtle);letter-spacing:.5px;">IP ADDRESS</div>
-              </div>
-            </div>
-            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem;">
-              <button onclick="agentCommand('get_status',{})" style="background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">↻ Sync MT5</button>
-              <button onclick="showDeployEaModal()" style="background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">+ Deploy EA</button>
-              <button onclick="if(confirm('Activate kill switch? This closes ALL open trades.')) agentCommand('kill_switch',{reason:'Manual from app',hours:24})" style="background:var(--red-dim);border:1px solid rgba(231,76,60,.3);color:var(--red);padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:600;cursor:pointer;font-family:inherit;">🔒 Kill Switch</button>
-            </div>
-            <div id="agentCmdStatus" style="display:none;margin-top:.75rem;padding:.5rem .75rem;background:var(--bg-card-2);border-radius:6px;font-size:.72rem;color:var(--text-muted);"></div>
-          </div>
-
-          <!-- Add Account Button -->
-          <button onclick="document.getElementById('addAccountModal').classList.remove('hidden')"
-            style="width:100%;background:var(--blue-dim);border:1px dashed var(--blue-border);border-radius:10px;padding:.85rem;color:var(--blue);font-size:.78rem;font-weight:600;cursor:pointer;margin-top:.75rem;font-family:inherit;">
-            + Connect Broker Account
-          </button>
-
-          <!-- All Nexus Agents (admin only) -->
-          <div id="adminAgentsPanel" class="hidden card" style="margin-top:1.25rem;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
-              <div class="section-eyebrow" style="margin-bottom:0;">All Nexus Agents</div>
-              <button onclick="loadAllAgents()" style="background:none;border:none;color:var(--blue);font-size:.72rem;cursor:pointer;font-family:inherit;">↻ Refresh</button>
-            </div>
-            <div id="allAgentsList">
-              <div style="color:var(--text-muted);font-size:.78rem;text-align:center;padding:1.5rem 0;">Click Refresh to load</div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Add Account Modal -->
-        <div id="addAccountModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9000;display:flex;align-items:flex-end;justify-content:center;padding:1rem;">
-          <div class="card" style="width:100%;max-width:440px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;">
-              <div style="font-size:.82rem;font-weight:700;letter-spacing:1.5px;color:var(--text-primary);">CONNECT BROKER ACCOUNT</div>
-              <span onclick="document.getElementById('addAccountModal').classList.add('hidden')" style="cursor:pointer;color:var(--text-muted);font-size:1.3rem;line-height:1;">✕</span>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:.6rem;">
-              <input id="acc-nickname" class="field-input" placeholder="Nickname (e.g. My Gold Account)">
-              <input id="acc-login" class="field-input" placeholder="Broker login number">
-              <input id="acc-password" class="field-input" type="password" placeholder="Broker password">
-              <input id="acc-server" class="field-input" placeholder="Server name (e.g. ICMarkets-Live)" list="serverList">
-              <datalist id="serverList">
-                <option value="ICMarkets-Live"><option value="ICMarkets-Demo">
-                <option value="Exness-Real"><option value="Exness-Demo">
-                <option value="Pepperstone-Live"><option value="Pepperstone-Demo">
-                <option value="FTMO-Server"><option value="Deriv-Server">
-              </datalist>
-              <button class="btn-primary" onclick="addTradingAccount()" style="width:100%;margin-top:.25rem;">Connect Account →</button>
-              <p style="font-size:.63rem;color:var(--text-subtle);text-align:center;margin:0;">Your credentials are encrypted. WTS never stores your password in plain text.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Lock for free tier -->
-        <div class="tier-lock" id="vpsLock">
-          <div class="lock-body">
-            <div class="lock-icon">🔒</div>
-            <h3>DEVELOPER & EXECUTIVE ONLY</h3>
-            <p>The VPS Agent is available on the Active Developer ($19/mo) and Standard Executive ($79/mo) plans.</p>
-            <button class="btn-gold" onclick="switchView('pricing',document.querySelector('[data-view=pricing]'))">View Plans →</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── PRICING VIEW ── -->
-      <div class="view hidden" id="view-pricing">
-        <div class="pricing-layout">
-          <div class="pricing-head">
-            <h2>CHOOSE YOUR STANDARD</h2>
-            <p>Pick the plan that matches where you are as a trader.</p>
-          </div>
-          <div class="pricing-cards">
-            <div class="pc">
-              <div class="pc-tier">Free Tier</div>
-              <div class="pc-name">Proof of Concept</div>
-              <div class="pc-price">$0<span>/mo</span></div>
-              <div class="pc-pitch">Experience the logic. Zero commitment.</div>
-              <ul class="pc-list">
-                <li class="y">3 total code generations</li>
-                <li class="y">Standard indicators (RSI, MA, MACD)</li>
-                <li class="n">Source code — compiled only</li>
-                <li class="n">Chart markup & journal</li>
-                <li class="n">Auto-debugger</li>
-              </ul>
-              <button class="pc-btn" onclick="activateTier('free');switchView('builder',document.querySelector('[data-view=builder]'))">Current Plan</button>
-            </div>
-            <div class="pc pc-blue">
-              <div class="pc-badge" style="background:var(--blue)">ACTIVE DEVELOPER</div>
-              <div class="pc-tier">$15/mo</div>
-              <div class="pc-name" style="color:var(--blue)">Active Developer</div>
-              <div class="pc-price" style="color:var(--blue)">$15<span>/mo</span></div>
-              <div class="pc-pitch">Unlimited builds. Full source code. Learn the why.</div>
-              <ul class="pc-list">
-                <li class="y">Unlimited EA/Indicator generations</li>
-                <li class="y"><strong>Full MQL source code</strong></li>
-                <li class="y">MT4 + MT5 output</li>
-                <li class="y">YouTube → Robot converter</li>
-                <li class="y">PineScript → MQL Translator</li>
-                <li class="y">Chart Markup (manual upload)</li>
-                <li class="y">Trade Journal + AI analysis</li>
-                <li class="y">Auto-Debugger</li>
-              </ul>
-              <button class="pc-btn pc-btn-blue" onclick="upgradePlan('dev')">Pay with Crypto — $15/mo</button>
-            </div>
-            <div class="pc pc-gold">
-              <div class="pc-badge" style="background:var(--gold);color:#08090D">STANDARD EXECUTIVE</div>
-              <div class="pc-tier">$79/mo</div>
-              <div class="pc-name" style="color:var(--gold)">Sovereign Executive</div>
-              <div class="pc-price" style="color:var(--gold)">$79<span>/mo</span></div>
-              <div class="pc-pitch">Zero friction. Your AI trades alongside you daily.</div>
-              <ul class="pc-list">
-                <li class="y">Everything in Developer</li>
-                <li class="y"><strong>Daily Mentor</strong> — morning markups in your style</li>
-                <li class="y"><strong>Auto-Debugger Live</strong> — auto-detect & fix</li>
-                <li class="y">Prop-Firm Stealth (SL/TP hidden)</li>
-                <li class="y">News Shield (auto-pause)</li>
-                <li class="y">Code Health Audit (unlimited)</li>
-                <li class="y">Priority processing</li>
-                <li class="y">Auto-injection to MetaTrader</li>
-              </ul>
-              <button class="pc-btn pc-btn-gold" onclick="upgradePlan('exec')">Pay with Crypto — $79/mo</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /views-container -->
-  </div><!-- /app-body -->
-
-</div><!-- /appShell -->
-
-<!-- LOG TRADE MODAL -->
-<div class="modal-overlay hidden" id="logModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h3>LOG NEW TRADE</h3>
-      <span class="modal-close" onclick="closeLogModal()">✕</span>
-    </div>
-    <div class="modal-body">
-      <div class="modal-row">
-        <div><label class="modal-lbl">Pair</label><select class="modal-input" id="m-pair"><option>XAUUSD</option><option>EURUSD</option><option>GBPUSD</option><option>US30</option><option>NAS100</option><option>BTCUSD</option></select></div>
-        <div><label class="modal-lbl">Direction</label><select class="modal-input" id="m-dir"><option>BUY</option><option>SELL</option></select></div>
-      </div>
-      <div class="modal-row">
-        <div><label class="modal-lbl">Entry Price</label><input class="modal-input" id="m-entry" placeholder="e.g. 2345.50"></div>
-        <div><label class="modal-lbl">Lot Size</label><input class="modal-input" id="m-lot" placeholder="e.g. 0.10"></div>
-      </div>
-      <div class="modal-row">
-        <div><label class="modal-lbl">Stop Loss</label><input class="modal-input" id="m-sl" placeholder="e.g. 2330.00"></div>
-        <div><label class="modal-lbl">Take Profit</label><input class="modal-input" id="m-tp" placeholder="e.g. 2375.00"></div>
-      </div>
-      <div class="modal-row">
-        <div><label class="modal-lbl">Setup Type</label><select class="modal-input" id="m-setup"><option>Breakout</option><option>Trend Follow</option><option>Reversal</option><option>Scalp</option><option>News Trade</option></select></div>
-        <div><label class="modal-lbl">Timeframe</label><select class="modal-input" id="m-tf"><option>M15</option><option>H1</option><option>H4</option><option>D1</option></select></div>
-      </div>
-      <div><label class="modal-lbl">Pre-Trade Notes</label><textarea class="modal-input" id="m-notes" style="min-height:65px;resize:vertical" placeholder="Why are you taking this trade? What's your thesis?"></textarea></div>
-      <div style="margin-top:.85rem"><label class="modal-lbl">Emotional State</label>
-        <div class="emo-tags" id="emoTags">
-          <span class="et" onclick="this.classList.toggle('active')">Confident</span>
-          <span class="et" onclick="this.classList.toggle('active')">Patient</span>
-          <span class="et" onclick="this.classList.toggle('active')">Anxious</span>
-          <span class="et" onclick="this.classList.toggle('active')">FOMO</span>
-          <span class="et" onclick="this.classList.toggle('active')">Revenge</span>
-          <span class="et" onclick="this.classList.toggle('active')">Disciplined</span>
-          <span class="et" onclick="this.classList.toggle('active')">Tired</span>
-        </div>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn-ghost" onclick="closeLogModal()">Cancel</button>
-      <button class="btn-gold" onclick="saveTrade()">Save & AI Analyse</button>
-    </div>
+  <div class="scene-content">
+    <h2 class="s2-headline">
+      THE <span class="glitch-word" data-text="MARKET">MARKET</span><br>IS AN OCEAN.
+    </h2>
+    <p class="s2-sub">Master how you navigate it with us.</p>
+    <a href="#" class="btn btn-violet">Begin →</a>
   </div>
-</div>
+</section>
 
-<div class="toast hidden" id="toastEl"></div>
+<!-- ═══════════════════════════════════
+     SECTION 3 — THE FORGE
+═══════════════════════════════════ -->
+<section class="scene" id="s3">
+  <div class="scene-bg"></div>
+  <div class="scene-overlay"></div>
 
-<!-- Firebase SDK (compat — v9 compat mode for simplicity) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <nav class="s-nav">
+    <span class="s-nav-brand">WORLDTRADE<em>STANDARD</em></span>
+    <div class="s-nav-right">
+      <span class="s-nav-label">The Forge</span>
+    </div>
+  </nav>
 
-<!-- Firebase Config — replace values with your actual Firebase project config -->
-<!-- Firebase Console → Project Settings → General → Your apps → Web app → Config -->
-<script>
-  const FIREBASE_CONFIG = {
-    apiKey:            "AIzaSyCQmfyBCZBXsP5bL6FBuJRnq0cXRpwAhJY",
-    authDomain:        "worldtradestandard.firebaseapp.com",
-    projectId:         "worldtradestandard",
-    storageBucket:     "worldtradestandard.firebasestorage.app",
-    messagingSenderId: "382332367367",
-    appId:             "1:382332367367:web:d18438641502f9b5bb70a2",
-    measurementId:     "G-SEMYKY4NTS"
-  };
-  firebase.initializeApp(FIREBASE_CONFIG);
-</script>
+  <div class="scene-content">
+    <div class="s3-label">The Forge</div>
+    <h2 class="s3-headline">
+      <span class="glitch-word" data-text="BUILD">BUILD</span><br>
+      YOUR<br>SYSTEM.
+    </h2>
+    <p class="s3-body">Describe what you want.<br>We help you build it.</p>
+    <a href="#" class="btn btn-violet">Start Building →</a>
+  </div>
+</section>
 
-<script src="js/app.js"></script>
+<!-- ═══════════════════════════════════
+     SECTION 4 — THE COMMUNITY
+═══════════════════════════════════ -->
+<section class="scene" id="s4">
+  <div class="scene-bg"></div>
+  <div class="scene-overlay"></div>
 
-<!-- Lazy load cinematic background images (hero excluded — it renders immediately) -->
-<script>
-(function() {
-  const lazyBgs = document.querySelectorAll('[data-bg]');
-  if (!lazyBgs.length) return;
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        el.style.backgroundImage = `url('${el.dataset.bg}')`;
-        obs.unobserve(el);
-      }
-    });
-  }, { rootMargin: '200px' });
-  lazyBgs.forEach(el => obs.observe(el));
-})();
-</script>
+  <nav class="s-nav">
+    <span class="s-nav-brand">WORLDTRADE<em>STANDARD</em></span>
+    <div class="s-nav-right">
+      <span class="s-nav-label">The Community</span>
+    </div>
+  </nav>
+
+  <div class="scene-content">
+    <h2 class="s4-headline">
+      YOU ARE NOT<br>
+      <span class="glitch-word" data-text="BUILDING">BUILDING</span><br>
+      ALONE.
+    </h2>
+    <p class="s4-body">Traders. Systems. Community.</p>
+    <a href="#" class="btn btn-violet">Enter The World →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">WORLDTRADE<em>STANDARD</em></span>
+  <div class="footer-links">
+    <a href="#">Terms</a>
+    <a href="#">Privacy</a>
+    <a href="#">Support</a>
+  </div>
+  <span class="footer-cities">Lagos · Dubai · London · Singapore</span>
+</footer>
+
 </body>
 </html>
