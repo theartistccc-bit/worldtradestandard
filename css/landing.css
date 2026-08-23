@@ -278,3 +278,10 @@
   .landing-section { padding: var(--sp-12) var(--sp-4); }
   .footer-links-new { flex-wrap: wrap; gap: var(--sp-4); }
 }
+
+@media (max-width: 480px) {
+  .hero-cin-title { font-size: 34px; }
+  .hero-cin-sub { font-size: 15px; }
+  .section-title-new { font-size: 26px; }
+  .manifesto-title { font-size: 36px; }
+}

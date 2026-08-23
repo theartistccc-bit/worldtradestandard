@@ -574,8 +574,16 @@ select, input, textarea { font-family: 'Outfit', sans-serif; color: var(--text);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    flex-wrap: nowrap;
   }
   .app-nav-tabs::-webkit-scrollbar { display: none; }
+
+  /* ── Tap targets ── */
+  .nav-bell { min-width: 36px; min-height: 36px; }
+  .btn-sm { padding: .5rem 1.05rem; }
+
+  /* ── VPS countdown — keep the timer legible on narrow screens ── */
+  #countdownTimer { font-size: 1.5rem !important; letter-spacing: 2px !important; }
   .antab { flex-shrink: 0; padding: 0 .6rem; font-size: .7rem; }
   .credits-chip { display: none; }
 

@@ -1,0 +1,21 @@
+{
+  "name": "WorldTradeStandard",
+  "short_name": "WTS",
+  "description": "The Artificial Trading Assistant",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050508",
+  "theme_color": "#378ADD",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/378ADD/ffffff?text=WTS",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/378ADD/ffffff?text=WTS",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
