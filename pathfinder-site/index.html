@@ -69,6 +69,11 @@ section{padding-block:104px;position:relative}
 .topbar span{display:inline-flex;align-items:center;gap:8px}
 .topbar svg{width:15px;height:15px;fill:var(--sun);flex:none}
 
+.socials{display:inline-flex;gap:8px;align-items:center}
+.soc{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);transition:background .2s}
+.soc svg{width:15px;height:15px;fill:#fff}
+.soc:hover{background:var(--sun)}.soc:hover svg{fill:var(--navy-deep)}
+.socials-lg .soc{width:42px;height:42px}.socials-lg .soc svg{width:20px;height:20px}
 /* menu */
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:#fff}
 header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:#fff;border-bottom:1px solid #e3e9f6}
@@ -256,7 +261,7 @@ footer .motto span{color:var(--sun)}
       <span><svg><use href="#i-pin"/></svg>#9 Ediba Lane, off Ediba Road, Calabar Municipality</span>
       <span class="hide-sm"><svg><use href="#i-mail"/></svg>pathfinderinternational@gmail.com</span>
     </div>
-    <span><svg><use href="#i-phone"/></svg>Call or WhatsApp: +234 803 348 3918</span>
+    <div class="grp"><span><svg><use href="#i-phone"/></svg>Call or WhatsApp: +234 803 348 3918</span><span class="socials"><!-- REPLACE the two # links below with the school Facebook and TikTok page URLs --><a class="soc" href="#" target="_blank" rel="noopener" aria-label="Pathfinder Elite on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v7h4v-7h3l.5-4h-3.5V9c0-.6.4-1 1-1z"/></svg></a><a class="soc" href="#" target="_blank" rel="noopener" aria-label="Pathfinder Elite on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 3c.4 2.3 1.9 3.8 4.2 4v3.4c-1.6 0-3-.5-4.2-1.3v6.2a5.8 5.8 0 11-5.8-5.8c.3 0 .6 0 .9.1v3.5a2.4 2.4 0 102 2.3V3z"/></svg></a></span></div>
   </div>
 </div>
 
@@ -373,17 +378,17 @@ footer .motto span{color:var(--sun)}
         <p>Tap any photo to see it larger.</p>
       </div>
       <div class="gallery-grid">
-        <figure class="g-wide g-tall" tabindex="0"><img src="img/playground.jpg" alt="Pupils laughing together at the swings" loading="lazy"></figure>
-        <figure class="g-tall" tabindex="0"><img src="img/gate-sign.jpg" alt="School entrance with flags and signboard" loading="lazy"></figure>
-        <figure tabindex="0"><img src="img/swings-girls.jpg" alt="Two girls in school uniform at the swings" loading="lazy"></figure>
-        <figure tabindex="0"><img src="img/swings-fish.jpg" alt="Pupils on the swings beside the goldfish mural" loading="lazy"></figure>
-        <figure class="g-wide" tabindex="0"><img src="img/swings-seesaw.jpg" alt="Pupils on the see-saw and swings" loading="lazy"></figure>
-        <figure class="g-wide" tabindex="0"><img src="img/garden-mural.jpg" alt="Painted tyre garden and mural wall at the school" loading="lazy"></figure>
-        <figure tabindex="0"><img src="img/swings-boys.jpg" alt="Boys swinging during break time" loading="lazy"></figure>
-        <figure tabindex="0"><img src="img/swings-pair-2.jpg" alt="A boy and girl on the swings" loading="lazy"></figure>
-        <figure class="g-wide" tabindex="0"><img src="img/billboard.jpg" alt="The Pathfinder Elite billboard with vision, mission and services" loading="lazy"></figure>
-        <figure class="g-wide" tabindex="0"><img src="img/seesaw-swings-2.jpg" alt="Pupils taking turns on the see-saw and swings" loading="lazy"></figure>
-        <figure class="g-wide" tabindex="0"><img src="img/street-view.jpg" alt="The school wall and signboard seen from Ediba Lane" loading="lazy"></figure>
+        <figure class="g-wide g-tall" tabindex="0"><img src="img/thumb/playground.jpg" data-full="img/playground.jpg" decoding="async" alt="Pupils laughing together at the swings" loading="lazy"></figure>
+        <figure class="g-tall" tabindex="0"><img src="img/thumb/gate-sign.jpg" data-full="img/gate-sign.jpg" decoding="async" alt="School entrance with flags and signboard" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/thumb/swings-girls.jpg" data-full="img/swings-girls.jpg" decoding="async" alt="Two girls in school uniform at the swings" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/thumb/swings-fish.jpg" data-full="img/swings-fish.jpg" decoding="async" alt="Pupils on the swings beside the goldfish mural" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/thumb/swings-seesaw.jpg" data-full="img/swings-seesaw.jpg" decoding="async" alt="Pupils on the see-saw and swings" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/thumb/garden-mural.jpg" data-full="img/garden-mural.jpg" decoding="async" alt="Painted tyre garden and mural wall at the school" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/thumb/swings-boys.jpg" data-full="img/swings-boys.jpg" decoding="async" alt="Boys swinging during break time" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/thumb/swings-pair-2.jpg" data-full="img/swings-pair-2.jpg" decoding="async" alt="A boy and girl on the swings" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/thumb/billboard.jpg" data-full="img/billboard.jpg" decoding="async" alt="The Pathfinder Elite billboard with vision, mission and services" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/thumb/seesaw-swings-2.jpg" data-full="img/seesaw-swings-2.jpg" decoding="async" alt="Pupils taking turns on the see-saw and swings" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/thumb/street-view.jpg" data-full="img/street-view.jpg" decoding="async" alt="The school wall and signboard seen from Ediba Lane" loading="lazy"></figure>
       </div>
     </div>
   </section>
@@ -427,6 +432,7 @@ footer .motto span{color:var(--sun)}
       <div style="display:grid;gap:16px;align-content:start">
         <a class="logo" href="#top"><img class="logo-mark" src="img/logo.png" alt=""><span class="logo-text"><strong>Pathfinder Elite</strong><small>International Schools</small></span></a>
         <p class="motto"><span>Motto:</span>Determination Personified</p>
+        <div class="socials socials-lg"><!-- REPLACE the two # links below with the school Facebook and TikTok page URLs --><a class="soc" href="#" target="_blank" rel="noopener" aria-label="Pathfinder Elite on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v7h4v-7h3l.5-4h-3.5V9c0-.6.4-1 1-1z"/></svg></a><a class="soc" href="#" target="_blank" rel="noopener" aria-label="Pathfinder Elite on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.5 3c.4 2.3 1.9 3.8 4.2 4v3.4c-1.6 0-3-.5-4.2-1.3v6.2a5.8 5.8 0 11-5.8-5.8c.3 0 .6 0 .9.1v3.5a2.4 2.4 0 102 2.3V3z"/></svg></a></div>
       </div>
       <div><h4>Quick links</h4><ul><li><a href="#about">About us</a></li><li><a href="#classes">Classes</a></li><li><a href="#services">Services</a></li><li><a href="#gallery">Gallery</a></li></ul></div>
       <div><h4>Classes</h4><ul><li>Creche</li><li>Reception</li><li>Nursery</li><li>Primary</li></ul></div>
@@ -454,7 +460,7 @@ footer .motto span{color:var(--sun)}
   var ico={x:'<path d="M6 6l12 12M18 6L6 18"/>',l:'<path d="M15 5l-7 7 7 7"/>',r:'<path d="M9 5l7 7-7 7"/>'};
   function svg(p){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>'}
   var figs=[].slice.call(document.querySelectorAll('.gallery-grid figure')),lb=null,li=0;
-  function show(i){li=(i+figs.length)%figs.length;var s=figs[li].querySelector('img'),t=lb.querySelector('img');t.src=s.src;t.alt=s.alt}
+  function show(i){li=(i+figs.length)%figs.length;var s=figs[li].querySelector('img'),t=lb.querySelector('img');t.src=s.dataset.full||s.src;t.alt=s.alt}
   function open(i){
     lb=document.createElement('div');lb.className='lightbox';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Photo viewer');
     lb.innerHTML='<img alt=""><button class="lb-btn lb-close" aria-label="Close">'+svg(ico.x)+'</button><button class="lb-btn lb-prev" aria-label="Previous photo">'+svg(ico.l)+'</button><button class="lb-btn lb-next" aria-label="Next photo">'+svg(ico.r)+'</button>';
