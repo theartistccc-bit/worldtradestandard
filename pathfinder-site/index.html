@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Pathfinder Elite International Schools, #9 Ediba Lane, off Ediba Road, Calabar. Creche, Reception, Nursery and Primary. Registration is ongoing. Call or WhatsApp +234 803 348 3918.">
+<meta property="og:title" content="Pathfinder Elite International Schools, Calabar">
+<meta property="og:description" content="Creche, Reception, Nursery and Primary. Registration is ongoing. Motto: Determination Personified.">
+<meta property="og:image" content="/img/playground.jpg">
+<meta name="theme-color" content="#16307a">
+<link rel="icon" href="/img/logo.png">
+<title>Pathfinder Elite International Schools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Dancing+Script:wght@600;700&display=swap">
+<style>
+/* Layout: the school's own visual world. Painted playground-curb stripes as dividers, billboard-style class names, the motto in the billboard's script, scrapbook photo placement. Colours from the walls (navy, sky), the curb (red, yellow) and the signboard lettering. */
+:root{
+  --navy:#16307a;
+  --navy-deep:#0f2257;
+  --sky:#5bb8ec;
+  --sky-pale:#e8f5fd;
+  --sun:#ffcf26;
+  --red:#e8423b;
+  --ink:#283152;
+  --muted:#535d7e;
+  --paper:#ffffff;
+  --cream:#fffaf0;
+  /* signboard lettering, darkened just enough to pass contrast on white */
+  --sign-cyan:#0b86a8;
+  --sign-teal:#0c8f80;
+  --sign-pink:#d1306a;
+  --sign-blue:#2a3fc4;
+  --display:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito","Segoe UI",system-ui,-apple-system,sans-serif;
+  --script:"Dancing Script","Brush Script MT",cursive;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-color:var(--navy) var(--sky-pale)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.65}
+::selection{background:var(--sun);color:var(--navy-deep)}
+h1,h2,h3,h4{font-family:var(--display);color:var(--navy);line-height:1.12;margin:0;text-wrap:balance;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit;text-underline-offset:3px}
+img{display:block;max-width:100%}
+input,textarea,select{caret-color:var(--red)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+section{padding-block:104px;position:relative}
+.head{display:grid;gap:14px;max-width:640px;margin-bottom:48px}
+.head h2{font-size:clamp(2rem,4.4vw,3.1rem)}
+.head p{color:var(--muted);font-size:1.06rem;max-width:56ch}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;font-size:1.05rem;padding:15px 30px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-sun{background:var(--sun);color:var(--navy-deep);box-shadow:0 6px 14px rgba(15,34,87,.18)}
+.btn-white{background:#fff;color:var(--navy)}
+.btn-red{background:var(--red);color:#fff}
+.btn svg{width:18px;height:18px}
+
+/* painted curb: the red / blue / yellow / white blocks around the playground */
+.curb{height:16px;background:repeating-linear-gradient(90deg,var(--red) 0 96px,#fff 96px 100px,var(--sky) 100px 196px,#fff 196px 200px,var(--sun) 200px 296px,#fff 296px 300px,var(--sky) 300px 396px,#fff 396px 400px)}
+
+/* info bar */
+.topbar{background:var(--navy-deep);color:#d9e2ff;font-size:.88rem}
+.topbar .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 26px;padding-block:10px}
+.topbar .grp{display:flex;flex-wrap:wrap;gap:6px 24px}
+.topbar span{display:inline-flex;align-items:center;gap:8px}
+.topbar svg{width:15px;height:15px;fill:var(--sun);flex:none}
+
+/* menu */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:#fff}
+header.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:#fff;border-bottom:1px solid #e3e9f6}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo-mark{width:58px;height:58px;flex:none;border-radius:50%;background:#fff}
+.logo-text{display:grid;line-height:1.05}
+.logo-text strong{font-family:var(--display);font-size:1.35rem;color:var(--navy);font-weight:700}
+.logo-text small{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:800}
+.menu{display:flex;align-items:center;gap:2px;list-style:none;margin:0;padding:0}
+.menu a{display:block;text-decoration:none;font-family:var(--display);font-weight:600;font-size:1.02rem;padding:10px 14px;border-radius:999px;color:var(--navy)}
+.menu a:hover{color:var(--red)}
+.menu .btn{margin-left:10px;padding:12px 24px;color:var(--navy-deep)}
+.burger{display:none;background:var(--sun);border:0;width:48px;height:48px;border-radius:50%;cursor:pointer;align-items:center;justify-content:center}
+.burger span,.burger span::before,.burger span::after{display:block;width:20px;height:2.5px;background:var(--navy);border-radius:2px;position:relative}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0}
+.burger span::before{top:-7px}.burger span::after{top:7px}
+
+/* hero */
+.hero{position:relative;color:#fff;overflow:hidden;background:var(--navy-deep);padding:0}
+.slides{position:absolute;inset:0}
+.slides img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:0;transition:opacity 1.4s cubic-bezier(.2,.8,.2,1),transform 8s ease-out;transform:scale(1.05)}
+.slides img:first-child{opacity:1}
+.slides.ready img{opacity:0}
+.slides.ready img.on{opacity:1;transform:scale(1)}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,34,87,.9) 0%,rgba(15,34,87,.66) 46%,rgba(15,34,87,.08) 82%)}
+.hero .wrap{position:relative;z-index:2;padding-block:112px 132px}
+.hero-copy{max-width:620px;display:grid;gap:22px;justify-items:start}
+.hero h1{color:#fff;font-size:clamp(2.6rem,6vw,4.6rem)}
+.hero h1 em{font-style:normal;color:var(--sun)}
+.hero p{font-size:1.15rem;color:#e4ebff;max-width:50ch}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:4px}
+.reg{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-weight:700;color:#dfe7ff;font-size:.95rem;margin-top:6px}
+.reg b{color:var(--sun);font-weight:800}
+.dots{position:absolute;z-index:4;right:max(16px,env(safe-area-inset-right,0px));bottom:36px;display:flex;gap:10px}
+.dots button{width:12px;height:12px;border-radius:999px;border:0;background:rgba(255,255,255,.55);cursor:pointer;padding:0;transition:width .3s,background .3s}
+.dots button.on{width:34px;background:var(--sun)}
+
+/* about */
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.scrap{position:relative;padding:20px 48px 70px 10px}
+.scrap .main{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:18px;border:10px solid #fff;box-shadow:0 18px 40px rgba(15,34,87,.18);transform:rotate(-2deg)}
+.scrap .inset{position:absolute;right:0;bottom:0;width:54%;aspect-ratio:3/2;object-fit:cover;border-radius:14px;border:8px solid #fff;box-shadow:0 16px 32px rgba(15,34,87,.2);transform:rotate(3deg)}
+.scrap .tape{position:absolute;width:110px;height:30px;background:rgba(255,207,38,.82);top:6px;left:38%;transform:rotate(-6deg);border-radius:3px}
+.about-copy{display:grid;gap:22px}
+.about-copy h2{font-size:clamp(2rem,4.4vw,3.1rem)}
+.about-copy > p{color:var(--muted);font-size:1.06rem;max-width:56ch}
+.motto{font-family:var(--script);font-weight:700;font-size:clamp(1.9rem,3.6vw,2.5rem);color:var(--sign-blue);line-height:1.1}
+.motto span{color:var(--sign-pink);font-size:.7em;margin-right:8px}
+.vm{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.vm div{border-radius:14px;padding:20px 22px;border:3px dashed rgba(22,48,122,.22)}
+.vm h4{font-size:1.18rem;margin-bottom:6px;color:var(--sign-pink)}
+.vm p{font-size:.96rem}
+.vm .v{background:#fff}
+.vm .m{background:#fff6cf}
+
+/* classes, set like the signboard */
+.classes{background:var(--sky-pale)}
+.classes .head h2{color:#fff;background:var(--sign-pink);display:inline-block;padding:6px 18px;border-radius:6px;font-size:clamp(1.5rem,3.2vw,2.2rem);justify-self:start}
+.board{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-radius:20px;border:6px solid var(--navy);overflow:hidden}
+.level{padding:30px 26px 34px;display:grid;gap:12px;align-content:start;border-right:3px solid #e1e8f5}
+.level:last-child{border-right:0}
+.level h3{font-size:clamp(1.6rem,2.6vw,2.2rem);letter-spacing:.02em;text-transform:uppercase}
+.level p{color:var(--muted);font-size:.97rem}
+.l1 h3{color:var(--sign-cyan)}.l2 h3{color:var(--sign-teal)}.l3 h3{color:var(--sign-pink)}.l4 h3{color:var(--sign-blue)}
+
+/* services */
+.svc .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
+.svc-list{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.svc-list li{display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:center;padding:14px 0;border-bottom:2px dashed #e1e8f5}
+.svc-list li:last-child{border-bottom:0}
+.svc-list i{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-style:normal}
+.svc-list i svg{width:26px;height:26px;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.svc-list b{display:block;font-family:var(--display);font-weight:600;color:var(--navy);font-size:1.15rem}
+.svc-list span{color:var(--muted);font-size:.95rem;line-height:1.5}
+.svc-photo{position:relative;padding:0 18px 18px 0}
+.svc-photo img{border-radius:18px;width:100%;aspect-ratio:3/2;object-fit:cover;position:relative;z-index:1}
+.svc-photo::before{content:"";position:absolute;inset:18px 0 0 18px;border-radius:18px;background:var(--sun)}
+
+/* CTA band */
+.cta{color:#fff;padding-block:84px;overflow:hidden;position:relative;background:var(--red)}
+.cta > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cta::before{content:"";position:absolute;inset:0;background:rgba(196,38,38,.88);z-index:1}
+.cta .wrap{position:relative;z-index:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px}
+.cta h2{color:#fff;font-size:clamp(1.8rem,3.6vw,2.6rem);max-width:620px}
+.cta p{color:#ffe4e1;margin-top:10px;font-weight:700;font-size:1.05rem}
+
+/* gallery */
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;grid-auto-flow:dense;gap:14px}
+.gallery-grid figure{margin:0;border-radius:16px;overflow:hidden;position:relative;cursor:zoom-in;background:var(--sky-pale)}
+.gallery-grid img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.gallery-grid figure:hover img{transform:scale(1.05)}
+.gallery-grid figure::after{content:"";position:absolute;right:14px;bottom:14px;width:42px;height:42px;border-radius:50%;background:var(--sun) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f2257' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6'/%3E%3Cpath d='M15 15l5 5M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center/22px no-repeat;opacity:0;transform:scale(.7);transition:.3s cubic-bezier(.2,.8,.2,1)}
+.gallery-grid figure:hover::after,.gallery-grid figure:focus-visible::after{opacity:1;transform:none}
+.g-wide{grid-column:span 2}
+.g-tall{grid-row:span 2}
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(10,20,55,.94);display:grid;place-items:center;padding:max(70px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(70px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.lightbox img{max-width:min(1200px,100%);max-height:100%;border-radius:14px;object-fit:contain}
+.lb-btn{position:absolute;width:50px;height:50px;border-radius:50%;border:0;background:var(--sun);color:var(--navy-deep);cursor:pointer;display:grid;place-items:center}
+.lb-btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.lb-close{top:calc(12px + env(safe-area-inset-top,0px));right:calc(16px + env(safe-area-inset-right,0px))}
+.lb-prev{left:calc(16px + env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%)}
+.lb-next{right:calc(16px + env(safe-area-inset-right,0px));top:50%;transform:translateY(-50%)}
+
+/* contact */
+.admit{background:var(--cream)}
+.admit .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.contact-list{list-style:none;margin:28px 0 0;padding:0;display:grid;gap:18px}
+.contact-list li{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center}
+.contact-list i{width:48px;height:48px;border-radius:50%;display:grid;place-items:center}
+.contact-list i svg{width:21px;height:21px;fill:#fff}
+.contact-list b{display:block;font-family:var(--display);color:var(--navy);font-weight:600}
+.contact-list span{color:var(--muted);font-size:.97rem;user-select:all;overflow-wrap:anywhere}
+form.enquiry{background:var(--navy);border-radius:22px;padding:36px;display:grid;grid-template-columns:1fr 1fr;gap:16px;color:#fff}
+form.enquiry h3{grid-column:1/-1;color:#fff;font-size:1.7rem}
+form.enquiry p.sub{grid-column:1/-1;color:#cbd6ff;margin-top:-8px}
+.field{display:grid;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-weight:700;font-size:.88rem;color:#dfe6ff}
+.field input,.field select,.field textarea{font:inherit;font-size:.98rem;padding:13px 16px;border-radius:12px;border:2px solid transparent;background:#fff;color:var(--ink);width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--sun)}
+.field [aria-invalid="true"]{border-color:#ff8a84}
+.field textarea{min-height:96px;resize:vertical}
+form.enquiry .btn{grid-column:1/-1;justify-content:center}
+.form-note{grid-column:1/-1;background:rgba(255,207,38,.14);border:2px solid var(--sun);border-radius:12px;padding:14px 16px;font-weight:700}
+
+/* footer */
+footer{background:var(--navy-deep);color:#c5cfee;padding-block:80px 28px}
+.foot{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:40px}
+footer h4{color:#fff;font-size:1.2rem;margin-bottom:18px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+footer a{text-decoration:none}
+footer a:hover{color:var(--sun);text-decoration:underline}
+footer .logo-text strong{color:#fff}
+footer .motto{color:#fff;font-size:1.7rem}
+footer .motto span{color:var(--sun)}
+.foot p{font-size:.95rem}
+.copy{border-top:1px solid #2a3a78;margin-top:50px;padding-top:22px;font-size:.86rem}
+
+/* responsive */
+@media (max-width:1040px){
+  .board{grid-template-columns:1fr 1fr}
+  .level:nth-child(2){border-right:0}
+  .level:nth-child(-n+2){border-bottom:3px solid #e1e8f5}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media (max-width:900px){
+  .burger{display:inline-flex}
+  .menu{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;background:#fff;padding:12px max(16px,env(safe-area-inset-right,0px)) 18px max(16px,env(safe-area-inset-left,0px));box-shadow:0 18px 30px rgba(15,34,87,.12)}
+  .menu.open{display:flex}
+  .menu .btn{margin:8px 0 0;justify-content:center}
+  .about .wrap,.svc .wrap,.admit .wrap{grid-template-columns:1fr}
+  .scrap{max-width:520px;width:100%;margin:0 auto}
+  .hero::after{background:linear-gradient(180deg,rgba(15,34,87,.55),rgba(15,34,87,.88))}
+  .hero .wrap{padding-block:88px 110px}
+}
+@media (max-width:600px){
+  section{padding-block:72px}
+  .board,.vm{grid-template-columns:1fr}
+  .level{border-right:0;border-bottom:3px solid #e1e8f5}
+  .level:last-child{border-bottom:0}
+  .gallery-grid{grid-auto-rows:160px}
+  form.enquiry{grid-template-columns:1fr;padding:24px}
+  .foot{grid-template-columns:1fr}
+  .topbar .hide-sm{display:none}
+  .scrap{padding:14px 24px 46px 4px}
+  .curb{height:12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4.2l-8 5-8-5V6l8 5 8-5z"/></symbol>
+</svg>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="grp">
+      <span><svg><use href="#i-pin"/></svg>#9 Ediba Lane, off Ediba Road, Calabar Municipality</span>
+      <span class="hide-sm"><svg><use href="#i-mail"/></svg>pathfinderinternational@gmail.com</span>
+    </div>
+    <span><svg><use href="#i-phone"/></svg>Call or WhatsApp: +234 803 348 3918</span>
+  </div>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Pathfinder Elite International Schools home">
+      <img class="logo-mark" src="img/logo.png" alt="">
+      <span class="logo-text"><strong>Pathfinder Elite</strong><small>International Schools</small></span>
+    </a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span></button>
+    <ul class="menu" id="menu">
+      <li><a href="#top">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#classes">Classes</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a class="btn btn-sun" href="#contact">Enrol now</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="slides" id="slides">
+      <img src="img/playground.jpg" alt="Pathfinder Elite pupils in uniform playing on the swings">
+      <img src="img/seesaw-swings-4.jpg" alt="Pupils on the see-saw and swings in the school playground">
+      <img src="img/seesaw-swing-close.jpg" alt="Pupils enjoying the see-saw and swing">
+    </div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1>Raising <em>determined</em> learners of character and excellence</h1>
+        <p>A happy, disciplined school behind the blue gates on Ediba Lane, Calabar, for children from Creche to Primary.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-sun" href="#contact">Enrol your child</a>
+          <a class="btn btn-white" href="#about">See the school</a>
+        </div>
+        <div class="reg"><b>Registration is ongoing:</b> Creche · Reception · Nursery · Primary</div>
+      </div>
+    </div>
+    <div class="dots" id="dots" aria-label="Choose photo"></div>
+  </section>
+  <div class="curb" aria-hidden="true"></div>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="scrap">
+        <img class="main" src="img/gate-car.jpg" alt="The Pathfinder Elite gate, flags and signboard on Ediba Lane, Calabar">
+        <img class="inset" src="img/swings-pair.jpg" alt="Two pupils at the school swings">
+        <span class="tape" aria-hidden="true"></span>
+      </div>
+      <div class="about-copy">
+        <h2>Behind the blue gates on Ediba Lane</h2>
+        <p>Painted walls, a sandy playground and teachers who know every child by name. At Pathfinder Elite, children build strong foundations in reading, numbers and good character, with plenty of time to play.</p>
+        <p class="motto"><span>Motto:</span>Determination Personified</p>
+        <div class="vm">
+          <div class="v"><h4>Our Vision</h4><p>To build a school that will stand the test of time by raising determined learners of character and excellence.</p></div>
+          <div class="m"><h4>Our Mission</h4><p>Raising determined, disciplined and God-fearing learners that will make a positive impact in our society.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="classes" id="classes">
+    <div class="wrap">
+      <div class="head">
+        <h2>Registration is ongoing into</h2>
+        <p>Four sections, one school. Your child keeps familiar faces and routines as they move up.</p>
+      </div>
+      <div class="board">
+        <div class="level l1"><h3>Creche</h3><p>Loving care, gentle routines and sensory play for our littlest pathfinders.</p></div>
+        <div class="level l2"><h3>Reception</h3><p>A smooth first step into the classroom, with songs, shapes and first letters.</p></div>
+        <div class="level l3"><h3>Nursery</h3><p>Jolly Phonics, early numbers, art and music that build confident young readers.</p></div>
+        <div class="level l4"><h3>Primary</h3><p>English, maths, science and more, taught with discipline and care.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="svc" id="services">
+    <div class="wrap">
+      <div>
+        <div class="head" style="margin-bottom:24px">
+          <h2>What comes with a place at Pathfinder</h2>
+          <p>Bright murals, a tyre garden and a playground with swings and see-saws make the campus a happy place to learn.</p>
+        </div>
+        <ul class="svc-list">
+          <li><i style="background:#ffe3e1"><svg viewBox="0 0 24 24" stroke="#c42d2d"><path d="M4 5.5C6.5 4.5 9.5 4.5 12 6c2.5-1.5 5.5-1.5 8-.5v13c-2.5-1-5.5-1-8 .5-2.5-1.5-5.5-1.5-8-.5z"/><path d="M12 6v13"/></svg></i><div><b>Jolly Phonics classes</b><span>Reading and spelling taught through sounds and actions.</span></div></li>
+          <li><i style="background:#fff3c4"><svg viewBox="0 0 24 24" stroke="#16307a"><circle cx="12" cy="7.5" r="3.5"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></i><div><b>Dedicated staff</b><span>Teachers committed to every child's progress.</span></div></li>
+          <li><i style="background:#ddf1fc"><svg viewBox="0 0 24 24" stroke="#16307a"><rect x="3" y="5" width="18" height="11" rx="2.5"/><path d="M3 11h18M8 16v2M16 16v2"/></svg></i><div><b>School bus services</b><span>Safe transport to and from school.</span></div></li>
+          <li><i style="background:#ddf5e6"><svg viewBox="0 0 24 24" stroke="#1f8a4c"><path d="M4 11l8-6 8 6v9H4z"/><path d="M10 20v-5h4v5"/></svg></i><div><b>After school care</b><span>A supervised space after the school day ends.</span></div></li>
+          <li><i style="background:#ece6ff"><svg viewBox="0 0 24 24" stroke="#5a3fd0"><circle cx="8.5" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3 19c0-3 2.5-5.5 5.5-5.5S14 16 14 19M14.5 14c2.8 0 5 1.8 5.5 5"/></svg></i><div><b>Social clubs</b><span>Clubs that build friendships, teamwork and talents.</span></div></li>
+        </ul>
+      </div>
+      <div class="svc-photo"><img src="img/garden-mural.jpg" alt="The school's garden of painted tyres beside a mural wall"></div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <img src="img/seesaw-swings-3.jpg" alt="" loading="lazy">
+    <div class="wrap">
+      <div>
+        <h2>There's a place on the swings for your child.</h2>
+        <p>Call or WhatsApp +234 803 348 3918. Registration is ongoing.</p>
+      </div>
+      <a class="btn btn-sun" href="#contact">Enrol now</a>
+    </div>
+  </div>
+  <div class="curb" aria-hidden="true"></div>
+
+  <section id="gallery">
+    <div class="wrap">
+      <div class="head">
+        <h2>Break time at Pathfinder</h2>
+        <p>Tap any photo to see it larger.</p>
+      </div>
+      <div class="gallery-grid">
+        <figure class="g-wide g-tall" tabindex="0"><img src="img/playground.jpg" alt="Pupils laughing together at the swings" loading="lazy"></figure>
+        <figure class="g-tall" tabindex="0"><img src="img/gate-sign.jpg" alt="School entrance with flags and signboard" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/swings-girls.jpg" alt="Two girls in school uniform at the swings" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/swings-fish.jpg" alt="Pupils on the swings beside the goldfish mural" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/swings-seesaw.jpg" alt="Pupils on the see-saw and swings" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/garden-mural.jpg" alt="Painted tyre garden and mural wall at the school" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/swings-boys.jpg" alt="Boys swinging during break time" loading="lazy"></figure>
+        <figure tabindex="0"><img src="img/swings-pair-2.jpg" alt="A boy and girl on the swings" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/billboard.jpg" alt="The Pathfinder Elite billboard with vision, mission and services" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/seesaw-swings-2.jpg" alt="Pupils taking turns on the see-saw and swings" loading="lazy"></figure>
+        <figure class="g-wide" tabindex="0"><img src="img/street-view.jpg" alt="The school wall and signboard seen from Ediba Lane" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="admit" id="contact">
+    <div class="wrap">
+      <div>
+        <div class="head" style="margin-bottom:0">
+          <h2>Come and see the school</h2>
+          <p>Visit us on Ediba Lane, call, or send an enquiry and we'll get back to you.</p>
+        </div>
+        <ul class="contact-list">
+          <li><i style="background:var(--red)"><svg><use href="#i-pin"/></svg></i><div><b>Address</b><span>#9 Ediba Lane, off Ediba Road, Calabar Municipality, Cross River State</span></div></li>
+          <li><i style="background:var(--sign-cyan)"><svg><use href="#i-phone"/></svg></i><div><b>Phone &amp; WhatsApp (Principal)</b><span>+234 803 348 3918</span> · <a href="https://wa.me/2348033483918" target="_blank" rel="noopener">Chat on WhatsApp</a></div></li>
+          <li><i style="background:var(--sign-teal)"><svg><use href="#i-mail"/></svg></i><div><b>Email</b><span>pathfinderinternational@gmail.com</span></div></li>
+        </ul>
+      </div>
+      <form class="enquiry" id="enquiry" novalidate>
+        <h3>Admission enquiry</h3>
+        <p class="sub">Tell us about your child and we'll contact you.</p>
+        <div class="field"><label for="pname">Parent or guardian name</label><input id="pname" name="pname" required autocomplete="name"></div>
+        <div class="field"><label for="phone">Phone number</label><input id="phone" name="phone" type="tel" required autocomplete="tel"></div>
+        <div class="field"><label for="cname">Child's name</label><input id="cname" name="cname" required></div>
+        <div class="field"><label for="section">Class</label>
+          <select id="section" name="section" required>
+            <option value="">Choose a class</option><option>Creche</option><option>Reception</option><option>Nursery</option><option>Primary</option>
+          </select></div>
+        <div class="field full"><label for="email">Email (optional)</label><input id="email" name="email" type="email" autocomplete="email"></div>
+        <div class="field full"><label for="msg">Message (optional)</label><textarea id="msg" name="msg"></textarea></div>
+        <button class="btn btn-sun" type="submit">Send enquiry</button>
+        <div class="form-note" id="formNote" role="status" hidden></div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<div class="curb" aria-hidden="true"></div>
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div style="display:grid;gap:16px;align-content:start">
+        <a class="logo" href="#top"><img class="logo-mark" src="img/logo.png" alt=""><span class="logo-text"><strong>Pathfinder Elite</strong><small>International Schools</small></span></a>
+        <p class="motto"><span>Motto:</span>Determination Personified</p>
+      </div>
+      <div><h4>Quick links</h4><ul><li><a href="#about">About us</a></li><li><a href="#classes">Classes</a></li><li><a href="#services">Services</a></li><li><a href="#gallery">Gallery</a></li></ul></div>
+      <div><h4>Classes</h4><ul><li>Creche</li><li>Reception</li><li>Nursery</li><li>Primary</li></ul></div>
+      <div><h4>Contact</h4><ul><li>#9 Ediba Lane, off Ediba Road, Calabar Municipality</li><li>Call or WhatsApp:<br>+234 803 348 3918</li><li style="overflow-wrap:anywhere">pathfinderinternational@gmail.com</li></ul></div>
+    </div>
+    <div class="copy">© 2026 Pathfinder Elite International Schools, Calabar.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var b=document.getElementById('burger'),m=document.getElementById('menu');
+  b.addEventListener('click',function(){var o=m.classList.toggle('open');b.setAttribute('aria-expanded',o)});
+  m.addEventListener('click',function(e){if(e.target.tagName==='A'){m.classList.remove('open');b.setAttribute('aria-expanded','false')}});
+
+  // hero photos
+  var sl=document.getElementById('slides'),imgs=sl.querySelectorAll('img'),dots=document.getElementById('dots'),cur=0,timer;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  imgs.forEach(function(_,i){var d=document.createElement('button');d.setAttribute('aria-label','Show photo '+(i+1));d.addEventListener('click',function(){go(i);restart()});dots.appendChild(d)});
+  function go(i){imgs[cur].classList.remove('on');dots.children[cur].classList.remove('on');cur=(i+imgs.length)%imgs.length;imgs[cur].classList.add('on');dots.children[cur].classList.add('on')}
+  function restart(){clearInterval(timer);if(!reduce)timer=setInterval(function(){go(cur+1)},6500)}
+  imgs[0].classList.add('on');dots.children[0].classList.add('on');sl.classList.add('ready');restart();
+
+  // gallery lightbox
+  var ico={x:'<path d="M6 6l12 12M18 6L6 18"/>',l:'<path d="M15 5l-7 7 7 7"/>',r:'<path d="M9 5l7 7-7 7"/>'};
+  function svg(p){return '<svg viewBox="0 0 24 24" aria-hidden="true">'+p+'</svg>'}
+  var figs=[].slice.call(document.querySelectorAll('.gallery-grid figure')),lb=null,li=0;
+  function show(i){li=(i+figs.length)%figs.length;var s=figs[li].querySelector('img'),t=lb.querySelector('img');t.src=s.src;t.alt=s.alt}
+  function open(i){
+    lb=document.createElement('div');lb.className='lightbox';lb.setAttribute('role','dialog');lb.setAttribute('aria-modal','true');lb.setAttribute('aria-label','Photo viewer');
+    lb.innerHTML='<img alt=""><button class="lb-btn lb-close" aria-label="Close">'+svg(ico.x)+'</button><button class="lb-btn lb-prev" aria-label="Previous photo">'+svg(ico.l)+'</button><button class="lb-btn lb-next" aria-label="Next photo">'+svg(ico.r)+'</button>';
+    document.body.appendChild(lb);show(i);lb.querySelector('.lb-close').focus();
+    lb.addEventListener('click',function(e){var c=e.target.classList;if(e.target===lb||c.contains('lb-close'))close();else if(c.contains('lb-prev'))show(li-1);else if(c.contains('lb-next'))show(li+1)});
+  }
+  function close(){if(lb){lb.remove();lb=null;figs[li].focus()}}
+  figs.forEach(function(f,i){f.addEventListener('click',function(){open(i)});f.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open(i)}})});
+  document.addEventListener('keydown',function(e){if(!lb)return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(li-1);if(e.key==='ArrowRight')show(li+1)});
+
+  // enquiry form
+  var f=document.getElementById('enquiry'),note=document.getElementById('formNote'),req=['pname','phone','cname','section'];
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var missing=req.filter(function(id){var el=document.getElementById(id),bad=!el.value.trim();el.setAttribute('aria-invalid',bad);return bad});
+    note.hidden=false;
+    if(missing.length){note.textContent='Please add your name, phone number, your child\'s name and the class you want.';document.getElementById(missing[0]).focus();return}
+    note.textContent='Thank you, '+document.getElementById('pname').value.trim()+'. Online enquiries are not connected yet, so please call or WhatsApp +234 803 348 3918 and we\'ll book your visit.';
+  });
+  req.forEach(function(id){document.getElementById(id).addEventListener('input',function(){this.removeAttribute('aria-invalid')})});
+})();
+</script>
+
+</body>
+</html>
